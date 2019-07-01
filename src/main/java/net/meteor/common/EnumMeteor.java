@@ -28,7 +28,7 @@ implements Serializable
 	private final ItemStack representingItem;
 	private final Block representingBlock;
 
-	private EnumMeteor(int id, Block mat, Block rMat, boolean fiery, String bTex, EnumChatFormatting color, ItemStack item, Block block) { 
+	EnumMeteor(int id, Block mat, Block rMat, boolean fiery, String bTex, EnumChatFormatting color, ItemStack item, Block block) {
 		this.ID = id;
 		this.material = mat;
 		this.rareMaterial = rMat;

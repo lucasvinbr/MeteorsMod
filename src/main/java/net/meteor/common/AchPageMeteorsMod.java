@@ -11,7 +11,8 @@ public class AchPageMeteorsMod extends AchievementPage
 		super(name, achievements);
 	}
 
-	public String getName()
+	@Override
+    public String getName()
 	{
 		return StatCollector.translateToLocal(super.getName());
 	}

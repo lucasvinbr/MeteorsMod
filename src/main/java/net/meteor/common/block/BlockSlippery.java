@@ -99,7 +99,7 @@ public class BlockSlippery extends BlockContainerMeteorsMod {
 	}
 	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		Item item = getItem(world, x, y, z);
 
         if (item == null)

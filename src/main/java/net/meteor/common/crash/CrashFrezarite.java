@@ -17,11 +17,11 @@ public class CrashFrezarite extends CrashMeteorite
 		super(Size, expl, metType);
 	}
 
-	public void afterCraterFormed(World world, Random random, int i, int j, int k) {
-		ArrayList arraylist = new ArrayList();
-		arraylist.addAll(this.explosion.affectedBlockPositions);
+	@Override
+    public void afterCraterFormed(World world, Random random, int i, int j, int k) {
+		ArrayList<ChunkPosition> arraylist = new ArrayList(this.explosion.affectedBlockPositions);
 		for (int j1 = arraylist.size() - 1; j1 >= 0; j1--) {
-			ChunkPosition chunkposition1 = (ChunkPosition)arraylist.get(j1);
+			ChunkPosition chunkposition1 = arraylist.get(j1);
 			int l = chunkposition1.chunkPosX;
 			int j11 = chunkposition1.chunkPosY;
 			int l1 = chunkposition1.chunkPosZ;

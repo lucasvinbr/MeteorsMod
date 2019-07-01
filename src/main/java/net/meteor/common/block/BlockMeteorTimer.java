@@ -33,7 +33,8 @@ public class BlockMeteorTimer extends BlockContainerMeteorsMod {
 		return false;
 	}
 	
-	public int getRenderType() {
+	@Override
+    public int getRenderType() {
         return -1;
     }
 	

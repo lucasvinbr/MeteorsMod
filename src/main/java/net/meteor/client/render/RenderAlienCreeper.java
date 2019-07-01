@@ -30,8 +30,7 @@ public class RenderAlienCreeper extends RenderLiving {
 
 	protected void updateCreeperScale(EntityAlienCreeper entitycreeper, float f)
 	{
-		EntityAlienCreeper entitycreeper1 = entitycreeper;
-		float f1 = entitycreeper1.getCreeperFlashIntensity(f);
+		float f1 = entitycreeper.getCreeperFlashIntensity(f);
 		float f2 = 1.0F + MathHelper.sin(f1 * 100F) * f1 * 0.01F;
 		if (f1 < 0.0F)
 		{

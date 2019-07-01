@@ -76,7 +76,7 @@ public class BlockMeteor extends BlockMeteorsMod
 			}
 			if ((l == 1) && !world.getBlock(i, j - 1, k).isOpaqueCube())
 			{
-				d2 = j + 0 - d;
+				d2 = j - d;
 			}
 			if ((l == 2) && !world.getBlock(i, j, k + 1).isOpaqueCube())
 			{
@@ -84,7 +84,7 @@ public class BlockMeteor extends BlockMeteorsMod
 			}
 			if ((l == 3) && !world.getBlock(i, j, k - 1).isOpaqueCube())
 			{
-				d3 = k + 0 - d;
+				d3 = k - d;
 			}
 			if ((l == 4) && !world.getBlock(i + 1, j, k).isOpaqueCube())
 			{
@@ -92,7 +92,7 @@ public class BlockMeteor extends BlockMeteorsMod
 			}
 			if ((l == 5) && !world.getBlock(i - 1, j, k).isOpaqueCube())
 			{
-				d1 = i + 0 - d;
+				d1 = i - d;
 			}
 			if ((d1 < i) || (d1 > i + 1) || (d2 < 0.0D) || (d2 > j + 1) || (d3 < k) || (d3 > k + 1))
 			{

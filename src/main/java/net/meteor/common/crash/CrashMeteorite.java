@@ -27,7 +27,8 @@ public class CrashMeteorite extends WorldGenerator
 		this.meteorType = metType;
 	}
 
-	public boolean generate(World world, Random random, int i, int j, int k)
+	@Override
+    public boolean generate(World world, Random random, int i, int j, int k)
 	{
 		Block meteor = this.meteorType.getMaterial();
 		Block rareMeteor = this.meteorType.getRareMaterial();
@@ -75,11 +76,10 @@ public class CrashMeteorite extends WorldGenerator
 	public void afterCraterFormed(World world, Random random, int i, int j, int k)
 	{
 		int aliencreepers = random.nextInt(5);
-		ArrayList arraylist = new ArrayList();
-		arraylist.addAll(this.explosion.affectedBlockPositions);
+		ArrayList<ChunkPosition> arraylist = new ArrayList(this.explosion.affectedBlockPositions);
 		for (int j1 = arraylist.size() - 1; (j1 >= 0) && (aliencreepers > 0); j1--)
 		{
-			ChunkPosition chunkposition1 = (ChunkPosition)arraylist.get(j1);
+			ChunkPosition chunkposition1 = arraylist.get(j1);
 			int l = chunkposition1.chunkPosX;
 			int j11 = chunkposition1.chunkPosY;
 			int l1 = chunkposition1.chunkPosZ;

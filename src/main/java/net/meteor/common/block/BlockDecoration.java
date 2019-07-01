@@ -43,12 +43,14 @@ public class BlockDecoration extends BlockMeteorsMod {
 	/**
      * Determines the damage on the item the block drops. Used in cloth and wood.
      */
+    @Override
     public int damageDropped(int p_149692_1_)
     {
         return p_149692_1_;
     }
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List p_149666_3_)
     {
         for (int i = 0; i < 3; ++i)
@@ -57,7 +59,8 @@ public class BlockDecoration extends BlockMeteorsMod {
         }
     }
 	
-	public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ)
+	@Override
+    public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ)
     {
         return true;
     }

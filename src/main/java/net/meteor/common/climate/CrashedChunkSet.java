@@ -54,7 +54,7 @@ implements Serializable
 	
 	public static CrashedChunkSet fromNBTString(String s) {
 		String[] props = s.split(":");
-		if (props == null || props.length < 6) {
+		if (props.length < 6) {
 			return null;
 		}
 		int xcOrigin, zcOrigin, xOrigin, yOrigin, zOrigin, age;

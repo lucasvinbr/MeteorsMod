@@ -28,7 +28,7 @@ public class ItemFrezariteSpade extends ItemSpade
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasEffect(ItemStack par1ItemStack)
+	public boolean hasEffect(ItemStack par1ItemStack, int pass)
 	{
 		return true;
 	}

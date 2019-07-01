@@ -81,7 +81,6 @@ public class TextureDetector extends TextureAtlasSprite {
 
 			for (d6 = d3 - this.currentAngle; d6 < -Math.PI; d6 += (Math.PI * 2D))
 			{
-				;
 			}
 
 			while (d6 >= Math.PI)
@@ -108,7 +107,6 @@ public class TextureDetector extends TextureAtlasSprite {
 
 		for (i = (int)((this.currentAngle / (Math.PI * 2D) + 1.0D) * (double)this.framesTextureData.size()) % this.framesTextureData.size(); i < 0; i = (i + this.framesTextureData.size()) % this.framesTextureData.size())
 		{
-			;
 		}
 
 		if (i != this.frameCounter)

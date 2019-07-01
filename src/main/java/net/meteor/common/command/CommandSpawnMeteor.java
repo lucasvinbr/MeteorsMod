@@ -20,6 +20,7 @@ public class CommandSpawnMeteor extends CommandBase {
 		return "/meteor <x> <y> <z> <size> [delay] [type] [summoned]";
 	}
 	
+	@Override
 	public int getRequiredPermissionLevel() {
         return 2;
     }

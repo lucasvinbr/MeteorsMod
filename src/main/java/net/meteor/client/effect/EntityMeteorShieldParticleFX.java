@@ -55,6 +55,7 @@ public class EntityMeteorShieldParticleFX extends EntityEnchantmentTableParticle
 		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().renderEngine.func_110581_b(new ResourceLocation("textures/particle/particles.png")).func_110552_b());
 	}
 	
+	@Override
 	public void onUpdate()
     {
         this.prevPosX = this.posX;

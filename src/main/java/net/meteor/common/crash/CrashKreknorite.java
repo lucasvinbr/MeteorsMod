@@ -20,17 +20,17 @@ public class CrashKreknorite extends CrashMeteorite
 		super(Size, expl, metType);
 	}
 
-	public void afterCraterFormed(World world, Random random, int i, int j, int k) {
+	@Override
+    public void afterCraterFormed(World world, Random random, int i, int j, int k) {
 		if (this.crashSize >= MeteorsMod.instance.MinMeteorSizeForPortal) {
 			createPortal(world, i, j, k, random.nextBoolean());
 		}
 		int blazes = random.nextInt(3);
-		ArrayList arraylist = new ArrayList();
-		arraylist.addAll(this.explosion.affectedBlockPositions);
+		ArrayList<ChunkPosition> arraylist = new ArrayList(this.explosion.affectedBlockPositions);
 		for (int j1 = arraylist.size() - 1; (j1 >= 0) && 
 				(blazes > 0); j1--)
 		{
-			ChunkPosition chunkposition1 = (ChunkPosition)arraylist.get(j1);
+			ChunkPosition chunkposition1 = arraylist.get(j1);
 			int l = chunkposition1.chunkPosX;
 			int j11 = chunkposition1.chunkPosY;
 			int l1 = chunkposition1.chunkPosZ;

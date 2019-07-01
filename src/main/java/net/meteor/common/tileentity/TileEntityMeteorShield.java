@@ -101,6 +101,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		}
 	}
 	
+	@Override
 	public boolean getPreventComets() {
 		return this.blockComets;
 	}
@@ -252,12 +253,12 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		NBTTagList nbttaglist = nbt.getTagList("Items", 10);
 		this.inv = new ItemStack[this.getSizeInventory()];
 
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			int j = nbttagcompound1.getByte("Slot") & 255;
+		for (int tagIndex = 0; tagIndex < nbttaglist.tagCount(); tagIndex++) {
+			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(tagIndex);
+			int slot = nbttagcompound1.getByte("Slot") & 255;
 
-			if (j >= 0 && j < this.inv.length) {
-				this.inv[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+			if (slot >= 0 && slot < this.inv.length) {
+				this.inv[slot] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
 	}

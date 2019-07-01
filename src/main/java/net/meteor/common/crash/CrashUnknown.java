@@ -82,16 +82,14 @@ public class CrashUnknown extends CrashMeteorite
 		case 9:
 		case 10:
 		case 11:
-			ItemStack item2 = new ItemStack(MeteorItems.MeteoriteBody, 1);
-			return item2;
+			return new ItemStack(MeteorItems.MeteoriteBody, 1);
 		case 12:
 		case 13:
 		case 14:
 			return null;
 		case 15:
 		case 16:
-			ItemStack item = new ItemStack(MeteorItems.KreknoriteSword, 1);
-			return item;
+			return new ItemStack(MeteorItems.KreknoriteSword, 1);
 		case 17:
 		case 18:
 			return null;
@@ -103,8 +101,7 @@ public class CrashUnknown extends CrashMeteorite
 		case 23:
 		case 24:
 		case 25:
-			ItemStack item1 = new ItemStack(MeteorItems.KreknoriteBody, 1);
-			return item1;
+			return new ItemStack(MeteorItems.KreknoriteBody, 1);
 		case 26:
 		case 27:
 		case 28:
@@ -125,12 +122,10 @@ public class CrashUnknown extends CrashMeteorite
 			return new ItemStack(MeteorItems.FrezariteSpade, 1);
 		case 39:
 		case 40:
-			ItemStack item3 = new ItemStack(MeteorItems.KreknoriteHelmet, 1);
-			return item3;
+			return new ItemStack(MeteorItems.KreknoriteHelmet, 1);
 		case 41:
 		case 42:
-			ItemStack item4 = new ItemStack(MeteorItems.FrezariteHelmet, 1);
-			return item4;
+			return new ItemStack(MeteorItems.FrezariteHelmet, 1);
 		case 43:
 		case 44:
 			return new ItemStack(Items.redstone, random.nextInt(16) + 1);

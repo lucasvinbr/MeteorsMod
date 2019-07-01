@@ -3,20 +3,20 @@ package net.meteor.common;
 
 public interface IMeteorShield {
 	
-	public int getRange();
+	int getRange();
 	
-	public int getPowerLevel();
+	int getPowerLevel();
 	
-	public int getX();
+	int getX();
 	
-	public int getY();
+	int getY();
 	
-	public int getZ();
+	int getZ();
 	
-	public boolean isTileEntity();
+	boolean isTileEntity();
 	
-	public String getOwner();
+	String getOwner();
 	
-	public boolean getPreventComets();
+	boolean getPreventComets();
 
 }

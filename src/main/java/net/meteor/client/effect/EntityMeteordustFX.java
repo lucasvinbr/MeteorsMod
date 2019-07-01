@@ -38,7 +38,8 @@ public class EntityMeteordustFX extends EntityFX
 		noClip = false;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
 	public void renderParticle(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		float f6 = (((float)particleAge + f) / (float)particleMaxAge) * 32F;
@@ -54,7 +55,8 @@ public class EntityMeteordustFX extends EntityFX
 		super.renderParticle(tessellator, f, f1, f2, f3, f4, f5);
 	}
 
-	public void onUpdate()
+	@Override
+    public void onUpdate()
 	{
 		prevPosX = posX;
 		prevPosY = posY;

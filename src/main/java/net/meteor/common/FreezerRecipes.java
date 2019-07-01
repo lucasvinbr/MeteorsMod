@@ -30,7 +30,7 @@ public class FreezerRecipes {
 		
 		private int id; // Use RecipeType.values() to get a RecipeType using this id
 		
-		private RecipeType(int id) {
+		RecipeType(int id) {
 			this.id = id;
 		}
 		
@@ -96,8 +96,10 @@ public class FreezerRecipes {
 			setRecipeType(RecipeType.both);
 		}
 		
+		@Override
 		public boolean requiresItem() { return true; }
 		
+		@Override
 		public ItemStack getResult(ItemStack neededItem) {
 			
 			ItemBlock itemBlock = (ItemBlock) neededItem.getItem();
@@ -146,6 +148,7 @@ public class FreezerRecipes {
 			return res;
 		}
 		
+		@Override
 		public boolean hasRequiredMaterials(ItemStack item, Fluid fluid, int fluidAmount) {
 			if (fluidAmount >= fluidAmountNeeded && this.fluid == fluid) {
 				return isFreezableItem(item);

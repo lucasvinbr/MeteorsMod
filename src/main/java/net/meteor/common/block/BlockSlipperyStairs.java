@@ -25,12 +25,14 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 		this.setCreativeTab(null);
 	}
 
-	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
+	@Override
+    public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
     {
         super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
         p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
     }
 
+    @Override
     public boolean onBlockEventReceived(World p_149696_1_, int p_149696_2_, int p_149696_3_, int p_149696_4_, int p_149696_5_, int p_149696_6_)
     {
         super.onBlockEventReceived(p_149696_1_, p_149696_2_, p_149696_3_, p_149696_4_, p_149696_5_, p_149696_6_);
@@ -97,7 +99,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 	}
 	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		Item item = getItem(world, x, y, z);
 
         if (item == null)

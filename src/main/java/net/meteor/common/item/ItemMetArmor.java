@@ -6,7 +6,6 @@ import net.meteor.common.MeteorItems;
 import net.meteor.common.MeteorsMod;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;

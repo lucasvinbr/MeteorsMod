@@ -122,6 +122,7 @@ public class ContainerFreezingMachine extends Container {
 		 this.lastRecipeModeID = this.iceMaker.getRecipeMode().getID();
 	}
 
+	 @Override
 	 @SideOnly(Side.CLIENT)
 	 public void updateProgressBar(int id, int value) {
 		 if (id == 0)

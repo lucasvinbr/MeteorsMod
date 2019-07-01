@@ -51,7 +51,8 @@ public class ItemBlockSlippery extends ItemBlock {
         return p_77647_1_;
     }
 	
-	public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
+	@Override
+    public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
     {
         Block block = p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_);
         Block storedBlock = getStoredBlock(p_77648_1_);
