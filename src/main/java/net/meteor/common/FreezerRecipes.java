@@ -103,7 +103,7 @@ public class FreezerRecipes {
 		public ItemStack getResult(ItemStack neededItem) {
 			
 			ItemBlock itemBlock = (ItemBlock) neededItem.getItem();
-			Block block = itemBlock.field_150939_a;
+			Block block = itemBlock.getBlock();
 			ItemStack res = new ItemStack(MeteorBlocks.blockSlippery, 1, neededItem.getItemDamage());
 			
 			if (block instanceof BlockSlippery) {
@@ -158,19 +158,19 @@ public class FreezerRecipes {
 		
 	}
 	
-	private List<FreezerRecipe> recipes = new ArrayList<FreezerRecipe>();
-	private Set<Item> neededItems = new HashSet<Item>();  		// Used for shift-clicking items into top slot
+	private List<FreezerRecipe> recipes = new ArrayList<>();
+	private Set<Item> neededItems = new HashSet<>();  		// Used for shift-clicking items into top slot
 	
 	public static FreezerRecipes instance() {
 		return theInstance;
 	}
 	
 	private FreezerRecipes() {
-		addRecipe(new ItemStack(Blocks.ice, 1), FluidRegistry.WATER, 1000, new ItemStack(Blocks.packed_ice, 1));
-		addRecipe(Items.iron_ingot, new ItemStack(MeteorItems.FrozenIron, 1));
+		addRecipe(new ItemStack(Blocks.ICE, 1), FluidRegistry.WATER, 1000, new ItemStack(Blocks.PACKED_ICE,  1));
+		addRecipe(Items.IRON_INGOT, new ItemStack(MeteorItems.FrozenIron, 1));
 		addRecipe(new SlipperyRecipe());
-		addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ice, 1));
-		addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.obsidian, 1));
+		addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ICE, 1));
+		addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.OBSIDIAN, 1));
 	}
 	
 	public void addRecipe(Block block, ItemStack result) {
@@ -210,10 +210,8 @@ public class FreezerRecipes {
 	}
 	
 	public FreezerRecipe getFreezingResult(ItemStack item, FluidStack fluidStack, RecipeType typeAvailable) {
-		Iterator<FreezerRecipe> iter = recipes.iterator();
-		
-		while (iter.hasNext()) {
-			FreezerRecipe recipe = iter.next();
+
+		for (FreezerRecipe recipe : recipes) {
 			if (canUseRecipe(recipe, typeAvailable)) {
 				if (fluidStack != null) {
 					if (recipe.hasRequiredMaterials(item, fluidStack.getFluid(), fluidStack.amount)) {
@@ -236,7 +234,7 @@ public class FreezerRecipes {
 	public static boolean isFreezableItem(ItemStack item) {
 		if (MeteorsMod.instance.slipperyBlocksEnabled && item != null && item.getItem() instanceof ItemBlock) {
 			ItemBlock itemBlock = (ItemBlock) item.getItem();
-			Block block = itemBlock.field_150939_a;
+			Block block = itemBlock.getBlock();
 			return BlockSlippery.canBeSlippery(block);
 		}
 		return false;

@@ -1,16 +1,14 @@
 package net.meteor.plugin.baubles;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import baubles.api.BaublesApi;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketTogglePlayerMagnetism implements IMessage {
 	
@@ -38,9 +36,9 @@ public class PacketTogglePlayerMagnetism implements IMessage {
 		@Override
 		public IMessage onMessage(PacketTogglePlayerMagnetism message, MessageContext ctx) {
 			EntityPlayer player = getClientPlayer();
-			EntityPlayer p = player.worldObj.getPlayerEntityByName(message.playerName);
-			if (p != null) {
-				IInventory inv = BaublesApi.getBaubles(p);
+			EntityPlayer p = player.getEntityWorld().getPlayerEntityByName(message.playerName);
+			if (p != null) {//TODO 1.12.2
+				/*IInventory inv = BaublesApi.getBaubles(p);
 				ItemStack stack = inv.getStackInSlot(3);
 				if (stack != null) {
 					if (stack.getItem() == Baubles.MagnetismController) {
@@ -52,14 +50,14 @@ public class PacketTogglePlayerMagnetism implements IMessage {
 							Baubles.enabledMagnetism = val;
 						}
 					}
-				}
+				}*/
 			}
 			return null;
 		}
 		
 		@SideOnly(Side.CLIENT)
 		public EntityPlayer getClientPlayer() {
-			return net.minecraft.client.Minecraft.getMinecraft().thePlayer;
+			return Minecraft.getMinecraft().player;
 		}
 		
 	}

@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFrezariteSpade extends ItemSpade
 {
@@ -22,8 +22,8 @@ public class ItemFrezariteSpade extends ItemSpade
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezSpade.one"));
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezSpade.two"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezSpade.one"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezSpade.two"));
 	}
 
 	@SideOnly(Side.CLIENT)

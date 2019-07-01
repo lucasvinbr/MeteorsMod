@@ -36,7 +36,7 @@ public class ItemSummoner extends ItemMeteorsMod
 	{
 		if (!entityplayer.capabilities.isCreativeMode)
 		{
-			itemstack.stackSize--;
+			itemstack.getCount()--;
 		}
 		world.playSoundAtEntity(entityplayer, "random.bow", 0.5F, 0.4F / (this.itemRand.nextFloat() * 0.4F + 0.8F));
 		if (!world.isRemote)

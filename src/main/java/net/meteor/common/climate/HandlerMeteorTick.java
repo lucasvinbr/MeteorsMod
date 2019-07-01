@@ -1,17 +1,17 @@
 package net.meteor.common.climate;
 
-import java.util.HashMap;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import java.util.HashMap;
 
 public class HandlerMeteorTick
 {
-	private HashMap<Integer, ClimateUpdater> climateUpdaters = new HashMap<Integer, ClimateUpdater>();
+	private HashMap<Integer, ClimateUpdater> climateUpdaters = new HashMap<>();
 
 	@SubscribeEvent
-	public void onWorldTick(WorldTickEvent event) {
-		int dim = event.world.provider.dimensionId;
+	public void onWorldTick(TickEvent.WorldTickEvent event) {
+		int dim = event.world.provider.getDimension();
 		if (climateUpdaters.containsKey(dim)) {
 			climateUpdaters.get(dim).onWorldTick(event);
 		}

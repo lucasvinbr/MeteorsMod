@@ -13,17 +13,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // This class is sort of a mirror image of a vanilla furnace,
 // but has some new attributes such as fluid handling and other recipes.
@@ -56,7 +53,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		{
 			ItemStack itemstack;
 
-			if (this.inv[slot].stackSize <= amount)
+			if (this.inv[slot].getCount() <= amount)
 			{
 				itemstack = this.inv[slot];
 				this.inv[slot] = null;
@@ -66,7 +63,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			{
 				itemstack = this.inv[slot].splitStack(amount);
 
-				if (this.inv[slot].stackSize == 0)
+				if (this.inv[slot].getCount() == 0)
 				{
 					this.inv[slot] = null;
 				}
@@ -90,9 +87,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		
 		this.inv[slot] = item;
 		
-		if (item != null && item.stackSize > this.getInventoryStackLimit())
+		if (item != null && item.getCount() > this.getInventoryStackLimit())
 		{
-			item.stackSize = this.getInventoryStackLimit();
+			item.setCount(this.getInventoryStackLimit());
 		}
 
 		if (slot == 3) {
@@ -103,18 +100,19 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	
 	private void checkFluidContainer() {
 		ItemStack item = inv[3];
-		if (item != null && FluidContainerRegistry.isContainer(item)) {
-			if (FluidContainerRegistry.isFilledContainer(item)) {
-				FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(item);
+
+		if (item != null && item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+			if (!item.isEmpty()) {
+				FluidStack fluid = FluidUtil.getFluidContained(item);
 				if (fluid != null && (fluid.isFluidEqual(tank.getFluid())) || tank.getFluidAmount() == 0) {
 					if (tank.fill(fluid, false) == fluid.amount) {
 
 						// Try to insert it into the bottom slot
 						ItemStack emptyContainer = null;
 						FluidContainerData[] containerData = FluidContainerRegistry.getRegisteredFluidContainerData();
-						for (int i = 0; i < containerData.length; i++) {
-							if (containerData[i].filledContainer.isItemEqual(item)) {
-								emptyContainer = containerData[i].emptyContainer.copy();
+						for (FluidContainerData containerDatum : containerData) {
+							if (containerDatum.filledContainer.isItemEqual(item)) {
+								emptyContainer = containerDatum.emptyContainer.copy();
 							}
 						}
 
@@ -123,12 +121,12 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 								tank.fill(fluid, true);
 								inv[4] = emptyContainer;
 								decrStackSize(3, 1);
-								this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-							} else if (inv[4].isItemEqual(emptyContainer) && inv[4].stackSize + 1 <= inv[4].getMaxStackSize()) {
+								this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							} else if (inv[4].isItemEqual(emptyContainer) && inv[4].getCount() + 1 <= inv[4].getMaxStackSize()) {
 								tank.fill(fluid, true);
-								inv[4].stackSize++;
+								inv[4].grow(1);
 								decrStackSize(3, 1);
-								this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+								this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 							}
 						}
 
@@ -140,15 +138,15 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 					ItemStack filledContainer = FluidContainerRegistry.fillFluidContainer(fluidInTank, item);
 					if (filledContainer != null) {
 						if (inv[4] == null) {
-							tank.drain(FluidContainerRegistry.getFluidForFilledItem(filledContainer).amount, true);
+							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv[4] = filledContainer;
 							decrStackSize(3, 1);
-							this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-						} else if (inv[4].isItemEqual(filledContainer) && inv[4].stackSize + 1 <= inv[4].getMaxStackSize()) {
-							tank.drain(FluidContainerRegistry.getFluidForFilledItem(filledContainer).amount, true);
-							inv[4].stackSize++;
+							this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+						} else if (inv[4].isItemEqual(filledContainer) && inv[4].getCount() + 1 <= inv[4].getMaxStackSize()) {
+							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
+							inv[4].grow(1);
 							decrStackSize(3, 1);
-							this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+							this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 						}
 					}
 				}
@@ -179,7 +177,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 			if (b0 >= 0 && b0 < this.inv.length)
 			{
-				this.inv[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				this.inv[b0] = new ItemStack(nbttagcompound1);
 			}
 		}
 
@@ -192,7 +190,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setShort("BurnTime", (short)this.burnTime);
 		nbt.setShort("CookTime", (short)this.cookTime);
@@ -213,12 +211,13 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 		nbt.setTag("Items", nbttaglist);
 		tank.writeToNBT(nbt);
+		return nbt;
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
-		readFromNBT(pkt.func_148857_g());
+		readFromNBT(pkt.getNbtCompound());
 	}
 
 	@Override
@@ -226,7 +225,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	{
 		NBTTagCompound var1 = new NBTTagCompound();
 		writeToNBT(var1);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, var1);
+		return new SPacketUpdateTileEntity(this.pos, 1, var1);
 	}
 
 	@Override
@@ -236,7 +235,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+		return this.getWorld().getTileEntity(this.getPos()) != this ? false : player.getDistanceSq((double)this.getPos().getX() + 0.5D, (double)this.getPos().getY() + 0.5D, (double)this.getPos().getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -247,7 +246,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack item) {
-		if (slot == 3) return FluidContainerRegistry.isContainer(item);
+		if (slot == 3) return item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 		return slot == 2 ? false : (slot == 1 ? getItemFreezeTime(item) > 0 : true);
 	}
 
@@ -257,8 +256,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack item, int side) {
-		return FluidContainerRegistry.isContainer(item) ? slot == 3 : slot == 1;
+	public boolean canInsertItem(int slot, ItemStack item, EnumFacing direction) {
+
+		return item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) ? slot == 3 : slot == 1;
 	}
 
 	@Override
@@ -305,7 +305,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			--this.burnTime;
 		}
 
-		if (!this.worldObj.isRemote)
+		if (!this.getWorld().isRemote)
 		{
 			
 			if (inv[3] != null) {
@@ -324,9 +324,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 						if (this.inv[1] != null)
 						{
-							--this.inv[1].stackSize;
+							this.inv[1].shrink(1);
 
-							if (this.inv[1].stackSize == 0)
+							if (this.inv[1].getCount() == 0)
 							{
 								this.inv[1] = inv[1].getItem().getContainerItem(inv[1]);
 							}
@@ -358,15 +358,15 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			if (flag != this.burnTime > 0)
 			{
 				flag1 = true;
-				int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-				this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, burnTime > 0 ? meta + 4 : meta - 4, 2);
+				int meta = getWorld().getBlockMetadata(xCoord, yCoord, zCoord);
+				this.getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, burnTime > 0 ? meta + 4 : meta - 4, 2);
 			}
 		}
 
 		if (flag1)
 		{
 			this.markDirty();
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 	}
 
@@ -376,10 +376,10 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			if (item == MeteorItems.itemFrezaCrystal) {
 				return 1600;
 			}
-			if (item == Item.getItemFromBlock(Blocks.ice)) {
+			if (item == Item.getItemFromBlock(Blocks.ICE)) {
 				return 200;
 			}
-			if (item == Item.getItemFromBlock(Blocks.packed_ice)) {
+			if (item == Item.getItemFromBlock(Blocks.PACKED_ICE)) {
 				return 400;
 			}
 		}
@@ -397,12 +397,12 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				this.cookTime = 0;
 				this.lastKnownItem = result;
 				this.markDirty();
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			return true;
 		}
 		if (!this.inv[2].isItemEqual(result)) return false;
-		int resultSize = inv[2].stackSize + result.stackSize;
+		int resultSize = inv[2].getCount() + result.getCount();
 		if (resultSize <= getInventoryStackLimit() && resultSize <= this.inv[2].getMaxStackSize()) {
 			if (this.lastKnownItem == null) {
 				this.lastKnownItem = result;
@@ -410,7 +410,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				this.cookTime = 0;
 				this.lastKnownItem = result;
 				this.markDirty();
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			return true;
 		}
@@ -428,13 +428,13 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			}
 			else if (this.inv[2].getItem() == recipe.getResult(inv[0]).getItem())
 			{
-				this.inv[2].stackSize += recipe.getResult(inv[0]).stackSize;
+				this.inv[2].grow(recipe.getResult(inv[0]).getCount());
 			}
 
 			if (recipe.requiresItem()) {
-				--this.inv[0].stackSize;
+				this.inv[0].shrink(1);
 
-				if (this.inv[0].stackSize <= 0)
+				if (this.inv[0].getCount() <= 0)
 				{
 					this.inv[0] = null;
 				}
@@ -444,7 +444,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				tank.drain(recipe.getFluidAmount(), true);
 
 				if (tank.getFluidAmount() == 0) {
-					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+					getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 				}
 			}
 
@@ -453,50 +453,37 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	/* IFluidHandler */
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill)
+	public int fill(FluidStack resource, boolean doFill)
 	{
 		if (tank.getFluidAmount() == 0) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 		return tank.fill(resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain)
+	public FluidStack drain(FluidStack resource, boolean doDrain)
 	{
 		if (resource == null || !resource.isFluidEqual(tank.getFluid()))
 		{
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 			return null;
 		}
 		return tank.drain(resource.amount, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain)
+	public FluidStack drain(int maxDrain, boolean doDrain)
 	{
 		if (doDrain && tank.getFluidAmount() - maxDrain <= 0) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 		return tank.drain(maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid)
-	{
-		return true;
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid)
-	{
-		return true;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from)
-	{
-		return new FluidTankInfo[] { tank.getInfo() };
+	public IFluidTankProperties[] getTankProperties() {
+		return tank.getTankProperties();
 	}
 
 	public FluidTankInfo getTankInfo() {

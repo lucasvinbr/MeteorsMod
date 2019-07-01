@@ -1,7 +1,6 @@
 package net.meteor.common.climate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,15 +14,18 @@ import net.meteor.common.packets.PacketGhostMeteor;
 import net.meteor.common.packets.PacketLastCrash;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.WorldEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class HandlerMeteor
 {
@@ -36,20 +38,20 @@ public class HandlerMeteor
 
 	private static Random random = new Random();
 
-	public ArrayList<GhostMeteor> ghostMets = new ArrayList<GhostMeteor>();
-	public ArrayList<CrashedChunkSet> crashedChunks = new ArrayList<CrashedChunkSet>();
+	public ArrayList<GhostMeteor> ghostMets = new ArrayList<>();
+	public ArrayList<CrashedChunkSet> crashedChunks = new ArrayList<>();
 
 	public static EnumMeteor defaultType;
 
 	public HandlerMeteor(WorldEvent.Load event, HandlerMeteorTick worldTickHandler) {
 		MeteorsMod.instance.setClientStartConfig();
-		this.theWorld = (WorldServer) event.world;
+		this.theWorld = (WorldServer) event.getWorld();
 		this.gMetData = GhostMeteorData.forWorld(theWorld, this);
 		this.ccSetData = CrashedChunkSetData.forWorld(theWorld, this);
 		this.climateUpdater = new ClimateUpdater(this);
 		this.forecast = new MeteorForecast(climateUpdater, ghostMets, ccSetData.getLoadedCrashLocation(), theWorld);
 		this.shieldManager = new ShieldManager(theWorld);
-		worldTickHandler.registerUpdater(theWorld.provider.dimensionId, climateUpdater);
+		worldTickHandler.registerUpdater(theWorld.provider.getDimension(), climateUpdater);
 	}
 
 	public void updateMeteors() {
@@ -73,7 +75,7 @@ public class HandlerMeteor
 							String owner = shield.getOwner();
 							EntityPlayer player = theWorld.getPlayerEntityByName(owner);
 							if (player != null) {
-								player.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("MeteorShield.meteorBlocked"), EnumChatFormatting.GREEN));
+								player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
 								player.addStat(HandlerAchievement.meteorBlocked, 1);
 							}
 							shieldManager.sendMeteorMaterialsToShield(shield, gMeteor);
@@ -81,7 +83,7 @@ public class HandlerMeteor
 							kittyAttack();
 						} else {
 							EntityMeteor meteor = new EntityMeteor(this.theWorld, gMeteor.size, gMeteor.x, gMeteor.z, gMeteor.type, false);
-							this.theWorld.spawnEntityInWorld(meteor);
+							this.theWorld.spawnEntity(meteor);
 							applyMeteorCrash(gMeteor.x, 0, gMeteor.z);
 							playCrashSound(meteor);
 						}
@@ -95,9 +97,9 @@ public class HandlerMeteor
 	}
 
 	public void kittyAttack() {
-		theWorld.func_73046_m().getConfigurationManager().sendChatMsg(ClientHandler.createMessage(StatCollector.translateToLocal("Meteor.kittiesIncoming"), EnumChatFormatting.DARK_RED));
+		theWorld.getMinecraftServer().getPlayerList().sendMessage(ClientHandler.createMessage(I18n.translateToLocal("Meteor.kittiesIncoming"), TextFormatting.DARK_RED));
 		for (int i = 0; i < this.theWorld.playerEntities.size(); i++) {
-			EntityPlayer player = (EntityPlayer) this.theWorld.playerEntities.get(i);
+			EntityPlayer player = this.theWorld.playerEntities.get(i);
 			if (player != null) {
 				for (int r = random.nextInt(64) + 50; r >= 0; r--) {
 					int x = random.nextInt(64);
@@ -111,14 +113,14 @@ public class HandlerMeteor
 						String owner = shield.getOwner();
 						EntityPlayer playerOwner = theWorld.getPlayerEntityByName(owner);
 						if (playerOwner != null) {
-							playerOwner.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("MeteorShield.meteorBlocked"), EnumChatFormatting.GREEN));
+							playerOwner.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
 							playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
 						}
 						shieldManager.sendMeteorMaterialsToShield(shield, new GhostMeteor(x, z, 1, 0, EnumMeteor.KITTY));
 					} else {
 						EntityMeteor fKitty = new EntityMeteor(this.theWorld, 1, x, z, EnumMeteor.KITTY, false);
 						fKitty.spawnPauseTicks = random.nextInt(100);
-						this.theWorld.spawnEntityInWorld(fKitty);
+						this.theWorld.spawnEntity(fKitty);
 					}
 				}
 				player.addStat(HandlerAchievement.kittyEvent, 1);
@@ -127,33 +129,31 @@ public class HandlerMeteor
 	}
 
 	public void applyMeteorCrash(int x, int y, int z) {
-		ArrayList<CrashedChunkSet> tbr = new ArrayList();
+		ArrayList<CrashedChunkSet> tbr = new ArrayList<>();
 
-		for (int i = 0; i < this.crashedChunks.size(); i++) {
-			CrashedChunkSet set = this.crashedChunks.get(i);
+		for (CrashedChunkSet set : this.crashedChunks) {
 			set.age += 1;
 			if (set.age >= 20) {
 				tbr.add(set);
 			}
 		}
-		for (int i = 0; i < tbr.size(); i++) {
-			this.crashedChunks.remove(tbr.get(i));
+		for (CrashedChunkSet crashedChunkSet : tbr) {
+			this.crashedChunks.remove(crashedChunkSet);
 		}
 
-		ChunkCoordIntPair coords = this.theWorld.getChunkFromBlockCoords(x, z).getChunkCoordIntPair();
-		this.crashedChunks.add(new CrashedChunkSet(coords.chunkXPos, coords.chunkZPos, x, y, z));
+		ChunkPos coords = new ChunkPos(x, z);
+		this.crashedChunks.add(new CrashedChunkSet(coords.x, coords.z, x, y, z));
 
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			forecast.setLastCrashLocation(new CrashLocation(x, y, z, true, forecast.getLastCrashLocation()));
-			MeteorsMod.network.sendToDimension(new PacketLastCrash(forecast.getLastCrashLocation()), theWorld.provider.dimensionId);
+			MeteorsMod.network.sendToDimension(new PacketLastCrash(forecast.getLastCrashLocation()), theWorld.provider.getDimension());
 			if (MeteorsMod.instance.textNotifyCrash) {
-				theWorld.func_73046_m().getConfigurationManager().sendChatMsg(new ChatComponentText(StatCollector.translateToLocal("Meteor.crashed")));
+				theWorld.getMinecraftServer().getPlayerList().sendMessage(new TextComponentString(I18n.translateToLocal("Meteor.crashed")));
 			}
 			
-			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(x - 60D, 0, z - 60D, x + 60D, theWorld.getHeight(), z + 60D);
+			AxisAlignedBB aabb = new AxisAlignedBB(x - 60D, 0, z - 60D, x + 60D, theWorld.getHeight(), z + 60D);
 			List<EntityPlayer> players = this.theWorld.getEntitiesWithinAABB(EntityPlayer.class, aabb);
-			for (int i = 0; i < players.size(); i++) {
-				EntityPlayer player = players.get(i);
+			for (EntityPlayer player : players) {
 				player.addStat(HandlerAchievement.foundMeteor, 1);
 			}
 		}
@@ -171,9 +171,9 @@ public class HandlerMeteor
 		return this.ghostMets.size() < 3;
 	}
 
-	public boolean canSpawnNewMeteorAt(ChunkCoordIntPair coords) {
-		for (int i = 0; i < this.crashedChunks.size(); i++) {
-			if (this.crashedChunks.get(i).containsChunk(coords)) {
+	public boolean canSpawnNewMeteorAt(ChunkPos coords) {
+		for (CrashedChunkSet crashedChunk : this.crashedChunks) {
+			if (crashedChunk.containsChunk(coords)) {
 				return false;
 			}
 		}
@@ -187,11 +187,9 @@ public class HandlerMeteor
 			sendGhostMeteorAddPacket(gMeteor);
 			forecast.updateNearestTimeForClients();
 			if (type == EnumMeteor.KITTY) {
-				Iterator<EntityPlayer> iter = theWorld.playerEntities.iterator();
-				while (iter.hasNext()) {
-					EntityPlayer player = iter.next();
-					player.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("Meteor.kittiesDetected.one"), EnumChatFormatting.DARK_RED));
-					player.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("Meteor.kittiesDetected.two"), EnumChatFormatting.DARK_RED));
+				for (EntityPlayer player : theWorld.playerEntities) {
+					player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("Meteor.kittiesDetected.one"), TextFormatting.DARK_RED));
+					player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("Meteor.kittiesDetected.two"), TextFormatting.DARK_RED));
 				}
 			}
 		}
@@ -251,8 +249,7 @@ public class HandlerMeteor
 	public void sendGhostMeteorPackets(EntityPlayerMP player) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			ArrayList<GhostMeteor> mets = this.ghostMets;
-			for (int i = 0; i < mets.size(); i++) {
-				GhostMeteor met = mets.get(i);
+			for (GhostMeteor met : mets) {
 				MeteorsMod.network.sendTo(new PacketGhostMeteor(true, met), player);
 			}
 		}
@@ -260,25 +257,23 @@ public class HandlerMeteor
 
 	private void sendGhostMeteorAddPacket(GhostMeteor met) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			MeteorsMod.network.sendToDimension(new PacketGhostMeteor(true, met), theWorld.provider.dimensionId);
+			MeteorsMod.network.sendToDimension(new PacketGhostMeteor(true, met), theWorld.provider.getDimension());
 		}
 	}
 
 	private void sendGhostMeteorRemovePacket(GhostMeteor met) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			MeteorsMod.network.sendToDimension(new PacketGhostMeteor(false, met), theWorld.provider.dimensionId);
+			MeteorsMod.network.sendToDimension(new PacketGhostMeteor(false, met), theWorld.provider.getDimension());
 		}
 	}
 
 	private void playCrashSound(EntityMeteor meteor) {
-		Iterator<EntityPlayer> iter = theWorld.playerEntities.iterator();
-		while (iter.hasNext()) {
-			EntityPlayer player = iter.next();
+		for (EntityPlayer player : theWorld.playerEntities) {
 			double xDiff = meteor.posX - player.posX;
 			double zDiff = meteor.posZ - player.posZ;
 			double xMod = xDiff / 128.0D * 4.0D;
 			double zMod = zDiff / 128.0D * 4.0D;
-			theWorld.playSoundEffect(player.posX + xMod, player.posY + 1.0D, player.posZ + zMod, MeteorsMod.MOD_ID + ":meteor.crash", 1.0F, 1.0F);
+			theWorld.playSound(player.posX + xMod, player.posY + 1.0D, player.posZ + zMod, new SoundEvent(new ResourceLocation(MeteorsMod.MOD_ID + ":meteor.crash")), SoundCategory.BLOCKS, 1.0F, 1.0F, true);
 		}
 	}
 }

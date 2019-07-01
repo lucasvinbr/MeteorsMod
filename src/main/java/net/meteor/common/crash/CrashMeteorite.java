@@ -1,15 +1,17 @@
 package net.meteor.common.crash;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.meteor.common.EnumMeteor;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.entity.EntityAlienCreeper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -22,27 +24,28 @@ public class CrashMeteorite extends WorldGenerator
 
 	public CrashMeteorite(int Size, Explosion expl, EnumMeteor metType)
 	{
-		this.crashSize = MathHelper.clamp_int(Size, 1, 3);
+		this.crashSize = MathHelper.clamp(Size, 1, 3);
 		this.explosion = expl;
 		this.meteorType = metType;
 	}
 
 	@Override
-    public boolean generate(World world, Random random, int i, int j, int k)
+    public boolean generate(World world, Random random, BlockPos blockPos)
 	{
 		Block meteor = this.meteorType.getMaterial();
 		Block rareMeteor = this.meteorType.getRareMaterial();
 
 		//Initial spreading
-		for (int y = j + MeteorsMod.instance.ImpactSpread * this.crashSize; y >= j - MeteorsMod.instance.ImpactSpread * this.crashSize; y--) {
-			for (int startX = i + MeteorsMod.instance.ImpactSpread * this.crashSize; startX >= i - MeteorsMod.instance.ImpactSpread * this.crashSize; startX--) {
-				for (int startZ = k + MeteorsMod.instance.ImpactSpread * this.crashSize; startZ >= k - MeteorsMod.instance.ImpactSpread * this.crashSize; startZ--) {
-					if ((!world.isAirBlock(startX, y, startZ)) && (meteorsAboveAndBelow(world, startX, y, startZ) == 0) && (random.nextInt(10) + 1 > 7) && (checkBlockIDs(world, startX, y, startZ))) {
+		for (int y = blockPos.getY() + MeteorsMod.instance.ImpactSpread * this.crashSize; y >= blockPos.getY() - MeteorsMod.instance.ImpactSpread * this.crashSize; y--) {
+			for (int startX = blockPos.getX() + MeteorsMod.instance.ImpactSpread * this.crashSize; startX >= blockPos.getX() - MeteorsMod.instance.ImpactSpread * this.crashSize; startX--) {
+				for (int startZ = blockPos.getZ() + MeteorsMod.instance.ImpactSpread * this.crashSize; startZ >= blockPos.getZ() - MeteorsMod.instance.ImpactSpread * this.crashSize; startZ--) {
+					if ((!world.isAirBlock(new BlockPos(startX, y, startZ))) && (meteorsAboveAndBelow(world, startX, y, startZ) == 0) && (random.nextInt(10) + 1 > 7) && (checkBlockIDs(world, startX, y, startZ))) {
 						Block theBlock = random.nextInt(45) == 25 ? rareMeteor : meteor;
-						if (Block.isEqualTo(theBlock, Blocks.ice) || Block.isEqualTo(theBlock, Blocks.lava)) {
-							world.setBlock(startX, y, startZ, theBlock, 0, 2);
+						if (Block.isEqualTo(theBlock, Blocks.ICE) || Block.isEqualTo(theBlock, Blocks.LAVA)) {
+							world.setBlockState(new BlockPos(startX, y, startZ), theBlock.getDefaultState(), 2);
 						} else {
-							world.setBlock(startX, y, startZ, theBlock, random.nextInt(4) + 1, 3);
+							//1.12.2 TODO random.nextInt(4) + 1 meta
+							world.setBlockState(new BlockPos(startX, y, startZ), theBlock.getDefaultState(), 3);
 						}
 					}
 				}
@@ -51,15 +54,16 @@ public class CrashMeteorite extends WorldGenerator
 		}
 
 		//Bottom layer spreading for a higher concentration in center
-		for (int y = j - MeteorsMod.instance.ImpactSpread * this.crashSize; y >= j - (MeteorsMod.instance.ImpactSpread * this.crashSize + 1); y--) {
-			for (int startX = i + MeteorsMod.instance.ImpactSpread * this.crashSize; startX >= i - MeteorsMod.instance.ImpactSpread * this.crashSize; startX--) {
-				for (int startZ = k + MeteorsMod.instance.ImpactSpread * this.crashSize; startZ >= k - MeteorsMod.instance.ImpactSpread * this.crashSize; startZ--) {
-					if ((!world.isAirBlock(startX, y, startZ)) && (meteorsAboveAndBelow(world, startX, y, startZ) == 0) && (checkBlockIDs(world, startX, y, startZ))) {
+		for (int y = blockPos.getY() - MeteorsMod.instance.ImpactSpread * this.crashSize; y >= blockPos.getY() - (MeteorsMod.instance.ImpactSpread * this.crashSize + 1); y--) {
+			for (int startX = blockPos.getX() + MeteorsMod.instance.ImpactSpread * this.crashSize; startX >= blockPos.getX() - MeteorsMod.instance.ImpactSpread * this.crashSize; startX--) {
+				for (int startZ = blockPos.getZ() + MeteorsMod.instance.ImpactSpread * this.crashSize; startZ >= blockPos.getZ() - MeteorsMod.instance.ImpactSpread * this.crashSize; startZ--) {
+					if ((!world.isAirBlock(new BlockPos(startX, y, startZ))) && (meteorsAboveAndBelow(world, startX, y, startZ) == 0) && (checkBlockIDs(world, startX, y, startZ))) {
 						Block theBlock = random.nextInt(45) == 25 ? rareMeteor : meteor;
-						if (Block.isEqualTo(theBlock, Blocks.ice) || Block.isEqualTo(theBlock, Blocks.lava)) {
-							world.setBlock(startX, y, startZ, theBlock, 0, 2);
+						if (Block.isEqualTo(theBlock, Blocks.ICE) || Block.isEqualTo(theBlock, Blocks.LAVA)) {
+							world.setBlockState(new BlockPos(startX, y, startZ), theBlock.getDefaultState(), 2);
 						} else {
-							world.setBlock(startX, y, startZ, theBlock, random.nextInt(4) + 1, 3);
+							//1.12.2 TODO random.nextInt(4) + 1 meta
+							world.setBlockState(new BlockPos(startX, y, startZ), theBlock.getDefaultState(), 3);
 						}
 					}
 				}
@@ -68,27 +72,27 @@ public class CrashMeteorite extends WorldGenerator
 
 		}
 
-		afterCraterFormed(world, random, i, j, k);
+		afterCraterFormed(world, random, blockPos.getX(), blockPos.getY(), blockPos.getZ());//1.12.2 TODO change to blockpos
 
 		return true;
 	}
 
-	public void afterCraterFormed(World world, Random random, int i, int j, int k)
+	public void afterCraterFormed(World world, Random random, int xIn, int yIn, int zIn)
 	{
 		int aliencreepers = random.nextInt(5);
-		ArrayList<ChunkPosition> arraylist = new ArrayList(this.explosion.affectedBlockPositions);
-		for (int j1 = arraylist.size() - 1; (j1 >= 0) && (aliencreepers > 0); j1--)
+		List<BlockPos> affectedBlockPositions = this.explosion.getAffectedBlockPositions();
+		for (int j1 = affectedBlockPositions.size() - 1; (j1 >= 0) && (aliencreepers > 0); j1--)
 		{
-			ChunkPosition chunkposition1 = arraylist.get(j1);
-			int l = chunkposition1.chunkPosX;
-			int j11 = chunkposition1.chunkPosY;
-			int l1 = chunkposition1.chunkPosZ;
-			boolean j2 = world.isAirBlock(l, j11, l1);
-			Block k2 = world.getBlock(l, j11 - 1, l1);
-			if (j2 && k2.isOpaqueCube() && (random.nextInt(10) > 4)) {
+			BlockPos blockPos = affectedBlockPositions.get(j1);
+			int x = blockPos.getX();
+			int y = blockPos.getY();
+			int z = blockPos.getZ();
+			boolean isAir = world.isAirBlock(blockPos);
+			IBlockState k2 = world.getBlockState(blockPos.down());
+			if (isAir && k2.isOpaqueCube() && (random.nextInt(10) > 4)) {
 				EntityAlienCreeper creeper = new EntityAlienCreeper(world);
-				creeper.setLocationAndAngles(l, j11, l1, 0.0F, 0.0F);
-				world.spawnEntityInWorld(creeper);
+				creeper.setLocationAndAngles(x, y, z, 0.0F, 0.0F);
+				world.spawnEntity(creeper);
 				aliencreepers--;
 			}
 		}
@@ -99,8 +103,8 @@ public class CrashMeteorite extends WorldGenerator
 	public int meteorsAbove(World world, int x, int y, int z) { int ceiling = y + 6 * this.crashSize;
 	int mAbove = 0;
 	for (int y1 = y; y1 <= ceiling; y1++) {
-		Block block = world.getBlock(x, y1, z);
-		if (Block.isEqualTo(block, this.meteorType.getMaterial()) || Block.isEqualTo(block, this.meteorType.getRareMaterial())) {
+		IBlockState block = world.getBlockState(new BlockPos(x, y1, z));
+		if (Block.isEqualTo(block.getBlock(), this.meteorType.getMaterial()) || Block.isEqualTo(block.getBlock(), this.meteorType.getRareMaterial())) {
 			mAbove++;
 		}
 	}
@@ -111,8 +115,8 @@ public class CrashMeteorite extends WorldGenerator
 		int floor = y - 6 * this.crashSize;
 		int mBelow = 0;
 		for (int y1 = y; y1 >= floor; y1--) {
-			Block block = world.getBlock(x, y1, z);
-			if (Block.isEqualTo(block, this.meteorType.getMaterial()) || Block.isEqualTo(block, this.meteorType.getRareMaterial())) {
+			IBlockState block = world.getBlockState(new BlockPos(x, y1, z));
+			if (Block.isEqualTo(block.getBlock(), this.meteorType.getMaterial()) || Block.isEqualTo(block.getBlock(), this.meteorType.getRareMaterial())) {
 				mBelow++;
 			}
 		}
@@ -120,14 +124,14 @@ public class CrashMeteorite extends WorldGenerator
 	}
 
 	public int meteorsAboveAndBelow(World world, int x, int y, int z) {
-		Block bl = world.getBlock(x, y, z);
-		return 0 - (Block.isEqualTo(bl, meteorType.getRareMaterial()) ? 1 : meteorsAbove(world, x, y, z) + meteorsBelow(world, x, y, z) - (Block.isEqualTo(bl, meteorType.getMaterial()) ? 1 : 0));
+		IBlockState bl = world.getBlockState(new BlockPos(x, y, z));
+		return 0 - (Block.isEqualTo(bl.getBlock(), meteorType.getRareMaterial()) ? 1 : meteorsAbove(world, x, y, z) + meteorsBelow(world, x, y, z) - (Block.isEqualTo(bl.getBlock(), meteorType.getMaterial()) ? 1 : 0));
 	}
 
 	protected boolean checkBlockIDs(World world, int i, int j, int k) {
-		Block bl = world.getBlock(i, j, k);
-		return (!Block.isEqualTo(bl, Blocks.bedrock) && !Block.isEqualTo(bl, meteorType.getMaterial()) && 
-				!Block.isEqualTo(bl, meteorType.getRareMaterial()) && !Block.isEqualTo(bl, Blocks.flowing_water) && 
-				!Block.isEqualTo(bl, Blocks.water));
+		IBlockState bl = world.getBlockState(new BlockPos(i, j, k));
+		return (!Block.isEqualTo(bl.getBlock(), Blocks.BEDROCK) && !Block.isEqualTo(bl.getBlock(), meteorType.getMaterial()) &&
+				!Block.isEqualTo(bl.getBlock(), meteorType.getRareMaterial()) && !Block.isEqualTo(bl.getBlock(), Blocks.FLOWING_WATER) &&
+				!Block.isEqualTo(bl.getBlock(), Blocks.WATER));
 	}
 }

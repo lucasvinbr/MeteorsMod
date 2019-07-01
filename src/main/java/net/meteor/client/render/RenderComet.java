@@ -3,12 +3,11 @@ package net.meteor.client.render;
 import net.meteor.client.model.ModelMeteor;
 import net.meteor.common.entity.EntityComet;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-public class RenderComet extends Render {
+public class RenderComet extends Render<EntityComet> {
 
 	private ModelMeteor modelMeteor;
 	private int metID = 0;
@@ -18,7 +17,7 @@ public class RenderComet extends Render {
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
+	public void doRender(EntityComet entity, double d, double d1, double d2, float f, float f1) {
 		renderMeteor((EntityComet)entity, d, d1, d2, f, f1);
 	}
 
@@ -34,7 +33,7 @@ public class RenderComet extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
+	protected ResourceLocation getEntityTexture(EntityComet entity) {
 		return RenderMeteor.skins.get(metID);
 	}
 	

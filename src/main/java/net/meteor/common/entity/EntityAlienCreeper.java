@@ -28,7 +28,7 @@ public class EntityAlienCreeper extends EntityCreeper
 	protected void entityInit()
 	{
 		super.entityInit();
-		this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
+		this.dataWatcher.updateObject(17, (byte) 1);
 	}
 	
 	@Override

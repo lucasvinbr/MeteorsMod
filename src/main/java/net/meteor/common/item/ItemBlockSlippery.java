@@ -5,6 +5,7 @@ import java.util.List;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -12,10 +13,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockSlippery extends ItemBlock {
 	
@@ -30,7 +35,7 @@ public class ItemBlockSlippery extends ItemBlock {
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean advancedTip) {
 		checkNBT(itemStack);
 		int slipperiness = getSlipperiness(this.field_150939_a);
-		info.add(StatCollector.translateToLocalFormatted("info.slipperyBlock.one", slipperiness));
+		info.add(I18n.translateToLocalFormatted("info.slipperyBlock.one", slipperiness));
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class ItemBlockSlippery extends ItemBlock {
 		checkNBT(itemStack);
 		Block storedBlock = getStoredBlock(itemStack);
 		String facadeName = new ItemStack(Item.getItemFromBlock(storedBlock), 1, itemStack.getItemDamage()).getDisplayName();
-		return StatCollector.translateToLocalFormatted(this.getUnlocalizedName() + ".name", facadeName);
+		return I18n.translateToLocalFormatted(this.getUnlocalizedName() + ".name", facadeName);
     }
 	
 	@Override
@@ -52,76 +57,78 @@ public class ItemBlockSlippery extends ItemBlock {
     }
 	
 	@Override
-    public boolean onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, int p_77648_4_, int p_77648_5_, int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        Block block = p_77648_3_.getBlock(p_77648_4_, p_77648_5_, p_77648_6_);
-        Block storedBlock = getStoredBlock(p_77648_1_);
+        Block block = world.getBlockState(pos).getBlock();
+        ItemStack itemStack = player.getHeldItem(hand);
+        Block storedBlock = getStoredBlock(itemStack);
+        BlockPos newPos = new BlockPos(pos);
 
-        if (block == Blocks.snow_layer && (p_77648_3_.getBlockMetadata(p_77648_4_, p_77648_5_, p_77648_6_) & 7) < 1)
+        if (block == Blocks.SNOW_LAYER && (world.getBlockMetadata(x, y, z) & 7) < 1)
         {
-            p_77648_7_ = 1;
+            facing = EnumFacing.UP;
         }
-        else if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush && !block.isReplaceable(p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_))
+        else if (block != Blocks.VINE && block != Blocks.TALLGRASS && block != Blocks.DEADBUSH && !block.isReplaceable(world, x, y, z))
         {
-            if (p_77648_7_ == 0)
+            if (facing == EnumFacing.DOWN)
             {
-                --p_77648_5_;
+                newPos = newPos.down();
             }
 
-            if (p_77648_7_ == 1)
+            if (facing == EnumFacing.UP)
             {
-                ++p_77648_5_;
+                newPos = newPos.up();
             }
 
-            if (p_77648_7_ == 2)
+            if (facing == EnumFacing.NORTH)
             {
-                --p_77648_6_;
+                newPos = newPos.north();
             }
 
-            if (p_77648_7_ == 3)
+            if (facing == EnumFacing.SOUTH)
             {
-                ++p_77648_6_;
+                newPos = newPos.south();
             }
 
-            if (p_77648_7_ == 4)
+            if (facing == EnumFacing.WEST)
             {
-                --p_77648_4_;
+                newPos = newPos.west();
             }
 
-            if (p_77648_7_ == 5)
+            if (facing == EnumFacing.EAST)
             {
-                ++p_77648_4_;
+                newPos = newPos.east();
             }
         }
 
-        if (p_77648_1_.stackSize == 0)
+        if (itemStack.getCount() == 0)
         {
-            return false;
+            return EnumActionResult.FAIL;
         }
-        else if (!p_77648_2_.canPlayerEdit(p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_1_))
+        else if (!player.canPlayerEdit(newPos, facing, itemStack))
         {
-            return false;
+            return EnumActionResult.FAIL;
         }
-        else if (p_77648_5_ == 255 && storedBlock.getMaterial().isSolid())
+        else if (y == 255 && storedBlock.getMaterial().isSolid())
         {
-            return false;
+            return EnumActionResult.FAIL;
         }
-        else if (p_77648_3_.canPlaceEntityOnSide(storedBlock, p_77648_4_, p_77648_5_, p_77648_6_, false, p_77648_7_, p_77648_2_, p_77648_1_))
+        else if (world.canPlaceEntityOnSide(storedBlock, newPos, false, facing, player, itemStack))
         {
-            int i1 = this.getMetadata(p_77648_1_.getItemDamage());
-            int j1 = storedBlock.onBlockPlaced(p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_8_, p_77648_9_, p_77648_10_, i1);
+            int i1 = this.getMetadata(itemStack.getItemDamage());
+            IBlockState newState = storedBlock.getDefaultState();//TODO 1.12.2 verify
 
-            if (placeBlockAt(p_77648_1_, p_77648_2_, p_77648_3_, p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_8_, p_77648_9_, p_77648_10_, j1))
+            if (placeBlockAt(itemStack, player, world, newPos, facing, hitX, hitY, hitZ, newState))
             {
-                p_77648_3_.playSoundEffect((double)((float)p_77648_4_ + 0.5F), (double)((float)p_77648_5_ + 0.5F), (double)((float)p_77648_6_ + 0.5F), storedBlock.stepSound.func_150496_b(), (storedBlock.stepSound.getVolume() + 1.0F) / 2.0F, storedBlock.stepSound.getPitch() * 0.8F);
-                --p_77648_1_.stackSize;
+                world.playSound((double)((float)newPos.getX() + 0.5F), (double)((float)newPos.getY() + 0.5F), (double)((float)newPos.getZ() + 0.5F), storedBlock.stepSound.func_150496_b(), (storedBlock.stepSound.getVolume() + 1.0F) / 2.0F, storedBlock.stepSound.getPitch() * 0.8F);
+                itemStack.shrink(1);
             }
 
-            return true;
+            return EnumActionResult.SUCCESS;
         }
         else
         {
-            return false;
+            return EnumActionResult.FAIL;
         }
     }
 	
@@ -129,11 +136,11 @@ public class ItemBlockSlippery extends ItemBlock {
 		if (itemStack == null) return;
 		NBTTagCompound nbt = itemStack.hasTagCompound() ? itemStack.getTagCompound() : new NBTTagCompound();
 		if (!nbt.hasKey(FACADE_BLOCK_KEY)) {
-			Block def = Blocks.stone;
+			Block def = Blocks.STONE;
 			if (itemStack.getItem() instanceof ItemBlockSlippery) {
 				ItemBlockSlippery itemBlock = (ItemBlockSlippery) itemStack.getItem();
-				if (itemBlock.field_150939_a instanceof BlockSlipperyStairs) {
-					def = Blocks.oak_stairs;
+				if (itemBlock.getBlock() instanceof BlockSlipperyStairs) {
+					def = Blocks.OAK_STAIRS;
 				}
 			}
 			nbt.setString(FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(def));
@@ -143,16 +150,16 @@ public class ItemBlockSlippery extends ItemBlock {
 	
 	public static Block getStoredBlock(ItemStack itemStack) {
 		if (itemStack.hasTagCompound()) {
-			Block def = Blocks.stone;
+			Block def = Blocks.STONE;
 			if (itemStack.getItem() instanceof ItemBlockSlippery) {
 				ItemBlockSlippery itemBlock = (ItemBlockSlippery) itemStack.getItem();
-				if (itemBlock.field_150939_a instanceof BlockSlipperyStairs) {
-					def = Blocks.oak_stairs;
+				if (itemBlock.getBlock() instanceof BlockSlipperyStairs) {
+					def = Blocks.OAK_STAIRS;
 				}
 			}
 			return TileEntitySlippery.getBlockFromName(itemStack.getTagCompound().getString(FACADE_BLOCK_KEY), def);
 		}
-		return Blocks.stone;
+		return Blocks.STONE;
 	}
 	
 	public static int getSlipperiness(Block block) {

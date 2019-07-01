@@ -6,17 +6,15 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
-public class RenderSummoner extends Render
+public class RenderSummoner extends Render<EntitySummoner>
 {
 	
 	private int damage;
@@ -44,7 +42,9 @@ public class RenderSummoner extends Render
         GL11.glPopMatrix();
 	}
 
-	private void func_77026_a(Tessellator par1Tessellator, IIcon par2Icon)
+	//TODO why is this even here?
+	//public net.minecraft.client.renderer.entity.RenderSnowball func_77026_a(Lnet/minecraft/client/renderer/Tessellator;Lnet/minecraft/util/IIcon;)V #renderEntity
+	/*private void func_77026_a(Tessellator par1Tessellator, IIcon par2Icon)
     {
 		float f = par2Icon.getMinU();
         float f1 = par2Icon.getMaxU();
@@ -62,7 +62,7 @@ public class RenderSummoner extends Render
         par1Tessellator.addVertexWithUV((double)(f4 - f5), (double)(f4 - f6), 0.0D, (double)f1, (double)f2);
         par1Tessellator.addVertexWithUV((double)(0.0F - f5), (double)(f4 - f6), 0.0D, (double)f, (double)f2);
         par1Tessellator.draw();
-    }
+    }*/
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {

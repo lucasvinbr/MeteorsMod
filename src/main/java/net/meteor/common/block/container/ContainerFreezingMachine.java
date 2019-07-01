@@ -7,13 +7,12 @@ import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidTankInfo;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerFreezingMachine extends Container {
 
@@ -53,19 +52,19 @@ public class ContainerFreezingMachine extends Container {
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting craft)
+	public void addListener(IContainerListener craft)
 	{
-		super.addCraftingToCrafters(craft);
-		craft.sendProgressBarUpdate(this, 0, this.iceMaker.cookTime);
-		craft.sendProgressBarUpdate(this, 1, this.iceMaker.burnTime);
-		craft.sendProgressBarUpdate(this, 2, this.iceMaker.currentItemBurnTime);
+		super.addListener(craft);
+		craft.sendWindowProperty(this, 0, this.iceMaker.cookTime);
+		craft.sendWindowProperty(this, 1, this.iceMaker.burnTime);
+		craft.sendWindowProperty(this, 2, this.iceMaker.currentItemBurnTime);
 		FluidTankInfo tankInfo = this.iceMaker.getTankInfo();
 		if (tankInfo != null && tankInfo.fluid != null) {
-			craft.sendProgressBarUpdate(this, 3, tankInfo.fluid.amount);
+			craft.sendWindowProperty(this, 3, tankInfo.fluid.amount);
 		} else {
-			craft.sendProgressBarUpdate(this, 3, 0);
+			craft.sendWindowProperty(this, 3, 0);
 		}
-		craft.sendProgressBarUpdate(this, 4, this.iceMaker.getRecipeMode().getID());
+		craft.sendWindowProperty(this, 4, this.iceMaker.getRecipeMode().getID());
 	}
 
 	/**
@@ -78,40 +77,40 @@ public class ContainerFreezingMachine extends Container {
 
 		 FluidTankInfo tankInfo = this.iceMaker.getTankInfo();
 
-		 for (int i = 0; i < this.crafters.size(); ++i)
+		 for (int i = 0; i < this.listeners.size(); ++i)
 		 {
-			 ICrafting icrafting = (ICrafting)this.crafters.get(i);
+			 IContainerListener icrafting = this.listeners.get(i);
 
 			 if (this.lastCookTime != this.iceMaker.cookTime)
 			 {
-				 icrafting.sendProgressBarUpdate(this, 0, this.iceMaker.cookTime);
+				 icrafting.sendWindowProperty(this, 0, this.iceMaker.cookTime);
 			 }
 
 			 if (this.lastBurnTime != this.iceMaker.burnTime)
 			 {
-				 icrafting.sendProgressBarUpdate(this, 1, this.iceMaker.burnTime);
+				 icrafting.sendWindowProperty(this, 1, this.iceMaker.burnTime);
 			 }
 
 			 if (this.lastItemBurnTime != this.iceMaker.currentItemBurnTime)
 			 {
-				 icrafting.sendProgressBarUpdate(this, 2, this.iceMaker.currentItemBurnTime);
+				 icrafting.sendWindowProperty(this, 2, this.iceMaker.currentItemBurnTime);
 			 }
 
 			 if (tankInfo != null && tankInfo.fluid != null) {
 				 if (this.lastFluidAmount != tankInfo.fluid.amount)
 				 {
-					 icrafting.sendProgressBarUpdate(this, 3, tankInfo.fluid.amount);
+					 icrafting.sendWindowProperty(this, 3, tankInfo.fluid.amount);
 					 this.lastFluidAmount = tankInfo.fluid.amount;
 				 }
 			 } else {
 				 if (this.lastFluidAmount != 0) {
-					 icrafting.sendProgressBarUpdate(this, 3, 0);
+					 icrafting.sendWindowProperty(this, 3, 0);
 					 this.lastFluidAmount = 0;
 				 }
 			 }
 			 
 			 if (this.lastRecipeModeID != this.iceMaker.getRecipeMode().getID()) {
-				 icrafting.sendProgressBarUpdate(this, 4, this.iceMaker.getRecipeMode().getID());
+				 icrafting.sendWindowProperty(this, 4, this.iceMaker.getRecipeMode().getID());
 			 }
 
 		 }
@@ -149,10 +148,10 @@ public class ContainerFreezingMachine extends Container {
 	  * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
 	  */
 	 @Override
-	 public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int slotID)
+	 public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	 {
 		 ItemStack itemstack = null;
-		 Slot slot = (Slot)this.inventorySlots.get(slotID);
+		 Slot slot = this.inventorySlots.get(slotID);
 
 		 if (slot != null && slot.getHasStack())
 		 {
@@ -208,7 +207,7 @@ public class ContainerFreezingMachine extends Container {
 				 return null;
 			 }
 
-			 if (itemstack1.stackSize == 0)
+			 if (itemstack1.getCount() == 0)
 			 {
 				 slot.putStack((ItemStack)null);
 			 }
@@ -217,12 +216,12 @@ public class ContainerFreezingMachine extends Container {
 				 slot.onSlotChanged();
 			 }
 
-			 if (itemstack1.stackSize == itemstack.stackSize)
+			 if (itemstack1.getCount() == itemstack.getCount())
 			 {
 				 return null;
 			 }
 
-			 slot.onPickupFromSlot(p_82846_1_, itemstack1);
+			 slot.onTake(player, itemstack1);
 		 }
 
 		 return itemstack;

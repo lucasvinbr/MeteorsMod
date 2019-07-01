@@ -6,8 +6,8 @@ import net.meteor.common.EnumMeteor;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.packets.PacketSoonestMeteor;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class MeteorForecast {
 	
@@ -38,19 +38,19 @@ public class MeteorForecast {
 	public GhostMeteor getNearestTimeMeteor() {
 		if (this.theWorld == null) return null;
 		GhostMeteor closestMeteor = null;
-		for (int i = 0; i < this.ghostMets.size(); i++) {
-			if (closestMeteor != null) {
-				if (this.ghostMets.get(i).type != EnumMeteor.KITTY) {
-					int var1 = closestMeteor.getRemainingTicks();
-					int var2 = this.ghostMets.get(i).getRemainingTicks();
-					if (var2 < var1)
-						closestMeteor = this.ghostMets.get(i);
-				}
-			} else if (this.ghostMets.get(i).type != EnumMeteor.KITTY) {
-				closestMeteor = this.ghostMets.get(i);
-			}
+        for (GhostMeteor ghostMet : this.ghostMets) {
+            if (closestMeteor != null) {
+                if (ghostMet.type != EnumMeteor.KITTY) {
+                    int var1 = closestMeteor.getRemainingTicks();
+                    int var2 = ghostMet.getRemainingTicks();
+                    if (var2 < var1)
+                        closestMeteor = ghostMet;
+                }
+            } else if (ghostMet.type != EnumMeteor.KITTY) {
+                closestMeteor = ghostMet;
+            }
 
-		}
+        }
 
 		return closestMeteor;
 	}
@@ -58,7 +58,7 @@ public class MeteorForecast {
 	public void updateNearestTimeForClients() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			GhostMeteor gMeteor = getNearestTimeMeteor();
-			MeteorsMod.network.sendToDimension(new PacketSoonestMeteor(gMeteor), theWorld.provider.dimensionId);
+			MeteorsMod.network.sendToDimension(new PacketSoonestMeteor(gMeteor), theWorld.provider.getDimension());
 		}
 	}
 	

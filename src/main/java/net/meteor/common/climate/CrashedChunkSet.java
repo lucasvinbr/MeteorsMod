@@ -2,11 +2,10 @@ package net.meteor.common.climate;
 
 import java.io.Serializable;
 
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 
-public class CrashedChunkSet
-implements Serializable
+public class CrashedChunkSet implements Serializable
 {
 	private int[] theChunksX = new int[49];
 	private int[] theChunksZ = new int[49];
@@ -34,9 +33,9 @@ implements Serializable
 		this.age = 0;
 	}
 
-	public boolean containsChunk(ChunkCoordIntPair coords) {
+	public boolean containsChunk(ChunkPos coords) {
 		for (int i = 0; i < 49; i++) {
-			if ((coords.chunkXPos == this.theChunksX[i]) && (coords.chunkZPos == this.theChunksZ[i])) {
+			if ((coords.x == this.theChunksX[i]) && (coords.z == this.theChunksZ[i])) {
 				return true;
 			}
 		}
@@ -44,8 +43,8 @@ implements Serializable
 		return false;
 	}
 
-	public ChunkCoordinates getCrashCoords() {
-		return new ChunkCoordinates(this.xOrigin, this.yOrigin, this.zOrigin);
+	public BlockPos getCrashCoords() {
+		return new BlockPos(this.xOrigin, this.yOrigin, this.zOrigin);
 	}
 	
 	public String toString() {

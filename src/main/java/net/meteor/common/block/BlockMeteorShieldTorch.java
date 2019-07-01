@@ -13,11 +13,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMeteorShieldTorch extends BlockTorch
 {
@@ -115,17 +115,16 @@ public class BlockMeteorShieldTorch extends BlockTorch
 			HandlerMeteor meteorHandler = MeteorsMod.proxy.metHandlers.get(world.provider.dimensionId);
 			List<IMeteorShield> shields = meteorHandler.getShieldManager().getShieldsInRange(i, k);
 			if (!shields.isEmpty()) {
-				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("ProtectionTorch.landOwnership")));
+				player.sendMessage(new TextComponentString(I18n.translateToLocal("ProtectionTorch.landOwnership")));
 				List owners = new ArrayList();
-				for (int l = 0; l < shields.size(); l++) {
-					IMeteorShield oPair = shields.get(l);
+				for (IMeteorShield oPair : shields) {
 					if (!owners.contains(oPair.getOwner())) {
 						owners.add(oPair.getOwner());
 					}
 				}
 
-				for (int l = 0; l < owners.size(); l++) {
-					player.addChatMessage(new ChatComponentText("    - " + (String)owners.get(l)));
+				for (Object owner : owners) {
+					player.sendMessage(new TextComponentString("    - " + (String) owner));
 				}
 			}
 		}

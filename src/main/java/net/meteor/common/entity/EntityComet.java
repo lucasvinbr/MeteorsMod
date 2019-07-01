@@ -5,10 +5,12 @@ import net.meteor.common.EnumMeteor;
 import net.meteor.common.crash.CrashComet;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 	
@@ -52,7 +54,7 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 	
 	@Override
 	public void onUpdate() {
-		if (!this.worldObj.provider.isSurfaceWorld()) {
+		if (!this.getEntityWorld().provider.isSurfaceWorld()) {
 			this.setDead();
 			return;
 		}
@@ -71,18 +73,18 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 		prevPosY = posY;
 		prevPosZ = posZ;
 		motionY -= 0.039999999105930328D;
-		moveEntity(motionX, motionY, motionZ);
+		setPosition(motionX, motionY, motionZ);
 		motionY *= 0.98000001907348633D;
 		
 		if (onGround) {
 			setDead();
-			if(!worldObj.isRemote) {
-				worldObj.newExplosion(this, posX, posY, posZ, 0.5F, false, true);
+			if(!getEntityWorld().isRemote) {
+				getEntityWorld().newExplosion(this, posX, posY, posZ, 0.5F, false, true);
 				CrashComet crash = new CrashComet(this.meteorType);
-				crash.generate(worldObj, rand, (int)posX, (int)posY, (int)posZ);
+				crash.generate(getEntityWorld(), rand, new BlockPos((int)posX, (int)posY, (int)posZ));
 			}
 		} else {
-			worldObj.spawnParticle("largeexplode", posX, posY + 2.5D, posZ, 0.0D, 0.0D, 0.0D);
+			getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, posX, posY + 2.5D, posZ, 0.0D, 0.0D, 0.0D);
 		}
 	}
 

@@ -9,7 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
@@ -74,8 +74,8 @@ public class ItemFrezariteHoe extends ItemHoe
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezHoe.one"));
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezHoe.two"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezHoe.one"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezHoe.two"));
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -3,11 +3,11 @@
 backup of assets/*
 build/*
 eclipse/*
-gradle/*
-gradlew
 /src/api/*
 /bin/*
 /lib/*
+out
+.idea
 
 *.bat
 *.sh

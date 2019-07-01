@@ -3,10 +3,8 @@ package net.meteor.client.block;
 import net.meteor.common.item.ItemBlockSlippery;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
@@ -33,7 +31,7 @@ public class SlipperyItemRenderer implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		GL11.glPushMatrix();
-		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderBlocks renderBlocks = (RenderBlocks) data[0];
 		Block facadeBlock = ItemBlockSlippery.getStoredBlock(item);
 		if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) {

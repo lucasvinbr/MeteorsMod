@@ -20,35 +20,26 @@ import net.meteor.plugin.baubles.Baubles;
 import net.meteor.plugin.thaumcraft.Thaumcraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.ChunkProviderGenerate;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.MinecraftForge;
 
+import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-
 @Mod(modid=MeteorsMod.MOD_ID, name=MeteorsMod.MOD_NAME, version=MeteorsMod.VERSION, dependencies="after:Waila;after:Baubles;after:Thaumcraft")
-public class MeteorsMod
-implements IWorldGenerator
+public class MeteorsMod implements IWorldGenerator
 {
 	
 	public static final String MOD_ID 	= "meteors";
@@ -99,7 +90,7 @@ implements IWorldGenerator
 	public int[] whitelistedDimensions;
 	public boolean slipperyBlocksEnabled;
 
-	@EventHandler
+	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
 		ModConfig.instance.load(event.getSuggestedConfigurationFile());
@@ -131,7 +122,7 @@ implements IWorldGenerator
 		proxy.preInit();
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void init(FMLInitializationEvent event)
 	{
 		registerEntities();
@@ -155,7 +146,7 @@ implements IWorldGenerator
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new HandlerGui());
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {}
 
 	private void loadStaticConfigurationValues() {
@@ -193,8 +184,8 @@ implements IWorldGenerator
 		this.ShieldRadiusMultiplier = ModConfig.instance.get("Shield Radius in Blocks", 64, "The range of the meteor shield is determined by this times the shield's power level.");
 		this.MinMeteorSize = ModConfig.instance.get("Minimum Meteor Size", 1, "Minimum Size of a falling meteor. Ranges from 1 to 3.");
 		this.MaxMeteorSize = ModConfig.instance.get("Maximum Meteor Size", 3, "Maximum Size of a falling meteor. Ranges from 1 to 3.");
-		this.MinMeteorSize = MathHelper.clamp_int(this.MinMeteorSize, 1, 3);
-		this.MaxMeteorSize = MathHelper.clamp_int(this.MaxMeteorSize, 1, 3);
+		this.MinMeteorSize = MathHelper.clamp(this.MinMeteorSize, 1, 3);
+		this.MaxMeteorSize = MathHelper.clamp(this.MaxMeteorSize, 1, 3);
 		if (this.MinMeteorSize > this.MaxMeteorSize)
 			this.MinMeteorSize = this.MaxMeteorSize;
 		else if (this.MaxMeteorSize < this.MinMeteorSize) {
@@ -209,13 +200,13 @@ implements IWorldGenerator
 		} else if (this.ImpactExplosionMultiplier < 0.0) {
 			this.ImpactExplosionMultiplier = 0.0;
 		}
-		this.ImpactSpread = MathHelper.abs_int(ModConfig.instance.get("Meteor Impact Spread", 4, "This times the meteor size determines how big of an impact the meteor's crater will have to spread ore."));
+		this.ImpactSpread = MathHelper.abs(ModConfig.instance.get("Meteor Impact Spread", 4, "This times the meteor size determines how big of an impact the meteor's crater will have to spread ore."));
 		this.slipperyBlocksEnabled = ModConfig.instance.get("Slippery Blocks Enabled", true, "Setting to false will disallow the creation of Slippery Blocks with the Freezer.");
 	}
 
 	
 
-	@EventHandler
+	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
 		evt.registerServerCommand(new CommandKittyAttack());
 		evt.registerServerCommand(new CommandDebugShields());
@@ -226,19 +217,17 @@ implements IWorldGenerator
 
 	private void registerEntities() {
 		proxy.registerTileEntities();
-		EntityRegistry.registerGlobalEntityID(EntityMeteor.class, "Meteor", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityMeteor.class, "FallingMeteor", 1, this, 64, 8, true);
-		EntityRegistry.registerGlobalEntityID(EntityAlienCreeper.class, "AlienCreeper", EntityRegistry.findGlobalUniqueEntityId(), 7864485, 16732697);
-		EntityRegistry.registerModEntity(EntityAlienCreeper.class, "AlienCreeper", 3, this, 80, 3, true);
-		EntityRegistry.registerGlobalEntityID(EntityCometKitty.class, "CometKitty", EntityRegistry.findGlobalUniqueEntityId(), 2239283, 884535);
-		EntityRegistry.registerModEntity(EntityCometKitty.class, "CometKitty", 4, this, 80, 3, true);
-		EntityRegistry.registerGlobalEntityID(EntitySummoner.class, "MeteorSummoner", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntitySummoner.class, "MeteorSummoner", 2, this, 64, 8, true);
-		EntityRegistry.registerGlobalEntityID(EntityComet.class, "FallingComet", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityComet.class, "FallingComet", 5, this, 64, 8, true);
+
+		//Register Entities
+		int id = 0;
+		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "fallingmeteor"), EntityMeteor.class, "FallingMeteor", id++, this, 64, 8, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "aliencreeper"), EntityAlienCreeper.class, "AlienCreeper", id++, this, 80, 3, true, 7864485, 16732697);
+		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "cometkitty"), EntityCometKitty.class, "CometKitty", id++, this, 80, 3, true, 2239283, 884535);
+		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "meteorsummoner"), EntitySummoner.class, "MeteorSummoner", id++, this, 64, 8, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "fallingcomet"), EntityComet.class, "FallingComet", id++, this, 64, 8, true);
 	}
 	
-	private void loadPlugins() {
+	private void loadPlugins() {//TODO 1.12.2
 		if (Loader.isModLoaded("Waila")) {
 			FMLInterModComms.sendMessage("Waila", "register", "net.meteor.plugin.waila.Waila.register");
 		} else {
@@ -259,30 +248,30 @@ implements IWorldGenerator
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
 	{
-		if ((chunkGenerator instanceof ChunkProviderGenerate)) {
+		if ((chunkGenerator instanceof ChunkProviderServer)) {//TODO 1.12.2 verify this is right
 			int x = chunkX << 4;
 			int z = chunkZ << 4;
 			for (int i = 0; i < this.chunkChecks; i++) {
 				int randX = x + rand.nextInt(16);
 				int randY = rand.nextInt(16) + 6;
 				int randZ = z + rand.nextInt(16);
-				(new WorldGenMinable(MeteorBlocks.blockMeteorOre, this.oreGenSize)).generate(world, rand, randX, randY, randZ);
+				(new WorldGenMinable(MeteorBlocks.blockMeteorOre.getDefaultState(), this.oreGenSize)).generate(world, rand, randX, randY, randZ);
 			}
 			
 			for (int i = 0; i < this.chunkChecks; i++) {
 				int randX = x + rand.nextInt(16);
 				int randY = rand.nextInt(20) + 32;
 				int randZ = z + rand.nextInt(16);
-				if (world.getBiomeGenForCoords(randX, randZ).temperature <= 0.15F) {
-					(new WorldGenMinable(MeteorBlocks.blockFrezariteOre, this.oreGenSize)).generate(world, rand, randX, randY, randZ);
+				if (world.getBiomeForCoordsBody(new BlockPos(randX, 0, randZ)).getDefaultTemperature() <= 0.15F) {
+					(new WorldGenMinable(MeteorBlocks.blockFrezariteOre.getDefaultState(), this.oreGenSize)).generate(world, rand, randX, randY, randZ);
 				}
 			}
 		}
 	}
 	
 	public boolean isDimensionWhitelisted(int dim) {
-		for (int i = 0; i < whitelistedDimensions.length; i++) {
-			if (dim == whitelistedDimensions[i]) {
+		for (int whitelistedDimension : whitelistedDimensions) {
+			if (dim == whitelistedDimension) {
 				return true;
 			}
 		}

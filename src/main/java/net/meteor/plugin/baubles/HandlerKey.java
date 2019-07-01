@@ -6,12 +6,10 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
-
-import baubles.api.BaublesApi;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 public class HandlerKey {
 	
@@ -23,9 +21,9 @@ public class HandlerKey {
 	}
 	
 	@SubscribeEvent
-	public void onKeyInput(KeyInputEvent event) {
+	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if (toggleMagnetism.isPressed()) {
-			IInventory inv = BaublesApi.getBaubles(Minecraft.getMinecraft().thePlayer);
+			IInventory inv = BaublesApi.getBaubles(Minecraft.getMinecraft().player);
 			ItemStack stack = inv.getStackInSlot(3);
 			if (stack != null) {
 				if (stack.getItem() == Baubles.MagnetismController) {

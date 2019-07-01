@@ -25,7 +25,7 @@ public class CrashKitty extends CrashMeteorite
 		for (int c = 0; c < kitties; c++) {
 			EntityCometKitty kitty = new EntityCometKitty(world);
 			kitty.setPosition(i, j, k);
-			world.spawnEntityInWorld(kitty);
+			world.spawnEntity(kitty);
 		}
 	}
 }

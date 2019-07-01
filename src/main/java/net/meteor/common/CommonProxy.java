@@ -7,11 +7,11 @@ import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.meteor.common.tileentity.TileEntityMeteorShield;
 import net.meteor.common.tileentity.TileEntityMeteorTimer;
 import net.meteor.common.tileentity.TileEntitySlippery;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy
 {
-	public HashMap<Integer, HandlerMeteor> metHandlers = new HashMap<Integer, HandlerMeteor>();
+	public HashMap<Integer, HandlerMeteor> metHandlers = new HashMap<>();
 
 	public void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityMeteorShield.class, "TileEntityMeteorShield");

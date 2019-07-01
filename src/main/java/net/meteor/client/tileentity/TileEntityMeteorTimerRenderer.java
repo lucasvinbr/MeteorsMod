@@ -13,17 +13,16 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
-public class TileEntityMeteorTimerRenderer extends TileEntitySpecialRenderer {
+public class TileEntityMeteorTimerRenderer extends TileEntitySpecialRenderer<TileEntityMeteorTimer> {
 
 	private static final ResourceLocation timerTex = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/metTimer.png");
 
@@ -70,7 +69,7 @@ public class TileEntityMeteorTimerRenderer extends TileEntitySpecialRenderer {
 	protected void drawStringAbove(TileEntityMeteorTimer timer, double x, double y, double z)
 	{
 		RenderManager renderManager = RenderManager.instance;
-		MovingObjectPosition mop = Minecraft.getMinecraft().objectMouseOver;
+		RayTraceResult mop = Minecraft.getMinecraft().objectMouseOver;
 
 		if (Minecraft.isGuiEnabled() && mop != null && timer.xCoord == mop.blockX && timer.yCoord == mop.blockY && timer.zCoord == mop.blockZ)
 		{
@@ -81,8 +80,8 @@ public class TileEntityMeteorTimerRenderer extends TileEntitySpecialRenderer {
 
 			if (d3 < (double)(f2 * f2))
 			{
-				String s = timer.quickMode ? StatCollector.translateToLocal("info.meteorTimer.quickMode") : StatCollector.translateToLocal("info.meteorTimer.powerMode");
-				FontRenderer fontrenderer = this.func_147498_b();
+				String s = timer.quickMode ? I18n.translateToLocal("info.meteorTimer.quickMode") : I18n.translateToLocal("info.meteorTimer.powerMode");
+				FontRenderer fontrenderer = this.getFontRenderer();
 				GL11.glPushMatrix();
 				GL11.glTranslatef((float)x + 0.0F, (float)y + 0.5F, (float)z);
 				GL11.glNormal3f(0.0F, 1.0F, 0.0F);

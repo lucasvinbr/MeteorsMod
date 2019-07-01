@@ -2,12 +2,13 @@ package net.meteor.common.packets;
 
 import io.netty.buffer.ByteBuf;
 import net.meteor.common.tileentity.TileEntityNetworkBase;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketButtonPress implements IMessage {
 	
@@ -28,10 +29,10 @@ public class PacketButtonPress implements IMessage {
 		int y = buffer.readInt();
 		int z = buffer.readInt();
 		buttonID = buffer.readInt();
-		
-		World world = MinecraftServer.getServer().worldServerForDimension(dim);
+
+		World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dim);
 		if (world != null) {
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			if (tile instanceof TileEntityNetworkBase) {
 				this.tileEntity = (TileEntityNetworkBase)tile;
 			}
@@ -40,10 +41,11 @@ public class PacketButtonPress implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buffer) {
-		buffer.writeInt(tileEntity.getWorldObj().provider.dimensionId);
-		buffer.writeInt(tileEntity.xCoord);
-		buffer.writeInt(tileEntity.yCoord);
-		buffer.writeInt(tileEntity.zCoord);
+		buffer.writeInt(tileEntity.getWorld().provider.getDimension());
+		BlockPos pos = tileEntity.getPos();
+		buffer.writeInt(pos.getX());
+		buffer.writeInt(pos.getY());
+		buffer.writeInt(pos.getZ());
 		buffer.writeInt(buttonID);
 	}
 	

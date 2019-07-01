@@ -56,7 +56,7 @@ public class ContainerMeteorShield extends Container {
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotID)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(slotID);
+        Slot slot = this.inventorySlots.get(slotID);
 
         if (slot != null && slot.getHasStack())
         {
@@ -73,15 +73,15 @@ public class ContainerMeteorShield extends Container {
             	ItemStack chip = new ItemStack(MeteorItems.itemMeteorChips, 1);
             	if (shield.isItemValidForSlot(0, chip)) {
             		this.putStackInSlot(0, chip);
-            		itemstack1.stackSize--;
+            		itemstack1.shrink(1);
             	}
             	itemstack = null;
             } else if (itemstack1.getItem() == MeteorItems.itemRedMeteorGem) {
-            	for (int i = 1; i < 5 && itemstack1.stackSize > 0; i++) {
+            	for (int i = 1; i < 5 && itemstack1.getCount() > 0; i++) {
             		Slot slot1 = (Slot)this.inventorySlots.get(i);
             		if (slot1 != null && shield.isItemValidForSlot(i, new ItemStack(MeteorItems.itemRedMeteorGem, 1))) {
             			slot1.putStack(new ItemStack(MeteorItems.itemRedMeteorGem, 1));
-            			itemstack1.stackSize--;
+            			itemstack1.shrink(1);
             		}
             	}
             	itemstack = null;
@@ -89,8 +89,8 @@ public class ContainerMeteorShield extends Container {
             	return null;
             }
             
-            if (itemstack1.stackSize == 0) {
-                slot.putStack((ItemStack)null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }

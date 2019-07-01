@@ -3,8 +3,8 @@ package net.meteor.common.climate;
 import net.meteor.common.IMeteorShield;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.storage.WorldSavedData;
 
 public class MeteorShieldSavedData extends WorldSavedData {
 	
@@ -21,8 +21,8 @@ public class MeteorShieldSavedData extends WorldSavedData {
 	
 	public static MeteorShieldSavedData forWorld(World world, ShieldManager man) {
 		tempHandle = man;
-		MapStorage storage = world.perWorldStorage;
-		MeteorShieldSavedData result = (MeteorShieldSavedData)storage.loadData(MeteorShieldSavedData.class, key);
+		MapStorage storage = world.getPerWorldStorage();
+		MeteorShieldSavedData result = (MeteorShieldSavedData)storage.getOrLoadData(MeteorShieldSavedData.class, key);
 		if (result == null) {
 			result = new MeteorShieldSavedData(key);
 			storage.setData(key, result);
@@ -52,7 +52,7 @@ public class MeteorShieldSavedData extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		int numShields = manager.meteorShields.size();
 		nbt.setInteger("numShields", numShields);
 		for (int i = 0; i < numShields; i++) {
@@ -66,6 +66,7 @@ public class MeteorShieldSavedData extends WorldSavedData {
 			sNBT.setBoolean("blockComets", shield.getPreventComets());
 			nbt.setTag("s" + i, sNBT);
 		}
+		return nbt;
 	}
 	
 	@Override

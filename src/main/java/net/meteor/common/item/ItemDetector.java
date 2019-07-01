@@ -4,14 +4,16 @@ import java.util.List;
 
 import net.meteor.client.TextureDetector;
 import net.meteor.common.ClientHandler;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ItemDetector extends ItemMeteorsMod {
 	
@@ -26,38 +28,37 @@ public class ItemDetector extends ItemMeteorsMod {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		
-		long worldTime = par2EntityPlayer.worldObj.getTotalWorldTime();
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		long worldTime = worldIn.getTotalWorldTime();
 		if (worldTime - lastDot > 10L) {
 			lastDot = worldTime;
 			dots = dots.length() > 5 ? "." : dots + ".";
 		}
 		
 		if (type == 1) {
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("Detector.time"));
+			tooltip.add(TextFormatting.AQUA + I18n.translateToLocal("Detector.time"));
 			if (ClientHandler.nearestTimeLocation == null) {
-				par3List.add(StatCollector.translateToLocal("Detector.scanning") + dots);
+				tooltip.add(I18n.translateToLocal("Detector.scanning") + dots);
 			} else {
-				par3List.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("Detector.detected"));
+				tooltip.add(TextFormatting.GREEN + I18n.translateToLocal("Detector.detected"));
 			}
 		} else if (type == 0) {
-			par3List.add(EnumChatFormatting.LIGHT_PURPLE + StatCollector.translateToLocal("Detector.proximity"));
+			tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal("Detector.proximity"));
 			if (ClientHandler.getClosestIncomingMeteor(par2EntityPlayer.posX, par2EntityPlayer.posZ) == null) {
-				par3List.add(StatCollector.translateToLocal("Detector.scanning") + dots);
+				tooltip.add(I18n.translateToLocal("Detector.scanning") + dots);
 			} else {
-				par3List.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("Detector.detected"));
+				tooltip.add(TextFormatting.GREEN + I18n.translateToLocal("Detector.detected"));
 			}
 		} else {
-			par3List.add(EnumChatFormatting.RED + StatCollector.translateToLocal("Detector.crash"));
+			tooltip.add(TextFormatting.RED + I18n.translateToLocal("Detector.crash"));
 			if (ClientHandler.lastCrashLocation == null) {
-				par3List.add(StatCollector.translateToLocal("CrashDetector.noActivity"));
-				par3List.add(StatCollector.translateToLocal("Detector.scanning") + dots);
+				tooltip.add(I18n.translateToLocal("CrashDetector.noActivity"));
+				tooltip.add(I18n.translateToLocal("Detector.scanning") + dots);
 			} else {
 				if (ClientHandler.lastCrashLocation.inOrbit) {
-					par3List.add(EnumChatFormatting.GREEN + "Orbital Entrance Detected!");
+					tooltip.add(TextFormatting.GREEN + "Orbital Entrance Detected!");
 				} else {
-					par3List.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("CrashDetector.zoneLocated"));
+					tooltip.add(TextFormatting.GREEN + I18n.translateToLocal("CrashDetector.zoneLocated"));
 				}
 			}
 		}

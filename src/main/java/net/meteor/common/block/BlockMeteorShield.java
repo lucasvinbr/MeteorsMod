@@ -7,76 +7,78 @@ import net.meteor.common.MeteorsMod;
 import net.meteor.common.tileentity.TileEntityMeteorShield;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMeteorShield extends BlockContainerMeteorsMod
 {
 	
 	public BlockMeteorShield()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		this.setLightOpacity(0);
 		this.setBlockBounds(0.0625F, 0.375F, 0.0625F, 0.9375F, 1.0F, 0.9375F);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLiving, ItemStack itemstack)
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
-		if ((par5EntityLiving instanceof EntityPlayer)) {
-			EntityPlayer player = (EntityPlayer)par5EntityLiving;
-			if (!par1World.isRemote) {
-				player.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("MeteorShield.charging"), EnumChatFormatting.YELLOW));
+		if ((placer instanceof EntityPlayer)) {
+			EntityPlayer player = (EntityPlayer)placer;
+			if (!worldIn.isRemote) {
+				player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.charging"), TextFormatting.YELLOW));
 			}
-			TileEntityMeteorShield shield = (TileEntityMeteorShield) par1World.getTileEntity(par2, par3, par4);
-			shield.owner = player.getCommandSenderName();
-			par1World.playSoundEffect(par2, par3, par4, "meteors:shield.humm", 1.0F, 1.0F);
+			TileEntityMeteorShield shield = (TileEntityMeteorShield) worldIn.getTileEntity(pos);
+			shield.owner = player.getName();
+			worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), new SoundEvent(new ResourceLocation("meteors:shield.humm")), SoundCategory.BLOCKS, 1.0F, 1.0F, true);
 		}
 		
-		int l = MathHelper.floor_double((double)(par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int l = MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
         if (l == 0)
         {
-        	par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 2);
+        	worldIn.setBlockMetadataWithNotify(x, y, z, 1, 2);
         }
 
         if (l == 1)
         {
-        	par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 2);
+        	worldIn.setBlockMetadataWithNotify(x, y, z, 0, 2);
         }
 
         if (l == 2)
         {
-        	par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
+        	worldIn.setBlockMetadataWithNotify(x, y, z, 3, 2);
         }
 
         if (l == 3)
         {
-        	par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
+        	worldIn.setBlockMetadataWithNotify(x, y, z, 2, 2);
         }
         
-        super.onBlockPlacedBy(par1World, par2, par3, par4, par5EntityLiving, itemstack);
+        super.onBlockPlacedBy(worldIn, x, y, z, placer, stack);
 	}
 
 	@Override
-	public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
+	public void breakBlock(World world, BlockPos pos, IBlockState state)
 	{
-		TileEntityMeteorShield shield = (TileEntityMeteorShield)par1World.getTileEntity(par2, par3, par4);
-		if (!par1World.isRemote) {
-			if (MeteorsMod.proxy.metHandlers.get(par1World.provider.dimensionId).getShieldManager().meteorShields.remove(shield)) {
+		TileEntityMeteorShield shield = (TileEntityMeteorShield)world.getTileEntity(pos);
+		if (!world.isRemote) {
+			if (MeteorsMod.proxy.metHandlers.get(world.provider.getDimension()).getShieldManager().meteorShields.remove(shield)) {
 				//MeteorsMod.log.info("METEOR SHIELD SHOULD BE REMOVED");
 			}
-			par1World.playSoundEffect(par2 + 0.5D, par3 + 0.5D, par4 + 0.5D, "meteors:shield.powerdown", 1.0F, 1.0F);
+			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new SoundEvent(new ResourceLocation("meteors:shield.powerdown")), SoundCategory.BLOCKS, 1.0F, 1.0F, true);
 		}
 		
 		if (shield != null)
@@ -87,29 +89,29 @@ public class BlockMeteorShield extends BlockContainerMeteorsMod
 
                 if (itemstack != null)
                 {
-                    float f = par1World.rand.nextFloat() * 0.8F + 0.1F;
-                    float f1 = par1World.rand.nextFloat() * 0.8F + 0.1F;
+                    float f = world.rand.nextFloat() * 0.8F + 0.1F;
+                    float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
                     EntityItem entityitem;
 
-                    for (float f2 = par1World.rand.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem))
+                    for (float f2 = world.rand.nextFloat() * 0.8F + 0.1F; itemstack.getCount() > 0; world.spawnEntity(entityitem))
                     {
-                        int j1 = par1World.rand.nextInt(21) + 10;
+                        int j1 = world.rand.nextInt(21) + 10;
 
-                        if (j1 > itemstack.stackSize)
+                        if (j1 > itemstack.getCount())
                         {
-                            j1 = itemstack.stackSize;
+                            j1 = itemstack.getCount();
                         }
 
-                        itemstack.stackSize -= j1;
-                        entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+                        itemstack.shrink(j1);
+                        entityitem = new EntityItem(world, (double)((float)pos.getX() + f), (double)((float)pos.getY() + f1), (double)((float)pos.getZ() + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
                         float f3 = 0.05F;
-                        entityitem.motionX = (double)((float)par1World.rand.nextGaussian() * f3);
-                        entityitem.motionY = (double)((float)par1World.rand.nextGaussian() * f3 + 0.2F);
-                        entityitem.motionZ = (double)((float)par1World.rand.nextGaussian() * f3);
+                        entityitem.motionX = (double)((float)world.rand.nextGaussian() * f3);
+                        entityitem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
+                        entityitem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
 
                         if (itemstack.hasTagCompound())
                         {
-                            entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+                            entityitem.getItem().setTagCompound(itemstack.getTagCompound().copy());
                         }
                     }
                 }
@@ -117,22 +119,22 @@ public class BlockMeteorShield extends BlockContainerMeteorsMod
             shield.invalidate();
         }
 		
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
+		super.breakBlock(world, pos, state);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void randomDisplayTick(World world, int i, int j, int k, Random random)
+	public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random random)
 	{
 		if (MeteorsMod.instance.meteorShieldSound && random.nextInt(256) == 100) {
-			world.playSound(i + 0.5D, j + 0.5D, k + 0.5D, "meteors:shield.humm", 0.6F, 1.0F, false);
+			world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new SoundEvent(new ResourceLocation("meteors:shield.humm")), SoundCategory.BLOCKS, 0.6F, 1.0F, false);
 		}
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		player.openGui(MeteorsMod.instance, 0, world, i, j, k);
+		player.openGui(MeteorsMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 
@@ -143,10 +145,10 @@ public class BlockMeteorShield extends BlockContainerMeteorsMod
 	
 	/**
      * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
+     * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
      */
 	@Override
-    public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
     

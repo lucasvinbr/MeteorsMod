@@ -3,10 +3,10 @@ package net.meteor.common.packets;
 import io.netty.buffer.ByteBuf;
 import net.meteor.common.ClientHandler;
 import net.meteor.common.climate.GhostMeteor;
-import net.minecraft.util.ChunkCoordinates;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketGhostMeteor implements IMessage {
 	
@@ -52,15 +52,15 @@ public class PacketGhostMeteor implements IMessage {
 
 		@Override
 		public IMessage onMessage(PacketGhostMeteor message, MessageContext ctx) {
-			ChunkCoordinates cc = new ChunkCoordinates(message.x, message.y, message.z);
+			BlockPos cc = new BlockPos(message.x, message.y, message.z);
 			if (message.addGhostMeteor) {
 				ClientHandler.ghostMetLocs.add(cc);
-			} else if (cc.posX == -1 && cc.posY == -1 && cc.posZ == -1) {
+			} else if (cc.getX() == -1 && cc.getY() == -1 && cc.getZ() == -1) {
 				ClientHandler.ghostMetLocs.clear();
 			} else {
 				for (int i = 0; i < ClientHandler.ghostMetLocs.size(); i++) {
-					ChunkCoordinates cc2 = ClientHandler.ghostMetLocs.get(i);
-					if (cc2.posX == cc.posX && cc2.posZ == cc.posZ) {
+					BlockPos cc2 = ClientHandler.ghostMetLocs.get(i);
+					if (cc2.getX() == cc.getX() && cc2.getZ() == cc.getZ()) {
 						ClientHandler.ghostMetLocs.remove(i);
 						break;
 					}

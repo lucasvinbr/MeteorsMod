@@ -6,21 +6,19 @@ import net.meteor.client.model.ModelMeteor;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.entity.EntityMeteor;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
-public class RenderMeteor extends Render {
+public class RenderMeteor extends Render<EntityMeteor> {
 
 	private ModelMeteor modelMeteor;
 	private int metID = 0;
 	
-	public static final HashMap<Integer, ResourceLocation> skins = new HashMap<Integer, ResourceLocation>();
+	public static final HashMap<Integer, ResourceLocation> skins = new HashMap<>();
 	
 	static {
 		skins.put(0, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/fallingMeteor.png"));
@@ -35,8 +33,8 @@ public class RenderMeteor extends Render {
 	}
 
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-		renderMeteor((EntityMeteor)entity, d, d1, d2, f, f1);
+	public void doRender(EntityMeteor entity, double d, double d1, double d2, float f, float f1) {
+		renderMeteor(entity, d, d1, d2, f, f1);
 	}
 
 	public void renderMeteor(EntityMeteor entityMeteor, double d, double d1, double d2, float f, float f1) {
@@ -53,7 +51,7 @@ public class RenderMeteor extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
+	protected ResourceLocation getEntityTexture(EntityMeteor entity) {
 		return skins.get(metID);
 	}
 

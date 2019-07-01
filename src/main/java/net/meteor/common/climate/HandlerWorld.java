@@ -4,8 +4,8 @@ import net.meteor.common.MeteorsMod;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class HandlerWorld {
 	
@@ -20,9 +20,9 @@ public class HandlerWorld {
 	
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event) {
-		if (!event.world.isRemote) {
-			addRules(event.world);
-			int dim = event.world.provider.dimensionId;
+		if (!event.getWorld().isRemote) {
+			addRules(event.getWorld());
+			int dim = event.getWorld().provider.getDimension();
 			HandlerMeteor metHandler = new HandlerMeteor(event, worldTickHandler);
 			MeteorsMod.proxy.metHandlers.put(dim, metHandler);
 		}

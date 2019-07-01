@@ -8,24 +8,25 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSlippery extends BlockContainerMeteorsMod {
 
 	public BlockSlippery(float slipperiness) {
-		super(Material.ice);
+		super(Material.ICE);
 		this.slipperiness = slipperiness;
 	}
 
@@ -36,7 +37,7 @@ public class BlockSlippery extends BlockContainerMeteorsMod {
 	
 	/**
      * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
+     * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
      */
 	@Override
     public boolean isOpaqueCube() {
@@ -66,51 +67,50 @@ public class BlockSlippery extends BlockContainerMeteorsMod {
     }
 	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack item) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		
-		TileEntitySlippery tileEntity = (TileEntitySlippery) world.getTileEntity(x, y, z);
-		tileEntity.setFacadeBlockName(item.getTagCompound().getString(ItemBlockSlippery.FACADE_BLOCK_KEY));
+		TileEntitySlippery tileEntity = (TileEntitySlippery) world.getTileEntity(pos);
+		tileEntity.setFacadeBlockName(stack.getTagCompound().getString(ItemBlockSlippery.FACADE_BLOCK_KEY));
 		tileEntity.markDirty();
 		
-		super.onBlockPlacedBy(world, x, y, z, entity, item);
+		super.onBlockPlacedBy(world, pos, state, placer, stack);
 	}
 	
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (!world.isRemote && !player.capabilities.isCreativeMode) {
-			TileEntitySlippery teSlippery = (TileEntitySlippery) world.getTileEntity(x, y, z);
+			TileEntitySlippery teSlippery = (TileEntitySlippery) world.getTileEntity(pos);
 			ItemStack slipItem = new ItemStack(this, 1, teSlippery.getFacadeBlock().damageDropped(world.getBlockMetadata(x, y, z)));
 	    	NBTTagCompound nbt = slipItem.hasTagCompound() ? slipItem.getTagCompound() : new NBTTagCompound();
 	    	nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, teSlippery.getFacadeBlockName());
 	    	slipItem.setTagCompound(nbt);
-	    	this.dropBlockAsItem(world, x, y, z, slipItem);
+	    	this.dropBlockAsItem(world, pos, slipItem, 0);
 		}
-    	return super.removedByPlayer(world, player, x, y, z, willHarvest);
+    	return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 	
 	@Override
-	public int quantityDropped(int meta, int fortune, Random random) {
+	public int quantityDropped(IBlockState state, int fortune, Random random) {
 		return 0;
 	}
 	
 	@Override
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		Item item = getItem(world, x, y, z);
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		Item item = super.getPickBlock(state, target, world, pos, player).getItem();//TODO 1.12.2 confirm
 
         if (item == null)
         {
             return null;
         }
         
-        BlockSlippery block = (BlockSlippery)world.getBlock(x, y, z);
         ItemStack stack = new ItemStack(item, 1, world.getBlockMetadata(x, y, z));
         NBTTagCompound nbt = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-        TileEntitySlippery tileEntity = (TileEntitySlippery)world.getTileEntity(x, y, z);
+        TileEntitySlippery tileEntity = (TileEntitySlippery)world.getTileEntity(pos);
 		nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, tileEntity.getFacadeBlockName());
 		stack.setTagCompound(nbt);
 		return stack;

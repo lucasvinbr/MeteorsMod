@@ -21,15 +21,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISidedInventory, IMeteorShield
 {
@@ -72,19 +72,19 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		if (!this.shieldedChunks) {
 			if (powerLevel > 0) {
 				if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-					MeteorsMod.proxy.metHandlers.get(worldObj.provider.dimensionId).getShieldManager().addShield(this);
+					MeteorsMod.proxy.metHandlers.get(getWorld().provider.dimensionId).getShieldManager().addShield(this);
 				}
 				this.shieldedChunks = true;
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			} else if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				GenerateParticles(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.worldObj.rand);
+				GenerateParticles(this.getWorld(), this.xCoord, this.yCoord, this.zCoord, this.worldObj.rand);
 			} else if (age >= CHARGE_TIME) {
 				setCharged();
-				if (!worldObj.isRemote) {
+				if (!getWorld().isRemote) {
 					if (owner != null && owner.length() > 0) {
-						EntityPlayer player = worldObj.getPlayerEntityByName(owner);
+						EntityPlayer player = getWorld().getPlayerEntityByName(owner);
 						if (player != null) {
-							player.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("MeteorShield.howToUpgrade"), EnumChatFormatting.GOLD));
+							player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.howToUpgrade"), TextFormatting.GOLD));
 						}
 					}
 				}
@@ -112,28 +112,28 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	public List<String> getDisplayInfo() {
-		List<String> info = new ArrayList<String>();
+		List<String> info = new ArrayList<>();
 		
 		if (powerLevel == 0) {
-			info.add(StatCollector.translateToLocal("info.meteorShield.charging"));
-			info.add(StatCollector.translateToLocalFormatted("info.meteorShield.charged", (int)((float)age / (float)CHARGE_TIME * 100)));
+			info.add(I18n.translateToLocal("info.meteorShield.charging"));
+			info.add(I18n.translateToLocalFormatted("info.meteorShield.charged", (int)((float)age / (float)CHARGE_TIME * 100)));
 		} else {
-			info.add(StatCollector.translateToLocalFormatted("info.meteorShield.powerLevel", powerLevel, 5));
-			info.add(StatCollector.translateToLocalFormatted("info.meteorShield.range", range));
+			info.add(I18n.translateToLocalFormatted("info.meteorShield.powerLevel", powerLevel, 5));
+			info.add(I18n.translateToLocalFormatted("info.meteorShield.range", range));
 		}
 		
-		info.add(StatCollector.translateToLocalFormatted("info.meteorShield.owner", owner));
+		info.add(I18n.translateToLocalFormatted("info.meteorShield.owner", owner));
 		
 		if (powerLevel != 0) {
 			if (blockComets) {
-				info.add(StatCollector.translateToLocal("info.meteorShield.cometsBeingBlocked"));
+				info.add(I18n.translateToLocal("info.meteorShield.cometsBeingBlocked"));
 			} else {
 				if (cometType != -1) {
-					info.add(StatCollector.translateToLocal("info.meteorShield.cometEnteredOrbit"));
-					info.add(StatCollector.translateToLocalFormatted("info.meteorShield.cometX", cometX));
-					info.add(StatCollector.translateToLocalFormatted("info.meteorShield.cometZ", cometZ));
+					info.add(I18n.translateToLocal("info.meteorShield.cometEnteredOrbit"));
+					info.add(I18n.translateToLocalFormatted("info.meteorShield.cometX", cometX));
+					info.add(I18n.translateToLocalFormatted("info.meteorShield.cometZ", cometZ));
 				} else {
-					info.add(StatCollector.translateToLocal("info.meteorShield.noComets"));
+					info.add(I18n.translateToLocal("info.meteorShield.noComets"));
 				}
 			}
 		}
@@ -142,30 +142,23 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	public void addMeteorMaterials(List<ItemStack> items) {
-		
-		for (int i = 0; i < items.size(); i++) {
-			ItemStack par1ItemStack = items.get(i);
+
+		for (ItemStack par1ItemStack : items) {
 			ItemStack itemstack1;
 			int k = 5;
-			if (par1ItemStack.isStackable())
-			{
-				while (par1ItemStack.stackSize > 0 && k >= 5 && k < this.getSizeInventory())
-				{
+			if (par1ItemStack.isStackable()) {
+				while (par1ItemStack.getCount() > 0 && k >= 5 && k < this.getSizeInventory()) {
 					itemstack1 = inv[k];
 
-					if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1))
-					{
-						int l = itemstack1.stackSize + par1ItemStack.stackSize;
+					if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1)) {
+						int l = itemstack1.getCount() + par1ItemStack.getCount();
 
-						if (l <= par1ItemStack.getMaxStackSize())
-						{
-							par1ItemStack.stackSize = 0;
-							itemstack1.stackSize = l;
-						}
-						else if (itemstack1.stackSize < par1ItemStack.getMaxStackSize())
-						{
-							par1ItemStack.stackSize -= par1ItemStack.getMaxStackSize() - itemstack1.stackSize;
-							itemstack1.stackSize = par1ItemStack.getMaxStackSize();
+						if (l <= par1ItemStack.getMaxStackSize()) {
+							par1ItemStack.setCount(0);
+							itemstack1.setCount(l);
+						} else if (itemstack1.getCount() < par1ItemStack.getMaxStackSize()) {
+							par1ItemStack.shrink(par1ItemStack.getMaxStackSize() - itemstack1.getCount());
+							itemstack1.setCount(par1ItemStack.getMaxStackSize());
 						}
 					}
 
@@ -173,18 +166,15 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 				}
 			}
 
-			if (par1ItemStack.stackSize > 0)
-			{
+			if (par1ItemStack.getCount() > 0) {
 				k = 5;
 
-				while (k >= 5 && k < this.getSizeInventory())
-				{
+				while (k >= 5 && k < this.getSizeInventory()) {
 					itemstack1 = inv[k];
 
-					if (itemstack1 == null)
-					{
+					if (itemstack1 == null) {
 						inv[k] = par1ItemStack.copy();
-						par1ItemStack.stackSize = 0;
+						par1ItemStack.setCount(0);
 						break;
 					}
 
@@ -192,7 +182,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 				}
 			}
 		}
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.markDirty();
 	}
 	
@@ -200,7 +190,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		this.cometX = (int)comet.posX;
 		this.cometZ = (int)comet.posZ;
 		this.cometType = comet.meteorType.getID();
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.markDirty();
 	}
 
@@ -290,9 +280,9 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
-		readFromNBT(pkt.func_148857_g());
+		readFromNBT(pkt.getNbtCompound());
 	}
 
 	@Override
@@ -300,13 +290,13 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	{
 		NBTTagCompound var1 = new NBTTagCompound();
 		writeToNBT(var1);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, var1);
+		return new SPacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, var1);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1.5, zCoord + 1);
+		return new AxisAlignedBB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1.5, zCoord + 1);
 	}
 
 	@Override
@@ -323,11 +313,11 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	public ItemStack decrStackSize(int i, int j) {
 		ItemStack stack = getStackInSlot(i);
 		if (stack != null) {
-			if (stack.stackSize <= j) {
+			if (stack.getCount() <= j) {
 				setInventorySlotContents(i, null);
 			} else {
 				ItemStack stack2 = stack.splitStack(j);
-				if (stack.stackSize <= 0) {
+				if (stack.getCount() <= 0) {
 					setInventorySlotContents(i, null);
 				}
 				stack = stack2;
@@ -349,12 +339,12 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 				this.updateRange();
 			}
 		} else if (isItemValidForSlot(i, itemstack)) {
-			if (i < 5 && itemstack.stackSize > 1) {
-				itemstack.stackSize = 1;
+			if (i < 5 && itemstack.getCount() > 1) {
+				itemstack.getCount() = 1;
 			}
 			if (i == 0) {
 				this.setCharged();
-				this.worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "meteors:shield.powerup", 1.0F, 0.6F);
+				this.getWorld().playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "meteors:shield.powerup", 1.0F, 0.6F);
 				this.markDirty();
 			} else if (i > 0 && i < 5) {
 				inv[i] = itemstack;
@@ -413,17 +403,17 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		int oldLevel = this.powerLevel;
 		this.powerLevel = 1 + powerCrystals;
 		this.range = MeteorsMod.instance.ShieldRadiusMultiplier * powerLevel;
-		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		
 		if (powerLevel > oldLevel) {
-			this.worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "meteors:shield.powerup", 1.0F, powerLevel / 10.0F + 0.5F);
-			EntityPlayer player = worldObj.getPlayerEntityByName(owner);
+			this.getWorld().playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "meteors:shield.powerup", 1.0F, powerLevel / 10.0F + 0.5F);
+			EntityPlayer player = getWorld().getPlayerEntityByName(owner);
 			if (powerLevel == 5 && player != null) {
 				player.addStat(HandlerAchievement.shieldFullyUpgraded, 1);
 			}
-			if (MeteorsMod.instance.ShieldRadiusMultiplier <= 0 && !worldObj.isRemote) {
+			if (MeteorsMod.instance.ShieldRadiusMultiplier <= 0 && !getWorld().isRemote) {
 				if (player != null) {
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("MeteorShield.noUpgrade")));
+					player.sendMessage(new TextComponentString(I18n.translateToLocal("MeteorShield.noUpgrade")));
 				}	
 			}
 		} else if (powerLevel < oldLevel) {
@@ -479,8 +469,8 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 
 	@Override
 	public void onChunkUnload() {
-		if (!this.worldObj.isRemote) {
-			HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(worldObj.provider.dimensionId);
+		if (!this.getWorld().isRemote) {
+			HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(getWorld().provider.getDimension());
 			metHandler.getShieldManager().addShield(new MeteorShieldData(xCoord, yCoord, zCoord, powerLevel, owner, blockComets));
 		}
 		this.invalidate();

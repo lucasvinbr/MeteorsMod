@@ -9,9 +9,10 @@ import net.meteor.common.MeteorsMod;
 import net.meteor.common.entity.EntityComet;
 import net.meteor.common.tileentity.TileEntityMeteorShield;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ClimateUpdater {
 	
@@ -24,12 +25,13 @@ public class ClimateUpdater {
 	public ClimateUpdater(HandlerMeteor metHandler) {
 		this.meteorHandler = metHandler;
 	}
-	
-	public void onWorldTick(WorldTickEvent event) {
+
+	//TODO where is my subscribeevent O_o
+	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		World world = event.world;
 		if (!world.isRemote) {
-			int dim = world.provider.dimensionId;
-			if (world.getGameRules().getGameRuleBooleanValue(HandlerWorld.METEORS_FALL_GAMERULE) && MeteorsMod.instance.isDimensionWhitelisted(dim)) {
+			int dim = world.provider.getDimension();
+			if (world.getGameRules().getBoolean(HandlerWorld.METEORS_FALL_GAMERULE) && MeteorsMod.instance.isDimensionWhitelisted(dim)) {
 				long wTime = world.getTotalWorldTime();
 				if (wTime % 20L == 0L && wTime != lastTick) {
 					lastTick = wTime;
@@ -46,10 +48,11 @@ public class ClimateUpdater {
 								int z = world.rand.nextInt(mod.meteorFallDistance);
 								if (world.rand.nextBoolean()) x = -x;
 								if (world.rand.nextBoolean()) z = -z;
-								EntityPlayer player = (EntityPlayer) world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
+								EntityPlayer player = world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
 								x = (int)(x + player.posX);
 								z = (int)(z + player.posZ);
-								ChunkCoordIntPair coords = world.getChunkFromBlockCoords(x, z).getChunkCoordIntPair();
+
+								ChunkPos coords = new ChunkPos(new BlockPos(x, 0, z));
 								if (meteorHandler.canSpawnNewMeteorAt(coords)) {
 									if (random.nextInt(100) < MeteorsMod.instance.kittyAttackChance) {
 										meteorHandler.readyNewMeteor(x, z, HandlerMeteor.getMeteorSize(), 90, EnumMeteor.KITTY);
@@ -65,31 +68,29 @@ public class ClimateUpdater {
 								int z = world.rand.nextInt(mod.meteorFallDistance / 4);
 								if (world.rand.nextBoolean()) x = -x;
 								if (world.rand.nextBoolean()) z = -z;
-								EntityPlayer player = (EntityPlayer) world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
+								EntityPlayer player = world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
 								x = (int)(x + player.posX);
 								z = (int)(z + player.posZ);
 								EntityComet comet = new EntityComet(world, x, z, HandlerMeteor.getCometType());
 								
 								boolean blocked = false;
 								List<IMeteorShield> shields = meteorHandler.getShieldManager().getShieldsInRange(x, z);
-								for (int i = 0; i < shields.size(); i++) {
-									IMeteorShield ims = shields.get(i);
-									if (ims.getPreventComets()) {
-										blocked = true;
-										break;
-									}
-								}
+                                for (IMeteorShield ims : shields) {
+                                    if (ims.getPreventComets()) {
+                                        blocked = true;
+                                        break;
+                                    }
+                                }
 								
 								if (!blocked) {
-									for (int i = 0; i < shields.size(); i++) {
-										IMeteorShield ims = shields.get(i);
-										TileEntityMeteorShield shield = (TileEntityMeteorShield)world.getTileEntity(ims.getX(), ims.getY(), ims.getZ());
-										if (shield != null) {
-											shield.detectComet(comet);
-										}
-									}
+                                    for (IMeteorShield ims : shields) {
+                                        TileEntityMeteorShield shield = (TileEntityMeteorShield) world.getTileEntity(ims.getX(), ims.getY(), ims.getZ());
+                                        if (shield != null) {
+                                            shield.detectComet(comet);
+                                        }
+                                    }
 									
-									world.spawnEntityInWorld(comet);
+									world.spawnEntity(comet);
 								}
 								
 							}

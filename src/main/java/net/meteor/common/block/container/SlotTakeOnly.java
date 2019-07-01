@@ -15,12 +15,12 @@ public class SlotTakeOnly extends Slot {
 	
 	private EntityPlayer thePlayer;
 
-	public SlotTakeOnly(IInventory par1iInventory, int par2, int par3, int par4) {
-		super(par1iInventory, par2, par3, par4);
+	public SlotTakeOnly(IInventory iInventory, int index, int xPosition, int yPosition) {
+		super(iInventory, index, xPosition, yPosition);
 	}
 	
-	public SlotTakeOnly(IInventory par1iInventory, int par2, int par3, int par4, EntityPlayer player) {
-		this(par1iInventory, par2, par3, par4);
+	public SlotTakeOnly(IInventory par1iInventory, int index, int xPosition, int yPosition, EntityPlayer player) {
+		this(par1iInventory, index, xPosition, yPosition);
 		this.thePlayer = player;
 	}
 	
@@ -33,18 +33,18 @@ public class SlotTakeOnly extends Slot {
 	}
 	
 	@Override
-	protected void onCrafting(ItemStack p_75210_1_, int p_75210_2_) {
-		this.onCrafting(p_75210_1_);
-		super.onCrafting(p_75210_1_, p_75210_2_);
+	protected void onCrafting(ItemStack itemStack, int amount) {
+		this.onCrafting(itemStack);
+		super.onCrafting(itemStack, amount);
     }
 	
 	@Override
 	protected void onCrafting(ItemStack item) {
 		
 		if (item != null && this.thePlayer != null) {
-			if (item.getItem() == Item.getItemFromBlock(Blocks.ice)) {
+			if (item.getItem() == Item.getItemFromBlock(Blocks.ICE)) {
 				this.thePlayer.addStat(HandlerAchievement.freezeWater, 1);
-			} else if (item.getItem() == Item.getItemFromBlock(Blocks.packed_ice)) {
+			} else if (item.getItem() == Item.getItemFromBlock(Blocks.PACKED_ICE)) {
 				this.thePlayer.addStat(HandlerAchievement.freezeIce, 1);
 			} else if (Block.getBlockFromItem(item.getItem()) instanceof BlockSlippery || Block.getBlockFromItem(item.getItem()) instanceof BlockSlipperyStairs) {
 				this.thePlayer.addStat(HandlerAchievement.freezeBlocks, 1);
@@ -55,9 +55,9 @@ public class SlotTakeOnly extends Slot {
 	}
 	
 	@Override
-	public void onPickupFromSlot(EntityPlayer p_82870_1_, ItemStack p_82870_2_) {
-		this.onCrafting(p_82870_2_);
-		super.onPickupFromSlot(p_82870_1_, p_82870_2_);
+	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
+		this.onCrafting(itemStack);
+		super.onTake(player, itemStack);
     }
 
 }

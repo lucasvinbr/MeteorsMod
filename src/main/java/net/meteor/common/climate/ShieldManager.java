@@ -17,9 +17,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class ShieldManager {
 	
@@ -28,7 +29,7 @@ public class ShieldManager {
 	
 	private static Random random = new Random();
 	
-	public ArrayList<IMeteorShield> meteorShields = new ArrayList<IMeteorShield>();
+	public ArrayList<IMeteorShield> meteorShields = new ArrayList<>();
 	
 	public ShieldManager(World w) {
 		this.theWorld = w;
@@ -36,7 +37,7 @@ public class ShieldManager {
 	}
 	
 	public void addShield(IMeteorShield shield) {
-		TileEntity tile = theWorld.getTileEntity(shield.getX(), shield.getY(), shield.getZ());
+		TileEntity tile = theWorld.getTileEntity(new BlockPos(shield.getX(), shield.getY(), shield.getZ()));
 		if (tile != null && tile instanceof TileEntityMeteorShield) {
 			for (int i = 0; i < meteorShields.size(); i++) {
 				IMeteorShield shield2 = meteorShields.get(i);
@@ -81,10 +82,8 @@ public class ShieldManager {
 	}
 
 	public List<IMeteorShield> getShieldsInRange(int x, int z) {
-		List<IMeteorShield> shields = new ArrayList<IMeteorShield>();
-		Iterator<IMeteorShield> iter = this.meteorShields.iterator();
-		while (iter.hasNext()) {
-			IMeteorShield shield = iter.next();
+		List<IMeteorShield> shields = new ArrayList<>();
+		for (IMeteorShield shield : this.meteorShields) {
 			double d = getDistance(x, z, shield.getX(), shield.getZ());
 			if (d <= shield.getRange()) {
 				shields.add(shield);
@@ -94,12 +93,12 @@ public class ShieldManager {
 	}
 	
 	public void sendMeteorMaterialsToShield(IMeteorShield shield, GhostMeteor gMeteor) {
-		TileEntityMeteorShield tShield = (TileEntityMeteorShield) theWorld.getTileEntity(shield.getX(), shield.getY(), shield.getZ());
+		TileEntityMeteorShield tShield = (TileEntityMeteorShield) theWorld.getTileEntity(new BlockPos(shield.getX(), shield.getY(), shield.getZ()));
 		if (tShield != null) {
 			
-			MeteorsMod.network.sendToAllAround(new PacketBlockedMeteor(shield.getX(), shield.getY(), shield.getZ(), gMeteor.type), new TargetPoint(theWorld.provider.dimensionId, shield.getX(), shield.getY(), shield.getZ(), 64));
+			MeteorsMod.network.sendToAllAround(new PacketBlockedMeteor(shield.getX(), shield.getY(), shield.getZ(), gMeteor.type), new NetworkRegistry.TargetPoint(theWorld.provider.getDimension(), shield.getX(), shield.getY(), shield.getZ(), 64));
 			
-			List<ItemStack> items = new ArrayList<ItemStack>();
+			List<ItemStack> items = new ArrayList<>();
 			int r = random.nextInt(100);
 			switch (gMeteor.type.getID()) {
 				case 0:
@@ -111,23 +110,23 @@ public class ShieldManager {
 				case 1:
 					items.add(new ItemStack(MeteorItems.itemFrezaCrystal, random.nextInt(4 * gMeteor.size) + 1));
 					if (r < 20) {
-						items.add(new ItemStack(Blocks.ice, random.nextInt(3 * gMeteor.size) + 1));
+						items.add(new ItemStack(Blocks.ICE, random.nextInt(3 * gMeteor.size) + 1));
 					}
 					break;
 				case 2:
 					items.add(new ItemStack(MeteorItems.itemKreknoChip, random.nextInt(3 * gMeteor.size) + 1));
 					if (gMeteor.size >= MeteorsMod.instance.MinMeteorSizeForPortal) {
 						if (r < 20) {
-							items.add(new ItemStack(Items.netherbrick, random.nextInt(4 * gMeteor.size) + 1));
+							items.add(new ItemStack(Items.NETHERBRICK, random.nextInt(4 * gMeteor.size) + 1));
 						}
 						if (r < 10) {
-							items.add(new ItemStack(Items.glowstone_dust, random.nextInt(3 * gMeteor.size) + 1));
+							items.add(new ItemStack(Items.GLOWSTONE_DUST, random.nextInt(3 * gMeteor.size) + 1));
 						}
 					}
 					break;
 				case 3:
 					if (r < 50) {
-						items.add(new ItemStack(Items.glowstone_dust, random.nextInt(5 * gMeteor.size) + 1));
+						items.add(new ItemStack(Items.GLOWSTONE_DUST, random.nextInt(5 * gMeteor.size) + 1));
 					}
 					if (r < 75) {
 						int r2 = random.nextInt(3);
@@ -153,9 +152,9 @@ public class ShieldManager {
 					}
 					break;
 				case 4:
-					items.add(new ItemStack(Items.cooked_fished, random.nextInt(2 * gMeteor.size) + 1));
+					items.add(new ItemStack(Items.COOKED_FISH, random.nextInt(2 * gMeteor.size) + 1));
 					if (r < 5) {
-						items.add(new ItemStack(Items.spawn_egg, 1, EntityList.getEntityID(new EntityCometKitty(theWorld))));
+						items.add(new ItemStack(Items.SPAWN_EGG, 1, EntityList.getEntityID(new EntityCometKitty(theWorld))));
 					}
 					break;
 			}
@@ -166,7 +165,7 @@ public class ShieldManager {
 	private double getDistance(int x1, int z1, int x2, int z2) {
 		int x = x1 - x2;
 		int z = z1 - z2;
-		return MathHelper.sqrt_double(x * x + z * z);
+		return MathHelper.sqrt(x * x + z * z);
 	}
 
 }

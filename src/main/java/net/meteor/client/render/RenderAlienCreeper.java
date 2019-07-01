@@ -4,18 +4,16 @@ import net.meteor.client.model.ModelAlienCreeper;
 import net.meteor.common.entity.EntityAlienCreeper;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
-public class RenderAlienCreeper extends RenderLiving {
+public class RenderAlienCreeper extends RenderLiving<EntityAlienCreeper> {
 
 	private ModelBase creeperModel;
 	
@@ -127,13 +125,13 @@ public class RenderAlienCreeper extends RenderLiving {
 	}
 
 	@Override
-	protected void preRenderCallback(EntityLivingBase entityliving, float f)
+	protected void preRenderCallback(EntityAlienCreeper entityliving, float f)
 	{
 		updateCreeperScale((EntityAlienCreeper)entityliving, f);
 	}
 
 	@Override
-	protected int getColorMultiplier(EntityLivingBase entityliving, float f, float f1)
+	protected int getColorMultiplier(EntityAlienCreeper entityliving, float f, float f1)
 	{
 		return updateCreeperColorMultiplier((EntityAlienCreeper)entityliving, f, f1);
 	}
@@ -151,7 +149,7 @@ public class RenderAlienCreeper extends RenderLiving {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
+	protected ResourceLocation getEntityTexture(EntityAlienCreeper entity) {
 		return skin;
 	}
 

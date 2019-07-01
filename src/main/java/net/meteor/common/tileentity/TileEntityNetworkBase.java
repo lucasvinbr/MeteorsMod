@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 public abstract class TileEntityNetworkBase extends TileEntity {
 
 	public void pressButton(int id) {
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			MeteorsMod.network.sendToServer(new PacketButtonPress(this, id));
 		}
 	}
@@ -16,7 +16,7 @@ public abstract class TileEntityNetworkBase extends TileEntity {
 
 	public void postButtonPress(int buttonID) {
 		this.markDirty();
-		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
 }

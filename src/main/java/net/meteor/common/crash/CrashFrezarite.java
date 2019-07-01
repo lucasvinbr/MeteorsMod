@@ -1,12 +1,13 @@
 package net.meteor.common.crash;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.meteor.common.EnumMeteor;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -18,17 +19,19 @@ public class CrashFrezarite extends CrashMeteorite
 	}
 
 	@Override
-    public void afterCraterFormed(World world, Random random, int i, int j, int k) {
-		ArrayList<ChunkPosition> arraylist = new ArrayList(this.explosion.affectedBlockPositions);
+    public void afterCraterFormed(World world, Random random, int xIn, int yIn, int zIn) {
+		List<BlockPos> arraylist = this.explosion.getAffectedBlockPositions();
 		for (int j1 = arraylist.size() - 1; j1 >= 0; j1--) {
-			ChunkPosition chunkposition1 = arraylist.get(j1);
-			int l = chunkposition1.chunkPosX;
-			int j11 = chunkposition1.chunkPosY;
-			int l1 = chunkposition1.chunkPosZ;
-			boolean j2 = world.isAirBlock(l, j11, l1);
-			Block k2 = world.getBlock(l, j11 - 1, l1);
-			if (j2 && k2.isOpaqueCube() && (random.nextInt(2) == 0))
-				world.setBlock(l, j11, l1, Blocks.snow_layer, random.nextInt(5), 2);
+			BlockPos blockPos = arraylist.get(j1);
+			int x = blockPos.getX();
+			int y = blockPos.getY();
+			int z = blockPos.getZ();
+			BlockPos pos = new BlockPos(x, y, z);
+			boolean j2 = world.isAirBlock(pos);
+			IBlockState block = world.getBlockState(pos.down());
+			if (j2 && block.isOpaqueCube() && (random.nextInt(2) == 0)) {
+				world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, random.nextInt(5)), 2);
+			}
 		}
 	}
 }

@@ -7,17 +7,18 @@ import net.meteor.common.MeteorItems;
 import net.meteor.common.entity.EntityAlienCreeper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMeteor extends BlockMeteorsMod
 {
@@ -27,20 +28,20 @@ public class BlockMeteor extends BlockMeteorsMod
 	
 	public BlockMeteor()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		this.setTickRandomly(true);
 		this.setHarvestLevel("pickaxe", 2);
 		this.setHarvestLevel("pickaxe", 1, 0);
 	}
 
 	@Override
-	public Item getItemDropped(int i, Random random, int j)
+	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
 		return MeteorItems.itemMeteorChips;
 	}
 
 	@Override
-	public int quantityDropped(int meta, int fortune, Random random)
+	public int quantityDropped(IBlockState state, int fortune, Random random)
 	{
 		if ((meta == 0) && (random.nextInt(4) == 0)) {
 			return 1 + random.nextInt(fortune + 1);
@@ -50,51 +51,51 @@ public class BlockMeteor extends BlockMeteorsMod
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void randomDisplayTick(World world, int i, int j, int k, Random random)
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random random)
 	{
-		if (world.getBlockMetadata(i, j, k) > 0) {
+		if (worldIn.getBlockMetadata(xIn, yIn, zIn) > 0) {
 			if (random.nextInt(32) == 0)
 	        {
-	            world.playSound((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), "fire.fire", 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+	            worldIn.playSound((double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), new SoundEvent(new ResourceLocation("minecraft:fire.fire")), SoundCategory.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 	        }
-			renderGlowParticles(world, i, j, k, random);
+			renderGlowParticles(worldIn, pos.getX(), pos.getY(), pos.getZ(), random);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void renderGlowParticles(World world, int i, int j, int k, Random random)
+	public void renderGlowParticles(World world, int xIn, int yIn, int zIn, Random random)
 	{
 		double d = 0.0625D;
 		for (int l = 0; l < 6; l++)
 		{
-			double d1 = i + random.nextFloat();
-			double d2 = j + random.nextFloat();
-			double d3 = k + random.nextFloat();
-			if ((l == 0) && !world.getBlock(i, j + 1, k).isOpaqueCube())
+			double d1 = xIn + random.nextFloat();
+			double d2 = yIn + random.nextFloat();
+			double d3 = zIn + random.nextFloat();
+			if ((l == 0) && !world.getBlockState(new BlockPos(xIn, yIn + 1, zIn)).isOpaqueCube())
 			{
-				d2 = j + 1 + d;
+				d2 = yIn + 1 + d;
 			}
-			if ((l == 1) && !world.getBlock(i, j - 1, k).isOpaqueCube())
+			if ((l == 1) && !world.getBlockState(new BlockPos(xIn, yIn - 1, zIn)).isOpaqueCube())
 			{
-				d2 = j - d;
+				d2 = yIn - d;
 			}
-			if ((l == 2) && !world.getBlock(i, j, k + 1).isOpaqueCube())
+			if ((l == 2) && !world.getBlockState(new BlockPos(xIn, yIn, zIn + 1)).isOpaqueCube())
 			{
-				d3 = k + 1 + d;
+				d3 = zIn + 1 + d;
 			}
-			if ((l == 3) && !world.getBlock(i, j, k - 1).isOpaqueCube())
+			if ((l == 3) && !world.getBlockState(new BlockPos(xIn, yIn, zIn - 1)).isOpaqueCube())
 			{
-				d3 = k - d;
+				d3 = zIn - d;
 			}
-			if ((l == 4) && !world.getBlock(i + 1, j, k).isOpaqueCube())
+			if ((l == 4) && !world.getBlockState(new BlockPos(xIn + 1, yIn, zIn)).isOpaqueCube())
 			{
-				d1 = i + 1 + d;
+				d1 = xIn + 1 + d;
 			}
-			if ((l == 5) && !world.getBlock(i - 1, j, k).isOpaqueCube())
+			if ((l == 5) && !world.getBlockState(new BlockPos(xIn - 1, yIn, zIn)).isOpaqueCube())
 			{
-				d1 = i - d;
+				d1 = xIn - d;
 			}
-			if ((d1 < i) || (d1 > i + 1) || (d2 < 0.0D) || (d2 > j + 1) || (d3 < k) || (d3 > k + 1))
+			if ((d1 < xIn) || (d1 > xIn + 1) || (d2 < 0.0D) || (d2 > yIn + 1) || (d3 < zIn) || (d3 > zIn + 1))
 			{
 				ClientProxy.spawnParticle("meteordust", d1, d2, d3, 0.0D, 0.0D, 0.0D, world, -1);
 			}
@@ -107,60 +108,61 @@ public class BlockMeteor extends BlockMeteorsMod
 		return 30;
 	}
 
+	@SuppressWarnings({"deprecation"})
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k)
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		AxisAlignedBB AABB = super.getCollisionBoundingBoxFromPool(world, i, j, k);
+		AxisAlignedBB AABB = new AxisAlignedBB(pos);
 		return AABB.contract(0.006D, 0.006D, 0.006D);
 	}
 
 	@Override
-	public boolean isBurning(IBlockAccess world, int x, int y, int z)
+	public boolean isBurning(IBlockAccess world, BlockPos pos)
 	{
 		return world.getBlockMetadata(x, y, z) > 0;
 	}
 	
 	@Override
-	public boolean isFireSource(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
 		int metadata = world.getBlockMetadata(x, y, z);
-		if ((side == ForgeDirection.UP) && (metadata > 0)) {
+		if ((side == EnumFacing.UP) && (metadata > 0)) {
 			return true;
 		}
-		return super.isFireSource(world, x, y, z, side);
+		return super.isFireSource(world, pos, side);
 	}
 
 	@Override
-	public void updateTick(World world, int i, int j, int k, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		int meta = world.getBlockMetadata(i, j, k);
+		int meta = world.getBlockMetadata(x, y, z);
 		if (meta > 0) {
-			if (isWaterAround(world, i, j, k)) {
-				world.setBlockMetadataWithNotify(i, j, k, 0, 2);
-				triggerLavaMixEffects(world, i, j, k);
+			if (isWaterAround(world, x, y, z)) {
+				world.setBlockMetadataWithNotify(x, y, z, 0, 2);
+				triggerLavaMixEffects(world, x, y, z);
 			} else {
-				world.setBlockMetadataWithNotify(i, j, k, --meta, 2);
+				world.setBlockMetadataWithNotify(x, y, z, --meta, 2);
 				if (meta == 0) {
-					triggerLavaMixEffects(world, i, j, k);
+					triggerLavaMixEffects(world, x, y, z);
 				}
 			}
 		}
 	}
 	
-	protected void triggerLavaMixEffects(World world, int i, int j, int k)
+	protected void triggerLavaMixEffects(World world, int x, int y, int z)
 	{
-		world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, new SoundEvent(new ResourceLocation("minecraft:random.fizz")), SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
 		for (int l = 0; l < 8; l++)
 		{
-			world.spawnParticle("largesmoke", i + Math.random(), j + 1.2D, k + Math.random(), 0.0D, 0.0D, 0.0D);
+			world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x + Math.random(), y + 1.2D, z + Math.random(), 0.0D, 0.0D, 0.0D);
 		}
 	}
 
-	private boolean isWaterAround(World world, int i, int j, int k) {
-		for (int sY = j + 1; sY >= j - 1; sY--) {
-			for (int sX = i + 1; sX >= i - 1; sX--) {
-				for (int sZ = k + 1; sZ >= k - 1; sZ--) {
-					Block block = world.getBlock(sX, sY, sZ);
-					if (Block.isEqualTo(block, Blocks.water) || Block.isEqualTo(block, Blocks.flowing_water)) {
+	private boolean isWaterAround(World world, int x, int y, int z) {
+		for (int sY = y + 1; sY >= y - 1; sY--) {
+			for (int sX = x + 1; sX >= x - 1; sX--) {
+				for (int sZ = z + 1; sZ >= z - 1; sZ--) {
+					Block block = world.getBlockState(new BlockPos(sX, sY, sZ)).getBlock();
+					if (Block.isEqualTo(block, Blocks.WATER) || Block.isEqualTo(block, Blocks.FLOWING_WATER)) {
 						return true;
 					}
 				}
@@ -188,30 +190,29 @@ public class BlockMeteor extends BlockMeteorsMod
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int l)
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
-		super.onBlockDestroyedByPlayer(world, i, j, k, l);
+		super.onBlockHarvested(world, pos, state, player);
 		if ((!world.isRemote) && (world.rand.nextInt(100) == 95)) {
 			EntityAlienCreeper creeper = new EntityAlienCreeper(world);
-			creeper.setLocationAndAngles(i, j, k, 0.0F, 0.0F);
-			world.spawnEntityInWorld(creeper);
+			creeper.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0.0F, 0.0F);
+			world.spawnEntity(creeper);
 			creeper.spawnExplosionParticle();
-			return;
 		}
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess iba, int i, int j, int k)
+	public int getLightValue(IBlockState state)
 	{
-		if (iba.getBlockMetadata(i, j, k) > 0) {
-			return getLightValue();
+		if (iba.getBlockMetadata(x, y, z) > 0) {
+			return state.getLightValue();
 		}
 		return 0;
 	}
 	
 	@Override
-	public int getExpDrop(IBlockAccess world, int metadata, int fortune) {
-		return MathHelper.getRandomIntegerInRange(rand, 2, 5);
+	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
+		return MathHelper.getInt(rand, 2, 5);
 	}
 	
 }

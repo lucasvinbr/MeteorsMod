@@ -5,7 +5,7 @@ import net.meteor.common.climate.CrashLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class TextureDetector extends TextureAtlasSprite {
@@ -24,9 +24,9 @@ public class TextureDetector extends TextureAtlasSprite {
 	{
 		Minecraft minecraft = Minecraft.getMinecraft();
 
-		if (minecraft.theWorld != null && minecraft.thePlayer != null)
+		if (minecraft.world != null && minecraft.player != null)
 		{
-			this.updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, (double)minecraft.thePlayer.rotationYaw, false, false);
+			this.updateCompass(minecraft.world, minecraft.player.posX, minecraft.player.posZ, (double)minecraft.player.rotationYaw, false, false);
 		}
 		else
 		{
@@ -43,7 +43,7 @@ public class TextureDetector extends TextureAtlasSprite {
 
 		if (par1World != null && !par8)
 		{
-			ChunkCoordinates chunkcoordinates;
+			BlockPos chunkcoordinates;
 			if (this.detectorType == 0) {
 				chunkcoordinates = ClientHandler.getClosestIncomingMeteor(par2, par4);
 			} else if (this.detectorType == 1) {
@@ -51,14 +51,14 @@ public class TextureDetector extends TextureAtlasSprite {
 			} else {
 				CrashLocation cl = ClientHandler.lastCrashLocation;
 				if (cl != null) {
-					chunkcoordinates = new ChunkCoordinates(cl.x, cl.y, cl.z);
+					chunkcoordinates = new BlockPos(cl.x, cl.y, cl.z);
 				} else {
 					chunkcoordinates = null;
 				}
 			}
 			if (chunkcoordinates != null) {
-				double d4 = (double)chunkcoordinates.posX - par2;
-				double d5 = (double)chunkcoordinates.posZ - par4;
+				double d4 = (double)chunkcoordinates.getX() - par2;
+				double d5 = (double)chunkcoordinates.getZ() - par4;
 				par6 %= 360.0D;
 				d3 = -((par6 - 90.0D) * Math.PI / 180.0D - Math.atan2(d5, d4));
 			} else {

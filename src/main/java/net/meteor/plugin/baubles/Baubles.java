@@ -26,19 +26,19 @@ public class Baubles {
 	
 	public static void setupBaubleItems() {
 		baublesLoaded = true;
-		MagnetismController = new ItemMagnetismController().setUnlocalizedName("MagnetizationController").setTextureName("MagnetizationController");
-		MagneticFieldDisruptor = new ItemMeteorsMod().setUnlocalizedName("MagneticFieldDisruptor").setTextureName("MagneticFieldDisruptor");
+		MagnetismController = new ItemMagnetismController().setTranslationKey("MagnetizationController").setTextureName("MagnetizationController");
+		MagneticFieldDisruptor = new ItemMeteorsMod().setTranslationKey("MagneticFieldDisruptor").setTextureName("MagneticFieldDisruptor");
 		GameRegistry.registerItem(MagnetismController, "MagnetizationController");
 		GameRegistry.registerItem(MagneticFieldDisruptor, "MagneticFieldDisruptor");
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MagneticFieldDisruptor, 1), new Object[] {
-			"oro", "mdm", "omo", Character.valueOf('o'), Blocks.obsidian, Character.valueOf('r'), MeteorItems.itemRedMeteorGem,
-			Character.valueOf('d'), "gemDiamond", Character.valueOf('m'), MeteorItems.MeteoriteIngot
+			"oro", "mdm", "omo", 'o', Blocks.obsidian, 'r', MeteorItems.itemRedMeteorGem,
+                'd', "gemDiamond", 'm', MeteorItems.MeteoriteIngot
 		}));
 		
 		GameRegistry.addRecipe(new ItemStack(MagnetismController, 1), new Object[] {
-			" s ", "lml", Character.valueOf('s'), Items.string, Character.valueOf('l'), Items.leather,
-			Character.valueOf('m'), MagneticFieldDisruptor
+			" s ", "lml", 's', Items.string, 'l', Items.leather,
+                'm', MagneticFieldDisruptor
 		});
 		
 		MeteorsMod.log.info("Baubles mod found. Baubles integration enabled.");

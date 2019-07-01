@@ -2,15 +2,17 @@ package net.meteor.common.command;
 
 import net.meteor.common.MeteorsMod;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CommandKittyAttack extends CommandBase
 {
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "kittyattack";
 	}
@@ -22,16 +24,15 @@ public class CommandKittyAttack extends CommandBase
 	}
 
 	@Override
-	public void processCommand(ICommandSender var1, String[] var2)
-	{
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			World world = var1.getEntityWorld();
-			MeteorsMod.proxy.metHandlers.get(world.provider.dimensionId).kittyAttack();
+			World world = sender.getEntityWorld();
+			MeteorsMod.proxy.metHandlers.get(world.provider.getDimension()).kittyAttack();
 		}
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender icommandsender) {
 		return "/kittyattack";
 	}
 

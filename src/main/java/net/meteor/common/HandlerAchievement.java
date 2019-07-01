@@ -5,10 +5,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class HandlerAchievement
 {
@@ -24,11 +22,11 @@ public class HandlerAchievement
 	public static final Achievement craftedMeteorTimer = new AchievementMeteorsMod("metCraftedMeteorTimer", "craftedMeteorTimer", 2, -4, MeteorBlocks.blockMeteorTimer, craftedDetector).registerStat();
 	public static final Achievement summonMeteor = new AchievementMeteorsMod("metSummonMeteor", "summonMeteor", 4, -1, MeteorItems.itemMeteorSummoner, meteorManipulator).registerStat();
 	public static final Achievement kittyEvent = new AchievementMeteorsMod("metCometKittyEvent", "cometKittyEvent", 4, -4, new ItemStack(MeteorItems.itemMeteorSummoner, 1, 5), craftedMeteorTimer).registerStat();
-	public static final Achievement kittyTame = new AchievementMeteorsMod("metKittyTame", "kittyTame", 6, -4, Items.fish, kittyEvent).registerStat();
+	public static final Achievement kittyTame = new AchievementMeteorsMod("metKittyTame", "kittyTame", 6, -4, Items.FISH, kittyEvent).registerStat();
 	public static final Achievement craftedFreezer = new AchievementMeteorsMod("metFreezerCrafted", "freezerCrafted", 3, 3, MeteorBlocks.blockFreezer, materialGather).registerStat();
-	public static final Achievement freezeWater = new AchievementMeteorsMod("metFreezeWater", "freezeWater", 5, 3, Blocks.ice, craftedFreezer).registerStat();
+	public static final Achievement freezeWater = new AchievementMeteorsMod("metFreezeWater", "freezeWater", 5, 3, Blocks.ICE, craftedFreezer).registerStat();
 	public static final Achievement freezeBlocks = new AchievementMeteorsMod("metFreezeBlocks", "freezeBlocks", 3, 5, MeteorBlocks.blockSlippery, craftedFreezer).registerStat();
-	public static final Achievement freezeIce = new AchievementMeteorsMod("metFreezeIce", "freezeIce", 7, 3, Blocks.packed_ice, freezeWater).registerStat();
+	public static final Achievement freezeIce = new AchievementMeteorsMod("metFreezeIce", "freezeIce", 7, 3, Blocks.PACKED_ICE, freezeWater).registerStat();
 	
 	public void readyAchievements()
 	{
@@ -41,14 +39,14 @@ public class HandlerAchievement
 	}
 
 	@SubscribeEvent
-	public void notifyPickup(ItemPickupEvent event) {
+	public void notifyPickup(PlayerEvent.ItemPickupEvent event) {
 		
 		EntityPlayer player = event.player;
 		if (HandlerPlayerTick.getMagnetizationLevel(player) > 0) {
 			player.triggerAchievement(attractedDrop);
 		}
 		
-		ItemStack iStack = event.pickedUp.getEntityItem();
+		ItemStack iStack = event.pickedUp.getItem();
 		if (iStack != null) {
 			Item item = iStack.getItem();
 			if ((item == null) || (player == null)) return;

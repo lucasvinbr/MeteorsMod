@@ -5,8 +5,8 @@ import java.util.Iterator;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.storage.WorldSavedData;
 
 public class CrashedChunkSetData extends WorldSavedData {
 	
@@ -22,7 +22,7 @@ public class CrashedChunkSetData extends WorldSavedData {
 	
 	public static CrashedChunkSetData forWorld(World world, HandlerMeteor metH) {
 		tempHandle = metH;
-		MapStorage storage = world.perWorldStorage;
+		MapStorage storage = world.getPerWorldStorage();
 		CrashedChunkSetData result = (CrashedChunkSetData)storage.loadData(CrashedChunkSetData.class, key);
 		if (result == null) {
 			result = new CrashedChunkSetData(key);
@@ -34,7 +34,7 @@ public class CrashedChunkSetData extends WorldSavedData {
 	}
 
 	private ArrayList<CrashedChunkSet> loadCrashedChunks(NBTTagCompound tag, HandlerMeteor mHandler) {
-		ArrayList<CrashedChunkSet> cList = new ArrayList<CrashedChunkSet>();
+		ArrayList<CrashedChunkSet> cList = new ArrayList<>();
 		for (int i = 1; i <= 20; i++) {
 			if (tag.hasKey("CCSet" + i)) {
 				CrashedChunkSet ccSet = CrashedChunkSet.fromNBTString(tag.getString("CCSet" + i));

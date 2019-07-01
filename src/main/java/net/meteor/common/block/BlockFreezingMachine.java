@@ -6,16 +6,22 @@ import net.meteor.common.ClientProxy;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFreezingMachine extends BlockContainerMeteorsMod {
 	
@@ -23,7 +29,7 @@ public class BlockFreezingMachine extends BlockContainerMeteorsMod {
 	private IIcon FrontIcon_Empty;
 
 	public BlockFreezingMachine() {
-		super(Material.rock);
+		super(Material.ROCK);
 	}
 	
 	@Override
@@ -78,40 +84,40 @@ public class BlockFreezingMachine extends BlockContainerMeteorsMod {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		player.openGui(MeteorsMod.instance, 1, world, i, j, k);
+		player.openGui(MeteorsMod.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World p_149734_1_, int p_149734_2_, int p_149734_3_, int p_149734_4_, Random p_149734_5_)
+    public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random random)
     {
-		int l = p_149734_1_.getBlockMetadata(p_149734_2_, p_149734_3_, p_149734_4_);
+		int l = world.getBlockMetadata(x, y, z);
         if (l > 5)
         {
-            float f = (float)p_149734_2_ + 0.5F;
-            float f1 = (float)p_149734_3_ + 0.0625F + p_149734_5_.nextFloat() * 14.0F / 16.0F;
-            float f2 = (float)p_149734_4_ + 0.5F;
+            float f = (float)pos.getX() + 0.5F;
+            float f1 = (float)pos.getY() + 0.0625F + random.nextFloat() * 14.0F / 16.0F;
+            float f2 = (float)pos.getZ() + 0.5F;
             float f3 = 0.52F;
-            float f4 = p_149734_5_.nextFloat() * 0.6F - 0.3F;
+            float f4 = random.nextFloat() * 0.6F - 0.3F;
 
             if (l == 8)
             {
-                ClientProxy.spawnParticle("frezadust", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, p_149734_1_, -1);
+                ClientProxy.spawnParticle("frezadust", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, world, -1);
             }
             else if (l == 9)
             {
-                ClientProxy.spawnParticle("frezadust", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, p_149734_1_, -1);
+                ClientProxy.spawnParticle("frezadust", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, world, -1);
             }
             else if (l == 6)
             {
-                ClientProxy.spawnParticle("frezadust", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D, p_149734_1_, -1);
+                ClientProxy.spawnParticle("frezadust", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D, world, -1);
             }
             else if (l == 7)
             {
-                ClientProxy.spawnParticle("frezadust", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D, p_149734_1_, -1);
+                ClientProxy.spawnParticle("frezadust", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D, world, -1);
             }
         }
     }

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.I18n;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,8 +32,8 @@ public class ItemFrezariteSword extends ItemSword
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezSword.one"));
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezSword.two"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezSword.one"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezSword.two"));
 	}
 
 	@SideOnly(Side.CLIENT)

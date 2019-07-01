@@ -5,8 +5,8 @@ import java.util.Iterator;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraft.world.storage.WorldSavedData;
 
 public class GhostMeteorData extends WorldSavedData {
 	
@@ -21,7 +21,7 @@ public class GhostMeteorData extends WorldSavedData {
 	
 	public static GhostMeteorData forWorld(World world, HandlerMeteor metH) {
 		tempHandle = metH;
-		MapStorage storage = world.perWorldStorage;
+		MapStorage storage = world.getPerWorldStorage();
 		GhostMeteorData result = (GhostMeteorData)storage.loadData(GhostMeteorData.class, key);
 		if (result == null) {
 			result = new GhostMeteorData(key);
@@ -47,7 +47,7 @@ public class GhostMeteorData extends WorldSavedData {
 	}
 	
 	private ArrayList<GhostMeteor> loadGhostMeteors(NBTTagCompound tag) {
-		ArrayList<GhostMeteor> gMets = new ArrayList<GhostMeteor>();
+		ArrayList<GhostMeteor> gMets = new ArrayList<>();
 		for (int i = 1; i <= 3; i++) {
 			if (tag.hasKey("GMet" + i)) {
 			   	GhostMeteor gmet = GhostMeteor.fromNBTString(tag.getString("GMet" + i));

@@ -22,17 +22,16 @@ import net.meteor.common.packets.PacketLastCrash;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMeteor extends Entity
-implements IEntityAdditionalSpawnData
+public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 {
 	public int size = 1;
 	public EnumMeteor meteorType;
@@ -87,24 +86,24 @@ implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		if (!this.summoned) {
-			if (!worldObj.isRemote) {
-				HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(worldObj.provider.dimensionId);
+			if (!getEntityWorld().isRemote) {
+				HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(getEntityWorld().provider.getDimension());
 				IMeteorShield shield = metHandler.getShieldManager().getClosestShieldInRange((int)posX, (int)posZ);
 				if (shield != null) {
 					String owner = shield.getOwner();
-					EntityPlayer playerOwner = worldObj.getPlayerEntityByName(owner);
+					EntityPlayer playerOwner = getEntityWorld().getPlayerEntityByName(owner);
 					if (playerOwner != null) {
-						playerOwner.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("MeteorShield.meteorBlocked"), EnumChatFormatting.GREEN));
+						playerOwner.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
 						playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
 					}
 					metHandler.getShieldManager().sendMeteorMaterialsToShield(shield, new GhostMeteor((int)posX, (int)posZ, size, 0, meteorType));
-					this.worldObj.playSoundEffect(posX, posY, posZ, "random.explode", 5F, (1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
-					this.worldObj.spawnParticle("hugeexplosion", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+					this.getEntityWorld().playSoundEffect(posX, posY, posZ, "random.explode", 5F, (1.0F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.2F) * 0.7F);
+					this.getEntityWorld().spawnParticle("hugeexplosion", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
 					
 					CrashLocation lastCrash = metHandler.getForecast().getLastCrashLocation();
 					if (lastCrash != null && lastCrash.x == originX && lastCrash.z == originZ) {
 						metHandler.getForecast().setLastCrashLocation(null);
-						MeteorsMod.network.sendToDimension(new PacketLastCrash(new CrashLocation(-1, -1, -1, false, null)), worldObj.provider.dimensionId);
+						MeteorsMod.network.sendToDimension(new PacketLastCrash(new CrashLocation(-1, -1, -1, false, null)), getEntityWorld().provider.getDimension());
 					}
 					
 					this.setDead();
@@ -131,48 +130,47 @@ implements IEntityAdditionalSpawnData
 		prevPosY = posY;
 		prevPosZ = posZ;
 		motionY -= 0.039999999105930328D;
-		moveEntity(motionX, motionY, motionZ);
+		setPosition(motionX, motionY, motionZ);
 		motionY *= 0.98000001907348633D;
 
 		if (onGround) {
 			setDead();
-			if(!worldObj.isRemote) {
+			if(!getEntityWorld().isRemote) {
 				if (!summoned) {
 					
-					AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(posX - 40D, posY - 20D, posZ - 40D, posX + 40D, posY + 20D, posZ + 40D);
-					List<EntityPlayer> players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
-					for (int i = 0; i < players.size(); i++) {
-						EntityPlayer player = players.get(i);
+					AxisAlignedBB aabb = new AxisAlignedBB(posX - 40D, posY - 20D, posZ - 40D, posX + 40D, posY + 20D, posZ + 40D);
+					List<EntityPlayer> players = this.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, aabb);
+					for (EntityPlayer player : players) {
 						player.addStat(HandlerAchievement.foundMeteor, 1);
 					}
 					
-					HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(worldObj.provider.dimensionId);
+					HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(getEntityWorld().provider.getDimension());
 					if (metHandler != null) {
 						CrashLocation cc = metHandler.getForecast().getLastCrashLocation();
 						if (cc != null && originX == cc.x && originZ == cc.z) {
 							metHandler.getForecast().setLastCrashLocation(new CrashLocation((int)posX, (int)posY, (int)posZ, false, cc.prevCrash));
-							MeteorsMod.network.sendToDimension(new PacketLastCrash(metHandler.getForecast().getLastCrashLocation()), worldObj.provider.dimensionId);
+							MeteorsMod.network.sendToDimension(new PacketLastCrash(metHandler.getForecast().getLastCrashLocation()), getEntityWorld().provider.getDimension());
 						}
 					}
 					
 				}
 				CrashMeteorite worldGen = getWorldGen();
-				if (worldGen.generate(worldObj, rand, (int)posX, (int)posY, (int)posZ)) {
-					worldGen.afterCrashCompleted(worldObj, (int)posX, (int)posY, (int)posZ);
+				if (worldGen.generate(getEntityWorld(), rand, (int)posX, (int)posY, (int)posZ)) {
+					worldGen.afterCrashCompleted(getEntityWorld(), (int)posX, (int)posY, (int)posZ);
 				}
 			}
 		} else {
 			if (size == 1) {
-				worldObj.spawnParticle("largeexplode", posX, posY + 2.75D, posZ, 0.0D, 0.0D, 0.0D);
+				getEntityWorld().spawnParticle("largeexplode", posX, posY + 2.75D, posZ, 0.0D, 0.0D, 0.0D);
 			} else {
-				worldObj.spawnParticle("hugeexplosion", posX, posY + 4.0D, posZ, 0.0D, 0.0D, 0.0D);
+				getEntityWorld().spawnParticle("hugeexplosion", posX, posY + 4.0D, posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
 
 	protected Explosion explode() {
 		float f = (float) (this.size * MeteorsMod.instance.ImpactExplosionMultiplier);
-		Explosion explosion = new ExplosionMeteor(worldObj, this, posX, posY, posZ, f);
+		Explosion explosion = new ExplosionMeteor(getEntityWorld(), this, posX, posY, posZ, f);
         explosion.isFlaming = meteorType.getFieryExplosion();
         explosion.isSmoking = true;
         explosion.doExplosionA();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.item.ItemMeteorsMod;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,13 +12,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import baubles.api.BaubleType;
-import baubles.api.BaublesApi;
-import baubles.api.IBauble;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ItemMagnetismController extends ItemMeteorsMod implements IBauble {
 	
@@ -63,12 +64,12 @@ public class ItemMagnetismController extends ItemMeteorsMod implements IBauble {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean advTooltip) {
-		String state = getNBTData(stack) ? EnumChatFormatting.GREEN + StatCollector.translateToLocal("options.on") : EnumChatFormatting.RED + StatCollector.translateToLocal("options.off");
-		info.add(StatCollector.translateToLocalFormatted("info.magnetisationController.state", state));
-		info.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocalFormatted("info.magnetisationController.one", HandlerKey.getKey()));
-		info.add(EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocal("info.magnetisationController.two"));
-		info.add("");
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		String state = getNBTData(stack) ? TextFormatting.GREEN + I18n.translateToLocal("options.on") : TextFormatting.RED + I18n.translateToLocal("options.off");
+		tooltip.add(I18n.translateToLocalFormatted("info.magnetisationController.state", state));
+		tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocalFormatted("info.magnetisationController.one", HandlerKey.getKey()));
+		tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocal("info.magnetisationController.two"));
+		tooltip.add("");
 	}
 	
 	public static void setNBTData(ItemStack itemstack, boolean val) {
@@ -94,7 +95,7 @@ public class ItemMagnetismController extends ItemMeteorsMod implements IBauble {
 		ItemStack stack = inv.getStackInSlot(3);
 		if (stack != null) {
 			if (stack.getItem() == Baubles.MagnetismController) {
-				return (getNBTData(stack) ? Math.max(EnchantmentHelper.getEnchantmentLevel(MeteorsMod.Magnetization.effectId, stack), def) : 0);
+				return (getNBTData(stack) ? Math.max(EnchantmentHelper.getEnchantmentLevel(MeteorsMod.Magnetization, stack), def) : 0);
 			}
 		}
 		return def;

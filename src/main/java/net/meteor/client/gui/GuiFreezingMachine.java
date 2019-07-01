@@ -10,14 +10,13 @@ import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.meteor.common.util.Util;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -43,7 +42,7 @@ public class GuiFreezingMachine extends GuiContainer {
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(freezingMachineTextures);
         int k = (this.width - this.xSize) / 2;
@@ -57,22 +56,22 @@ public class GuiFreezingMachine extends GuiContainer {
         if (fluidStack != null && fluidStack.amount > 0) {
         	
         	fluidAmount = fluidStack.amount;
-        	Fluid fluid = FluidRegistry.getFluid(fluidStack.fluidID);
+        	Fluid fluid = fluidStack.getFluid();
         	
         	if (fluid != null) {
         		
         		fluidName = fluid.getLocalizedName(fluidStack);
-        		IIcon icon = fluid.getIcon();
+				TextureAtlasSprite fluidTexture = mc.getTextureMapBlocks().getTextureExtry(fluid.getStill().toString());
         		int height = (int) (((double)fluidAmount / (double)tankInfo.capacity) * 69);
         		int drawnHeight = 0;
-        		this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        		this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         		
         		for (int i = height / 16; i >= 0; i--) {
         			if (i > 0) {
-        				this.drawTexturedModelRectFromIcon(k + 13, l + 76 - 16 - drawnHeight, icon, 20, 16);
+        				this.drawTexturedModalRect(k + 13, l + 76 - 16 - drawnHeight, fluidTexture, 20, 16);
         				drawnHeight += 16;
         			} else {
-        				this.drawTexturedModelRectFromIcon(k + 13, l + 76 - drawnHeight - height, icon, 20, height);
+						this.drawTexturedModalRect(k + 13, l + 76 - drawnHeight, fluidTexture, 20, height);
         			}
         			height -= 16;
         		}
@@ -95,49 +94,43 @@ public class GuiFreezingMachine extends GuiContainer {
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_) {
-		if (func_146978_c(13, 7, 20, 69, p_146979_1_, p_146979_2_)) {
-			List info = new ArrayList();
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		if (isPointInRegion(13, 7, 20, 69, mouseX, mouseY)) {
+			List<String> info = new ArrayList<>();
 			if (fluidName != null && !fluidName.isEmpty()) {
 				info.add(fluidName);
 			}
 			info.add(fluidAmount + " / 10000 mB");
-			this.func_146283_a(info, p_146979_1_ - guiLeft, p_146979_2_ - guiTop);
+			this.drawHoveringText(info, mouseX - guiLeft, mouseY - guiTop);
 		}
 		
-		if (func_146978_c(149, 60, 20, 20, p_146979_1_, p_146979_2_)) {
+		if (isPointInRegion(149, 60, 20, 20, mouseX, mouseY)) {
 			List info = new ArrayList();
 			RecipeType type = freezer.getRecipeMode();
 			if (type == RecipeType.item) {
-				info.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("info.freezer.itemMode"));
-				info.addAll(Util.getFormattedLines("info.freezer.itemMode.desc", EnumChatFormatting.WHITE));
+				info.add(TextFormatting.AQUA + I18n.translateToLocal("info.freezer.itemMode"));
+				info.addAll(Util.getFormattedLines("info.freezer.itemMode.desc", TextFormatting.WHITE));
 			} else if (type == RecipeType.fluid) {
-				info.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("info.freezer.fluidMode"));
-				info.addAll(Util.getFormattedLines("info.freezer.fluidMode.desc", EnumChatFormatting.WHITE));
+				info.add(TextFormatting.AQUA + I18n.translateToLocal("info.freezer.fluidMode"));
+				info.addAll(Util.getFormattedLines("info.freezer.fluidMode.desc", TextFormatting.WHITE));
 			} else if (type == RecipeType.both) {
-				info.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("info.freezer.bothMode"));
-				info.addAll(Util.getFormattedLines("info.freezer.bothMode.desc", EnumChatFormatting.WHITE));
+				info.add(TextFormatting.AQUA + I18n.translateToLocal("info.freezer.bothMode"));
+				info.addAll(Util.getFormattedLines("info.freezer.bothMode.desc", TextFormatting.WHITE));
 			} else if (type == RecipeType.either) {
-				info.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("info.freezer.eitherMode"));
-				info.addAll(Util.getFormattedLines("info.freezer.eitherMode.desc", EnumChatFormatting.WHITE));
+				info.add(TextFormatting.AQUA + I18n.translateToLocal("info.freezer.eitherMode"));
+				info.addAll(Util.getFormattedLines("info.freezer.eitherMode.desc", TextFormatting.WHITE));
 			}
-			this.func_146283_a(info, p_146979_1_ - guiLeft, p_146979_2_ - guiTop);
+			this.drawHoveringText(info, mouseX - guiLeft, mouseY - guiTop);
 		}
 		
-		String s = StatCollector.translateToLocal("tile.freezingMachine.name");
-		int i = this.fontRendererObj.getStringWidth(s);
-		this.fontRendererObj.drawString(s, 168 - i, 6, 4210752, false);
+		String s = I18n.translateToLocal("tile.freezingMachine.name");
+		int i = this.fontRenderer.getStringWidth(s);
+		this.fontRenderer.drawString(s, 168 - i, 6, 4210752, false);
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		freezer.pressButton(button.id);
 	}
-	
-//	// Workaround to not rewrite minecraft code
-//	// Used in GuiButtonFreezerRecipeMode
-//	public void drawTooltip(List p_146283_1_, int p_146283_2_, int p_146283_3_) {
-//		this.func_146283_a(p_146283_1_, p_146283_2_, p_146283_3_);
-//	}
 
 }

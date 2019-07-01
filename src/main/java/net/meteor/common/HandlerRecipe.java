@@ -5,17 +5,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class HandlerRecipe implements IFuelHandler {
 	
 	@SubscribeEvent
-	public void onCrafting(ItemCraftedEvent event)
+	public void onCrafting(PlayerEvent.ItemCraftedEvent event)
 	{
 		Item item = event.crafting.getItem();
 		EntityPlayer player = event.player;
@@ -46,56 +46,56 @@ public class HandlerRecipe implements IFuelHandler {
 
 	public void addRecipes() {
 		// ============= Crafting Recipes =============
-		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteHelmet, 1), new Object[] { 
-			"mmm", "m m", Character.valueOf('m'), MeteorItems.MeteoriteIngot 
+		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteHelmet, 1), new Object[] {
+			"mmm", "m m", 'm', MeteorItems.MeteoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteBody, 1), new Object[] { 
-			"m m", "mmm", "mmm", Character.valueOf('m'), MeteorItems.MeteoriteIngot 
+			"m m", "mmm", "mmm", 'm', MeteorItems.MeteoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteLegs, 1), new Object[] { 
-			"mmm", "m m", "m m", Character.valueOf('m'), MeteorItems.MeteoriteIngot 
+			"mmm", "m m", "m m", 'm', MeteorItems.MeteoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteBoots, 1), new Object[] { 
-			"m m", "m m", Character.valueOf('m'), MeteorItems.MeteoriteIngot 
+			"m m", "m m", 'm', MeteorItems.MeteoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteAxe, 1), new Object[] { 
-			"mm", "ms", " s", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), Items.iron_ingot 
+			"mm", "ms", " s", 'm', MeteorItems.MeteoriteIngot, 's', Items.IRON_INGOT
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteAxe, 1), new Object[] { 
-			"mm", "sm", "s ", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), Items.iron_ingot 
+			"mm", "sm", "s ", 'm', MeteorItems.MeteoriteIngot, 's', Items.IRON_INGOT
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteSpade, 1), new Object[] { 
-			"m", "s", "s", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), Items.iron_ingot 
+			"m", "s", "s", 'm', MeteorItems.MeteoriteIngot, 's', Items.IRON_INGOT
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteSword), new Object[] { 
-			"m", "m", "s", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), Items.iron_ingot 
+			"m", "m", "s", 'm', MeteorItems.MeteoriteIngot, 's', Items.IRON_INGOT
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoritePickaxe, 1), new Object[] { 
-			"mmm", " s ", " s ", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), Items.iron_ingot 
+			"mmm", " s ", " s ", 'm', MeteorItems.MeteoriteIngot, 's', Items.IRON_INGOT
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteHoe, 1), new Object[] { 
-			"mm", " s", " s", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), Items.iron_ingot 
+			"mm", " s", " s", 'm', MeteorItems.MeteoriteIngot, 's', Items.IRON_INGOT
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.MeteoriteHoe, 1), new Object[] { 
-			"mm", "s ", "s ", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), Items.iron_ingot
+			"mm", "s ", "s ", 'm', MeteorItems.MeteoriteIngot, 's', Items.IRON_INGOT
 		});
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorBlocks.torchMeteorShieldActive, 4), new Object[] { 
-			"m", "s", Character.valueOf('m'), MeteorItems.itemMeteorChips, Character.valueOf('s'), "stickWood" 
+			"m", "s", 'm', MeteorItems.itemMeteorChips, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorBlocks.blockMeteorShield, 1), new Object[] { 
-			"mmm", "crc", "ccc", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('c'), "cobblestone", Character.valueOf('r'), Items.redstone 
+			"mmm", "crc", "ccc", 'm', MeteorItems.MeteoriteIngot, 'c', "cobblestone", 'r', Items.REDSTONE
 		}));
 
 		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.ice, 4), new Object[] { 
@@ -103,85 +103,85 @@ public class HandlerRecipe implements IFuelHandler {
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.FrezariteHelmet, 1), new Object[] { 
-			"ccc", "c c", Character.valueOf('c'), MeteorItems.FrozenIron 
+			"ccc", "c c", 'c', MeteorItems.FrozenIron
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.FrezariteBody, 1), new Object[] { 
-			"c c", "ccc", "ccc", Character.valueOf('c'), MeteorItems.FrozenIron 
+			"c c", "ccc", "ccc", 'c', MeteorItems.FrozenIron
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.FrezariteLegs, 1), new Object[] { 
-			"ccc", "c c", "c c", Character.valueOf('c'), MeteorItems.FrozenIron 
+			"ccc", "c c", "c c", 'c', MeteorItems.FrozenIron
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.FrezariteBoots, 1), new Object[] { 
-			"c c", "c c", Character.valueOf('c'), MeteorItems.FrozenIron 
+			"c c", "c c", 'c', MeteorItems.FrozenIron
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.KreknoriteHelmet, 1), new Object[] { 
-			"ccc", "c c", Character.valueOf('c'), MeteorItems.KreknoriteIngot 
+			"ccc", "c c", 'c', MeteorItems.KreknoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.KreknoriteBody, 1), new Object[] { 
-			"c c", "ccc", "ccc", Character.valueOf('c'), MeteorItems.KreknoriteIngot 
+			"c c", "ccc", "ccc", 'c', MeteorItems.KreknoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.KreknoriteLegs, 1), new Object[] { 
-			"ccc", "c c", "c c", Character.valueOf('c'), MeteorItems.KreknoriteIngot 
+			"ccc", "c c", "c c", 'c', MeteorItems.KreknoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.KreknoriteBoots, 1), new Object[] { 
-			"c c", "c c", Character.valueOf('c'), MeteorItems.KreknoriteIngot 
+			"c c", "c c", 'c', MeteorItems.KreknoriteIngot
 		});
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.KreknoriteSword, 1), new Object[] { 
-			"c", "c", "s", Character.valueOf('c'), MeteorItems.KreknoriteIngot, Character.valueOf('s'), "stickWood"
+			"c", "c", "s", 'c', MeteorItems.KreknoriteIngot, 's', "stickWood"
 		}));
 
 		GameRegistry.addShapelessRecipe(new ItemStack(MeteorItems.itemVanillaIceCream, 4), new Object[] { 
-			Items.bowl, Items.sugar, Items.milk_bucket, MeteorItems.itemFrezaCrystal 
+			Items.BOWL, Items.SUGAR, Items.MILK_BUCKET, MeteorItems.itemFrezaCrystal
 		});
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(MeteorItems.itemChocolateIceCream, 4), new Object[] { 
-			Items.bowl, Items.sugar, Items.milk_bucket, MeteorItems.itemFrezaCrystal, "dyeBrown"
+			Items.BOWL, Items.SUGAR, Items.MILK_BUCKET, MeteorItems.itemFrezaCrystal, "dyeBrown"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.FrezaritePickaxe, 1), new Object[] { 
-			"ccc", " s ", " s ", Character.valueOf('c'), MeteorItems.FrozenIron, Character.valueOf('s'), "stickWood"
+			"ccc", " s ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.FrezariteSpade, 1), new Object[] { 
-			"c", "s", "s", Character.valueOf('c'), MeteorItems.FrozenIron, Character.valueOf('s'), "stickWood" 
+			"c", "s", "s", 'c', MeteorItems.FrozenIron, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.FrezariteAxe, 1), new Object[] { 
-			" cc", " sc", " s ", Character.valueOf('c'), MeteorItems.FrozenIron, Character.valueOf('s'), "stickWood"
+			" cc", " sc", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.FrezariteAxe, 1), new Object[] { 
-			"cc ", "cs ", " s ", Character.valueOf('c'), MeteorItems.FrozenIron, Character.valueOf('s'), "stickWood" 
+			"cc ", "cs ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.FrezariteHoe, 1), new Object[] { 
-			"cc ", " s ", " s ", Character.valueOf('c'), MeteorItems.FrozenIron, Character.valueOf('s'), "stickWood" 
+			"cc ", " s ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.FrezariteHoe, 1), new Object[] { 
-			" cc", " s ", " s ", Character.valueOf('c'), MeteorItems.FrozenIron, Character.valueOf('s'), "stickWood"
+			" cc", " s ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(MeteorItems.FrezariteSword, 1), new Object[] { 
-			"c", "c", "s", Character.valueOf('c'), MeteorItems.FrozenIron, Character.valueOf('s'), "stickWood"
+			"c", "c", "s", 'c', MeteorItems.FrozenIron, 's', "stickWood"
 		}));
 
 		GameRegistry.addRecipe(new ItemStack(MeteorBlocks.blockMeteorTimer, 1), new Object[] {
-			"mfk", "brb", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('f'), MeteorItems.FrozenIron, 
-			Character.valueOf('k'), MeteorItems.KreknoriteIngot, Character.valueOf('b'), new ItemStack(MeteorBlocks.blockDecorator, 1, 0), 
-			Character.valueOf('r'), Items.redstone
+			"mfk", "brb", 'm', MeteorItems.MeteoriteIngot, 'f', MeteorItems.FrozenIron,
+				'k', MeteorItems.KreknoriteIngot, 'b', new ItemStack(MeteorBlocks.blockDecorator, 1, 0),
+				'r', Items.REDSTONE
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorBlocks.blockRedMeteorGem, 1), new Object[] {
-			"rrr", "rrr", "rrr", Character.valueOf('r'), MeteorItems.itemRedMeteorGem
+			"rrr", "rrr", "rrr", 'r', MeteorItems.itemRedMeteorGem
 		});
 
 		GameRegistry.addShapelessRecipe(new ItemStack(MeteorItems.itemRedMeteorGem, 9), new Object[] {
@@ -189,7 +189,7 @@ public class HandlerRecipe implements IFuelHandler {
 		});
 		
 		GameRegistry.addRecipe(new ItemStack(MeteorBlocks.blockDecorator, 1, 0), new Object[] {
-			"iii", "iii", "iii", Character.valueOf('i'), MeteorItems.MeteoriteIngot
+			"iii", "iii", "iii", 'i', MeteorItems.MeteoriteIngot
 		});
 
 		GameRegistry.addShapelessRecipe(new ItemStack(MeteorItems.MeteoriteIngot, 9), new Object[] {
@@ -197,7 +197,7 @@ public class HandlerRecipe implements IFuelHandler {
 		});
 		
 		GameRegistry.addRecipe(new ItemStack(MeteorBlocks.blockDecorator, 1, 1), new Object[] {
-			"iii", "iii", "iii", Character.valueOf('i'), MeteorItems.FrozenIron
+			"iii", "iii", "iii", 'i', MeteorItems.FrozenIron
 		});
 
 		GameRegistry.addShapelessRecipe(new ItemStack(MeteorItems.FrozenIron, 9), new Object[] {
@@ -205,7 +205,7 @@ public class HandlerRecipe implements IFuelHandler {
 		});
 		
 		GameRegistry.addRecipe(new ItemStack(MeteorBlocks.blockDecorator, 1, 2), new Object[] {
-			"iii", "iii", "iii", Character.valueOf('i'), MeteorItems.KreknoriteIngot
+			"iii", "iii", "iii", 'i', MeteorItems.KreknoriteIngot
 		});
 
 		GameRegistry.addShapelessRecipe(new ItemStack(MeteorItems.KreknoriteIngot, 9), new Object[] {
@@ -213,55 +213,55 @@ public class HandlerRecipe implements IFuelHandler {
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorProximityDetector, 1), new Object[] { 
-			" m ", "mrm", " m ", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('r'), Items.redstone
+			" m ", "mrm", " m ", 'm', MeteorItems.MeteoriteIngot, 'r', Items.REDSTONE
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorTimeDetector, 1), new Object[] { 
-			" f ", "frf", " f ", Character.valueOf('f'), MeteorItems.FrozenIron, Character.valueOf('r'), MeteorItems.itemRedMeteorGem 
+			" f ", "frf", " f ", 'f', MeteorItems.FrozenIron, 'r', MeteorItems.itemRedMeteorGem
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorCrashDetector, 1), new Object[] { 
-			" k ", "krk", " k ", Character.valueOf('k'), MeteorItems.KreknoriteIngot, Character.valueOf('r'), MeteorItems.itemRedMeteorGem 
+			" k ", "krk", " k ", 'k', MeteorItems.KreknoriteIngot, 'r', MeteorItems.itemRedMeteorGem
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1), new Object[] { 
-			"rmr", "mrm", "rmr", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('r'), MeteorItems.itemRedMeteorGem 
+			"rmr", "mrm", "rmr", 'm', MeteorItems.MeteoriteIngot, 'r', MeteorItems.itemRedMeteorGem
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 1), new Object[] { 
-			"mbm", "bsb", "mbm", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), MeteorItems.itemMeteorSummoner,
-			Character.valueOf('b'), new ItemStack(MeteorBlocks.blockDecorator, 1, 0)
+			"mbm", "bsb", "mbm", 'm', MeteorItems.MeteoriteIngot, 's', MeteorItems.itemMeteorSummoner,
+				'b', new ItemStack(MeteorBlocks.blockDecorator, 1, 0)
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 2), new Object[] { 
-			"mbm", "bsb", "mbm", Character.valueOf('m'), MeteorItems.FrozenIron, Character.valueOf('s'), MeteorItems.itemMeteorSummoner,
-			Character.valueOf('b'), new ItemStack(MeteorBlocks.blockDecorator, 1, 1)
+			"mbm", "bsb", "mbm", 'm', MeteorItems.FrozenIron, 's', MeteorItems.itemMeteorSummoner,
+				'b', new ItemStack(MeteorBlocks.blockDecorator, 1, 1)
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 3), new Object[] { 
-			"mbm", "bsb", "mbm", Character.valueOf('m'), MeteorItems.KreknoriteIngot, Character.valueOf('s'), MeteorItems.itemMeteorSummoner,
-			Character.valueOf('b'), new ItemStack(MeteorBlocks.blockDecorator, 1, 2)
+			"mbm", "bsb", "mbm", 'm', MeteorItems.KreknoriteIngot, 's', MeteorItems.itemMeteorSummoner,
+				'b', new ItemStack(MeteorBlocks.blockDecorator, 1, 2)
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 4), new Object[] { 
-			"rmr", "ksk", "rfr", Character.valueOf('m'), new ItemStack(MeteorBlocks.blockDecorator, 1, 0), Character.valueOf('s'), MeteorItems.itemMeteorSummoner, 
-			Character.valueOf('k'), new ItemStack(MeteorBlocks.blockDecorator, 1, 2), Character.valueOf('f'), new ItemStack(MeteorBlocks.blockDecorator, 1, 1),
-			Character.valueOf('r'), MeteorItems.itemRedMeteorGem
+			"rmr", "ksk", "rfr", 'm', new ItemStack(MeteorBlocks.blockDecorator, 1, 0), 's', MeteorItems.itemMeteorSummoner,
+				'k', new ItemStack(MeteorBlocks.blockDecorator, 1, 2), 'f', new ItemStack(MeteorBlocks.blockDecorator, 1, 1),
+				'r', MeteorItems.itemRedMeteorGem
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 5), new Object[] { 
-			"mfm", "fsf", "mfm", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), MeteorItems.itemMeteorSummoner, 
-			Character.valueOf('f'), Items.fish
+			"mfm", "fsf", "mfm", 'm', MeteorItems.MeteoriteIngot, 's', MeteorItems.itemMeteorSummoner,
+				'f', Items.FISH
 		});
 
 		GameRegistry.addRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 5), new Object[] { 
-			"mfm", "fsf", "mfm", Character.valueOf('m'), MeteorItems.MeteoriteIngot, Character.valueOf('s'), MeteorItems.itemMeteorSummoner, 
-			Character.valueOf('f'), Items.cooked_fished
+			"mfm", "fsf", "mfm", 'm', MeteorItems.MeteoriteIngot, 's', MeteorItems.itemMeteorSummoner,
+				'f', Items.COOKED_FISH
 		});
 		
 		GameRegistry.addRecipe(new ItemStack(MeteorBlocks.blockFreezer, 1), new Object[] {
-			"ifi", "fbf", "ifi", Character.valueOf('i'), Items.iron_ingot, Character.valueOf('f'), MeteorItems.itemFrezaCrystal,
-			Character.valueOf('b'), Items.bucket
+			"ifi", "fbf", "ifi", 'i', Items.IRON_INGOT, 'f', MeteorItems.itemFrezaCrystal,
+				'b', Items.BUCKET
 		}); 
 		
 		// ============= Smelting Recipes =============

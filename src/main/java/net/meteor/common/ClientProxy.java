@@ -3,9 +3,9 @@ package net.meteor.common;
 import net.meteor.client.block.ShieldItemRenderer;
 import net.meteor.client.block.SlipperyItemRenderer;
 import net.meteor.client.block.TimerItemRenderer;
-import net.meteor.client.effect.EntityFrezaDustFX;
-import net.meteor.client.effect.EntityMeteorShieldParticleFX;
-import net.meteor.client.effect.EntityMeteordustFX;
+import net.meteor.client.effect.ParticleFrezaDust;
+import net.meteor.client.effect.ParticleMeteorShield;
+import net.meteor.client.effect.ParticleMeteorDust;
 import net.meteor.client.model.ModelCometKitty;
 import net.meteor.client.render.RenderAlienCreeper;
 import net.meteor.client.render.RenderComet;
@@ -27,14 +27,15 @@ import net.meteor.common.tileentity.TileEntitySlippery;
 import net.meteor.plugin.baubles.Baubles;
 import net.meteor.plugin.baubles.MagnetizationOverlay;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ClientProxy extends CommonProxy
 {
@@ -85,17 +86,18 @@ public class ClientProxy extends CommonProxy
 	public static void spawnParticle(String s, double d, double d1, double d2, double d3, double d4, double d5, World worldObj, int opt)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		if (mc == null || mc.renderViewEntity == null || mc.effectRenderer == null) {
+		if (mc == null || mc.getRenderViewEntity() == null || mc.effectRenderer == null) {
 			return;
 		}
 		int i = mc.gameSettings.particleSetting;
 		if (i == 1 && worldObj.rand.nextInt(3) == 0) {
 			i = 2;
 		}
-		double d6 = mc.renderViewEntity.posX - d;
-		double d7 = mc.renderViewEntity.posY - d1;
-		double d8 = mc.renderViewEntity.posZ - d2;
-		EntityFX obj = null;
+		Entity renderViewEntity = mc.getRenderViewEntity();
+		double d6 = renderViewEntity.posX - d;
+		double d7 = renderViewEntity.posY - d1;
+		double d8 = renderViewEntity.posZ - d2;
+		Particle obj = null;
 		double d9 = 16D;
 		if (d6 * d6 + d7 * d7 + d8 * d8 > d9 * d9) {
 			return;
@@ -103,19 +105,23 @@ public class ClientProxy extends CommonProxy
 		if (i > 1) {
 			return;
 		}
-		if (s.equals("meteordust"))
-			obj = new EntityMeteordustFX(worldObj, d, d1, d2, (float)d3, (float)d4, (float)d5);
-		else if (s.equals("frezadust"))
-			obj = new EntityFrezaDustFX(worldObj, d, d1, d2, (float)d3, (float)d4, (float)d5);
-		else if (s.equals("meteorshield")) {
-			if (opt != -1)
-				obj = new EntityMeteorShieldParticleFX(worldObj, d, d1, d2, d3, d4, d5, opt);
-			else {
-				obj = new EntityMeteorShieldParticleFX(worldObj, d, d1, d2, d3, d4, d5);
-			}
+		switch (s) {
+			case "meteordust":
+				obj = new ParticleMeteorDust(worldObj, d, d1, d2, (float) d3, (float) d4, (float) d5);
+				break;
+			case "frezadust":
+				obj = new ParticleFrezaDust(worldObj, d, d1, d2, (float) d3, (float) d4, (float) d5);
+				break;
+			case "meteorshield":
+				if (opt != -1)
+					obj = new ParticleMeteorShield(worldObj, d, d1, d2, d3, d4, d5, opt);
+				else {
+					obj = new ParticleMeteorShield(worldObj, d, d1, d2, d3, d4, d5);
+				}
+				break;
 		}
 		if (obj != null) {
-			mc.effectRenderer.addEffect((EntityFX)obj);
+			mc.effectRenderer.addEffect(obj);
 		}
 	}
 }

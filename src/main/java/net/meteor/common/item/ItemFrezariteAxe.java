@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.I18n;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -22,8 +22,8 @@ public class ItemFrezariteAxe extends ItemAxe
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezAxe.one"));
-		par3List.add("\2473" + StatCollector.translateToLocal("enchantment.frezAxe.two"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezAxe.one"));
+		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezAxe.two"));
 	}
 
 	@SideOnly(Side.CLIENT)

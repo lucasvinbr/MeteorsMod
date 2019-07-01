@@ -1,20 +1,23 @@
 package net.meteor.common.block;
 
-import java.util.Random;
-
 import net.meteor.common.MeteorItems;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockKreknorite extends BlockMeteor
 {
@@ -36,83 +39,83 @@ public class BlockKreknorite extends BlockMeteor
 		if ((!world.isRemote) && (world.rand.nextInt(100) == 95)) {
 			EntityBlaze blaze = new EntityBlaze(world);
 			blaze.setLocationAndAngles(i, j, k, 0.0F, 0.0F);
-			world.spawnEntityInWorld(blaze);
+			world.spawnEntity(blaze);
 			blaze.spawnExplosionParticle();
 		}
 	}
 
 	@Override
-	public void updateTick(World world, int i, int j, int k, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		int meta = world.getBlockMetadata(i, j, k);
+		int meta = world.getBlockMetadata(x, y, z);
 		if (meta > 0) {
-			world.setBlockMetadataWithNotify(i, j, k, --meta, 2);
+			world.setBlockMetadataWithNotify(x, y, z, --meta, 2);
 			if (meta <= 0) {
-				world.setBlock(i, j, k, Blocks.obsidian, 0, 2);
-				triggerLavaMixEffects(world, i, j, k);
+				world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState(), 2);
+				triggerLavaMixEffects(world, pos.getX(), pos.getY(), pos.getZ());
 			} else {
-				checkForHarden(world, i, j, k);
+				checkForHarden(world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 	}
 
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k)
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state)
 	{
-		checkForHarden(world, i, j, k);
+		checkForHarden(world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, Block block)
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor)
 	{
-		checkForHarden(world, i, j, k);
+		checkForHarden((World) world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
-	private void checkForHarden(World world, int i, int j, int k)
+	private void checkForHarden(World world, int x, int y, int z)
 	{
-		if (world.getBlock(i, j, k) != this)
+		if (world.getBlockState(new BlockPos(x, y, z)).getBlock() != this)
 		{
 			return;
 		}
-		boolean flag = false;
-		if (flag || world.getBlock(i, j, k - 1).getMaterial() == Material.water)
+		boolean flag = false;//TODO 1.12.2 looks broken
+		if (flag || world.getBlockState(new BlockPos(x, y, z - 1)).getMaterial() == Material.WATER)
         {
             flag = true;
         }
 
-        if (flag || world.getBlock(i, j, k + 1).getMaterial() == Material.water)
+        if (flag || world.getBlockState(new BlockPos(x, y, z + 1)).getMaterial() == Material.WATER)
         {
             flag = true;
         }
 
-        if (flag || world.getBlock(i - 1, j, k).getMaterial() == Material.water)
+        if (flag || world.getBlockState(new BlockPos(x - 1, y, z)).getMaterial() == Material.WATER)
         {
             flag = true;
         }
 
-        if (flag || world.getBlock(i + 1, j, k).getMaterial() == Material.water)
+        if (flag || world.getBlockState(new BlockPos(x + 1, y, z)).getMaterial() == Material.WATER)
         {
             flag = true;
         }
 
-        if (flag || world.getBlock(i, j + 1, k).getMaterial() == Material.water)
+        if (flag || world.getBlockState(new BlockPos(x, y + 1, z)).getMaterial() == Material.WATER)
         {
             flag = true;
         }
 		if (flag)
 		{
-			world.setBlock(i, j, k, Blocks.obsidian, 0, 2);
-			triggerLavaMixEffects(world, i, j, k);
+			world.setBlockState(new BlockPos(x, y, z), Blocks.OBSIDIAN.getDefaultState(), 2);
+			triggerLavaMixEffects(world, x, y, z);
 		}
 	}
 
 	@Override
-	protected void triggerLavaMixEffects(World world, int i, int j, int k)
+	protected void triggerLavaMixEffects(World world, int i, int j, int z)
 	{
-		world.playSoundEffect(i + 0.5F, j + 0.5F, k + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		world.playSound(i + 0.5F, j + 0.5F, z + 0.5F, new SoundEvent(new ResourceLocation("minecraft:random.fizz")), SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F, true);
 		for (int l = 0; l < 8; l++)
 		{
-			world.spawnParticle("largesmoke", i + Math.random(), j + 1.2D, k + Math.random(), 0.0D, 0.0D, 0.0D);
+			world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, i + Math.random(), j + 1.2D, z + Math.random(), 0.0D, 0.0D, 0.0D);
 		}
 	}
 
@@ -130,8 +133,8 @@ public class BlockKreknorite extends BlockMeteor
 	}
 	
 	@Override
-	public int getExpDrop(IBlockAccess world, int metadata, int fortune) {
-		return MathHelper.getRandomIntegerInRange(rand, 3, 6);
+	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
+		return MathHelper.getInt(rand, 3, 6);
 	}
 	
 }

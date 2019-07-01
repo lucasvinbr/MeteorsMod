@@ -1,16 +1,17 @@
 package net.meteor.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class BlockRedMeteorGem extends BlockMeteorsMod {
 
 	public BlockRedMeteorGem() {
-		super(Material.rock);
+		super(Material.ROCK);
 	}
 	
 	@Override
-	public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
+	public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon) {
 		return true;
 	}
 

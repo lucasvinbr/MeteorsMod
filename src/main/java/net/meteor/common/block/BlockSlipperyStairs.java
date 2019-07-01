@@ -14,13 +14,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvider {
 
 	public BlockSlipperyStairs(float slipperiness) {
-		super(Blocks.packed_ice, 0);
+		super(Blocks.PACKED_ICE, 0);
 		this.slipperiness = slipperiness;
 		this.setCreativeTab(null);
 	}
@@ -47,7 +47,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 	
 	/**
      * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
+     * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
      */
 	@Override
     public boolean isOpaqueCube() {
@@ -88,7 +88,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 	    	NBTTagCompound nbt = slipItem.hasTagCompound() ? slipItem.getTagCompound() : new NBTTagCompound();
 	    	nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, teSlippery.getFacadeBlockName());
 	    	slipItem.setTagCompound(nbt);
-	    	this.dropBlockAsItem(world, x, y, z, slipItem);
+	    	this.dropBlockAsItem(world, [], slipItem);
 		}
     	return super.removedByPlayer(world, player, x, y, z, willHarvest);
 	}
@@ -99,7 +99,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 	}
 	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+	public ItemStack getPickBlock(RayTraceResult target, World world, int x, int y, int z, EntityPlayer player) {
 		Item item = getItem(world, x, y, z);
 
         if (item == null)

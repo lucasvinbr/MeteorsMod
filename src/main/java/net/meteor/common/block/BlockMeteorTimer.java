@@ -4,14 +4,13 @@ import net.meteor.common.tileentity.TileEntityMeteorTimer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMeteorTimer extends BlockContainerMeteorsMod {
 	
@@ -19,7 +18,7 @@ public class BlockMeteorTimer extends BlockContainerMeteorsMod {
 	private IIcon timerSide;
 
 	public BlockMeteorTimer() {
-		super(Material.redstoneLight);
+		super(Material.REDSTONE_LIGHT);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 	}
 	
@@ -44,8 +43,8 @@ public class BlockMeteorTimer extends BlockContainerMeteorsMod {
 	}
 	
 	/**
-     * Returns true if the block is emitting indirect/weak redstone power on the specified side. If isBlockNormalCube
-     * returns true, standard redstone propagation rules will apply instead and this will not be called. Args: World, X,
+     * Returns true if the block is emitting indirect/weak REDSTONE power on the specified side. If isBlockNormalCube
+     * returns true, standard REDSTONE propagation rules will apply instead and this will not be called. Args: World, X,
      * Y, Z, side. Note that the side is reversed - eg it is 1 (up) when checking the bottom of the block.
      */
 	@Override
@@ -72,9 +71,9 @@ public class BlockMeteorTimer extends BlockContainerMeteorsMod {
 			TileEntityMeteorTimer tEntity = (TileEntityMeteorTimer)world.getTileEntity(i, j, k);
 			tEntity.quickMode = !tEntity.quickMode;
 			if (tEntity.quickMode) {
-				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("MeteorTimer.modeChange.two")));
+				player.sendMessage(new TextComponentString(I18n.translateToLocal("MeteorTimer.modeChange.two")));
 			} else {
-				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("MeteorTimer.modeChange.one")));
+				player.sendMessage(new TextComponentString(I18n.translateToLocal("MeteorTimer.modeChange.one")));
 			}
 			world.markBlockForUpdate(i, j, k);
 		}

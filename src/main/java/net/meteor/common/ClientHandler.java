@@ -15,23 +15,24 @@ import net.meteor.plugin.baubles.PacketToggleMagnetism;
 import net.meteor.plugin.baubles.PacketTogglePlayerMagnetism;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+
 
 public class ClientHandler
 {
 	public static CrashLocation lastCrashLocation = null;
-	public static ChunkCoordinates nearestTimeLocation = null;
-	public static ArrayList<ChunkCoordinates> ghostMetLocs = new ArrayList<ChunkCoordinates>(); // TODO Privatize
+	public static BlockPos nearestTimeLocation = null;
+	public static ArrayList<BlockPos> ghostMetLocs = new ArrayList<>(); // TODO Privatize
 	
 	public void registerPackets() {
 		MeteorsMod.network.registerMessage(PacketBlockedMeteor.Handler.class, PacketBlockedMeteor.class, 0, Side.CLIENT);
@@ -46,19 +47,18 @@ public class ClientHandler
 		}
 	}
 
-	public static ChunkCoordinates getClosestIncomingMeteor(double pX, double pZ) {
-		ChunkCoordinates coords = null;
+	public static BlockPos getClosestIncomingMeteor(double pX, double pZ) {
+		BlockPos coords = null;
 		double y = 50.0D;
-		for (int i = 0; i < ghostMetLocs.size(); i++) {
+		for (BlockPos ghostMetLoc : ghostMetLocs) {
 			if (coords != null) {
-				ChunkCoordinates loc = ghostMetLocs.get(i);
-				double var1 = getDistance(pX, y, pZ, loc.posX, y, loc.posZ);
-				double var2 = getDistance(pX, y, pZ, coords.posX, y, coords.posZ);
+				BlockPos loc = ghostMetLoc;
+				double var1 = getDistance(pX, y, pZ, loc.getX(), y, loc.getZ());
+				double var2 = getDistance(pX, y, pZ, coords.getX(), y, coords.getZ());
 				if (var1 < var2)
 					coords = loc;
-			}
-			else {
-				coords = ghostMetLocs.get(i);
+			} else {
+				coords = ghostMetLoc;
 			}
 		}
 		return coords;
@@ -68,15 +68,15 @@ public class ClientHandler
 		double var7 = x1 - x2;
 		double var9 = y1 - y2;
 		double var11 = z1 - z2;
-		return MathHelper.sqrt_double(var7 * var7 + var9 * var9 + var11 * var11);
+		return MathHelper.sqrt(var7 * var7 + var9 * var9 + var11 * var11);
 	}
 	
-	public static IChatComponent createMessage(String s, EnumChatFormatting ecf) {
-		return new ChatComponentText(s).setChatStyle(new ChatStyle().setColor(ecf));
+	public static ITextComponent createMessage(String s, TextFormatting ecf) {
+		return new TextComponentString(s).setStyle(new Style().setColor(ecf));
 	}
 
 	@SubscribeEvent
-	public void playerLoggedIn(PlayerLoggedInEvent event)
+	public void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		EntityPlayerMP player = (EntityPlayerMP) event.player;
 		MeteorsMod.network.sendTo(new PacketSettings(), player);
@@ -85,9 +85,9 @@ public class ClientHandler
 	@SubscribeEvent
 	public void entityJoinWorld(EntityJoinWorldEvent event) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			if (event.entity instanceof EntityPlayer) {
-				EntityPlayerMP player = (EntityPlayerMP) event.entity;
-				HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(event.world.provider.dimensionId);
+			if (event.getEntity() instanceof EntityPlayer) {
+				EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+				HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(event.getWorld().provider.getDimension());
 				MeteorsMod.network.sendTo(new PacketGhostMeteor(), player);		// Clear Ghost Meteors
 				metHandler.sendGhostMeteorPackets(player);
 				if (metHandler.getForecast() == null) {

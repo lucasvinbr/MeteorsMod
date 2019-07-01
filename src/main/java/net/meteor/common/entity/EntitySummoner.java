@@ -15,12 +15,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntitySummoner extends EntityThrowable implements IEntityAdditionalSpawnData
 {
@@ -63,28 +63,28 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 	public void onUpdate()
 	{
 		super.onUpdate();
-		if (this.worldObj.isRemote) {
+		if (this.getEntityWorld().isRemote) {
 			int rgbIndex = mID;
 			if (isRandom) {
-				rgbIndex = this.worldObj.rand.nextInt(5);
+				rgbIndex = this.getEntityWorld().rand.nextInt(5);
 			}
-			worldObj.spawnParticle("mobSpell", this.posX, this.posY, this.posZ, spellRGB[rgbIndex][0], spellRGB[rgbIndex][1], spellRGB[rgbIndex][2]);
+			getEntityWorld().spawnParticle("mobSpell", this.posX, this.posY, this.posZ, spellRGB[rgbIndex][0], spellRGB[rgbIndex][1], spellRGB[rgbIndex][2]);
 		}
 	}
 
 	@Override
-	protected void onImpact(MovingObjectPosition movingobjectposition)
+	protected void onImpact(RayTraceResult rayTraceResult)
 	{
 		for (int i = 0; i < 8; i++)
 		{
-			this.worldObj.spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+			this.getEntityWorld().spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
 		}
 
 		EntityPlayer player = (EntityPlayer)this.getThrower();
 
-		if (!MeteorsMod.instance.isDimensionWhitelisted(worldObj.provider.dimensionId)) {
-			if ((player != null) && (!this.worldObj.isRemote)) {
-				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("MeteorSummoner.wrongDimension")));
+		if (!MeteorsMod.instance.isDimensionWhitelisted(getEntityWorld().provider.getDimension())) {
+			if ((player != null) && (!this.getEntityWorld().isRemote)) {
+				player.sendMessage(new TextComponentString(I18n.translateToLocal("MeteorSummoner.wrongDimension")));
 				if (!player.capabilities.isCreativeMode) {
 					if (this.isRandom) {
 						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1));
@@ -98,13 +98,13 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 			return;
 		}
 
-		if (!this.worldObj.isRemote) {
+		if (!this.getEntityWorld().isRemote) {
 
 			boolean canHit = true;
 
-			if (!worldObj.getGameRules().getGameRuleBooleanValue(HandlerWorld.SUMMON_METEORS_GAMERULE)) {
+			if (!getEntityWorld().getGameRules().getBoolean(HandlerWorld.SUMMON_METEORS_GAMERULE)) {
 				canHit = false;
-				player.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("MeteorSummoner.cannotSummon"), EnumChatFormatting.RED));
+				player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorSummoner.cannotSummon"), TextFormatting.RED));
 				if (!player.capabilities.isCreativeMode) {
 					if (this.isRandom) {
 						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1));
@@ -113,10 +113,10 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 					}
 				}
 			} else if ((!MeteorsMod.instance.allowSummonedMeteorGrief) && (player != null)) {
-				IMeteorShield shield = MeteorsMod.proxy.metHandlers.get(worldObj.provider.dimensionId).getShieldManager().getClosestShieldInRange((int)this.posX, (int)this.posZ);
-				if (shield != null && (!player.getCommandSenderName().equalsIgnoreCase(shield.getOwner()))) {
+				IMeteorShield shield = MeteorsMod.proxy.metHandlers.get(getEntityWorld().provider.getDimension()).getShieldManager().getClosestShieldInRange((int)this.posX, (int)this.posZ);
+				if (shield != null && (!player.getName().equalsIgnoreCase(shield.getOwner()))) {
 					canHit = false;
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("MeteorSummoner.landProtected")));
+					player.sendMessage(new TextComponentString(I18n.translateToLocal("MeteorSummoner.landProtected")));
 					if (!player.capabilities.isCreativeMode) {
 						if (this.isRandom) {
 							player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1)); 
@@ -130,11 +130,11 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 
 			if (canHit) {
 				if (player != null) {
-					player.addChatMessage(ClientHandler.createMessage(StatCollector.translateToLocal("MeteorSummoner.incomingMeteor"), EnumChatFormatting.LIGHT_PURPLE));
+					player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorSummoner.incomingMeteor"), TextFormatting.LIGHT_PURPLE));
 					player.triggerAchievement(HandlerAchievement.summonMeteor);
 				}
-				EntityMeteor meteorToSpawn = new EntityMeteor(this.worldObj, HandlerMeteor.getMeteorSize(), this.posX, this.posZ, EnumMeteor.getTypeFromID(this.mID), true);
-				this.worldObj.spawnEntityInWorld(meteorToSpawn);
+				EntityMeteor meteorToSpawn = new EntityMeteor(this.getEntityWorld(), HandlerMeteor.getMeteorSize(), this.posX, this.posZ, EnumMeteor.getTypeFromID(this.mID), true);
+				this.getEntityWorld().spawnEntity(meteorToSpawn);
 			}
 		}
 		this.setDead();

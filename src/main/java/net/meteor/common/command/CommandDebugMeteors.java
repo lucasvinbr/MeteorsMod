@@ -7,14 +7,16 @@ import net.meteor.common.climate.GhostMeteor;
 import net.meteor.common.climate.HandlerMeteor;
 import net.meteor.common.climate.MeteorForecast;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class CommandDebugMeteors extends CommandBase {
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "listMeteors";
 	}
 	
@@ -24,31 +26,29 @@ public class CommandDebugMeteors extends CommandBase {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender var1) {
+	public String getUsage(ICommandSender var1) {
 		return "/listMeteors [clear]";
 	}
 
 	@Override
-	public void processCommand(ICommandSender var1, String[] var2) {
-		World world = var1.getEntityWorld();
-		HandlerMeteor metH = MeteorsMod.proxy.metHandlers.get(world.provider.dimensionId);
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		World world = sender.getEntityWorld();
+		HandlerMeteor metH = MeteorsMod.proxy.metHandlers.get(world.provider.getDimension());
 		if (metH != null) {
 			MeteorForecast forecast = metH.getForecast();
 			
-			if (var2.length >= 1 && var2[0].equalsIgnoreCase("clear")) {
+			if (args.length >= 1 && args[0].equalsIgnoreCase("clear")) {
 				forecast.clearMeteors();
-				var1.addChatMessage(new ChatComponentText("Meteors Cleared"));
+				sender.sendMessage(new TextComponentString("Meteors Cleared"));
 				return;
 			}
 			
 			int secs = forecast.getSecondsUntilNewMeteor();
-			var1.addChatMessage(new ChatComponentText(secs + " Seconds Until Possible New Meteor"));
+			sender.sendMessage(new TextComponentString(secs + " Seconds Until Possible New Meteor"));
 			
-			var1.addChatMessage(new ChatComponentText(metH.ghostMets.size() + " Meteor(s) in Orbit"));
-			Iterator<GhostMeteor> iter = metH.ghostMets.iterator();
-			while (iter.hasNext()) {
-				GhostMeteor met = iter.next();
-				var1.addChatMessage(new ChatComponentText("T:" + met.type.toString() + " S:" + met.size + " X:" + met.x + " Z:" + met.z + " RT:" + met.getRemainingTicks()));
+			sender.sendMessage(new TextComponentString(metH.ghostMets.size() + " Meteor(s) in Orbit"));
+			for (GhostMeteor met : metH.ghostMets) {
+				sender.sendMessage(new TextComponentString("T:" + met.type.toString() + " S:" + met.size + " X:" + met.x + " Z:" + met.z + " RT:" + met.getRemainingTicks()));
 			}
 		}
 	}
