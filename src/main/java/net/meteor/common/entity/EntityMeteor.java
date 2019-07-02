@@ -22,14 +22,17 @@ import net.meteor.common.packets.PacketLastCrash;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 {
@@ -46,7 +49,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 		super(world);
 		this.preventEntitySpawning = true;
 		this.setSize(0.98F, 0.98F);
-		this.yOffset = (this.height / 2.0F);
+		//this.yOffset = (this.height / 2.0F);//TODO 1.12.2
 		this.meteorType = EnumMeteor.METEORITE;
 
 		this.motionX = (rand.nextDouble() - rand.nextDouble()) * 1.2D;
@@ -97,8 +100,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 						playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
 					}
 					metHandler.getShieldManager().sendMeteorMaterialsToShield(shield, new GhostMeteor((int)posX, (int)posZ, size, 0, meteorType));
-					this.getEntityWorld().playSoundEffect(posX, posY, posZ, "random.explode", 5F, (1.0F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.2F) * 0.7F);
-					this.getEntityWorld().spawnParticle("hugeexplosion", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+					this.getEntityWorld().playSound(posX, posY, posZ, new SoundEvent(new ResourceLocation("minecraft:random.explode")), SoundCategory.BLOCKS, 5F, (1.0F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.2F) * 0.7F, true);
+					this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
 					
 					CrashLocation lastCrash = metHandler.getForecast().getLastCrashLocation();
 					if (lastCrash != null && lastCrash.x == originX && lastCrash.z == originZ) {
@@ -155,24 +158,22 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					
 				}
 				CrashMeteorite worldGen = getWorldGen();
-				if (worldGen.generate(getEntityWorld(), rand, (int)posX, (int)posY, (int)posZ)) {
+				if (worldGen.generate(getEntityWorld(), rand, new BlockPos((int)posX, (int)posY, (int)posZ))) {
 					worldGen.afterCrashCompleted(getEntityWorld(), (int)posX, (int)posY, (int)posZ);
 				}
 			}
 		} else {
 			if (size == 1) {
-				getEntityWorld().spawnParticle("largeexplode", posX, posY + 2.75D, posZ, 0.0D, 0.0D, 0.0D);
+				getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, posX, posY + 2.75D, posZ, 0.0D, 0.0D, 0.0D);
 			} else {
-				getEntityWorld().spawnParticle("hugeexplosion", posX, posY + 4.0D, posZ, 0.0D, 0.0D, 0.0D);
+				getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, posX, posY + 4.0D, posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
 
 	protected Explosion explode() {
 		float f = (float) (this.size * MeteorsMod.instance.ImpactExplosionMultiplier);
-		Explosion explosion = new ExplosionMeteor(getEntityWorld(), this, posX, posY, posZ, f);
-        explosion.isFlaming = meteorType.getFieryExplosion();
-        explosion.isSmoking = true;
+		Explosion explosion = new ExplosionMeteor(getEntityWorld(), this, posX, posY, posZ, f, meteorType.getFieryExplosion(), true);
         explosion.doExplosionA();
         explosion.doExplosionB(true);
         return explosion;
@@ -216,12 +217,12 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 		this.originZ = nbttagcompound.getInteger("originZ");
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public float getShadowSize()
-	{
-		return 0.0F;
-	}
+//	@SideOnly(Side.CLIENT)
+//	@Override//TODO 1.12.2
+//	public float getShadowSize()
+//	{
+//		return 0.0F;
+//	}
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {

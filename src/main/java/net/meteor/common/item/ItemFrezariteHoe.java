@@ -4,18 +4,28 @@ import java.util.List;
 
 import net.meteor.common.MeteorsMod;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
+import net.minecraft.block.SoundType;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.I18n;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ItemFrezariteHoe extends ItemHoe
 {
@@ -26,61 +36,63 @@ public class ItemFrezariteHoe extends ItemHoe
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if (!par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack))
+        ItemStack heldItem = player.getHeldItem(hand);
+        if (!player.canPlayerEdit(pos, facing, heldItem))
         {
-            return false;
+            return EnumActionResult.FAIL;
         }
         else
         {
-            UseHoeEvent event = new UseHoeEvent(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
+            UseHoeEvent event = new UseHoeEvent(player, heldItem, world, pos);
             if (MinecraftForge.EVENT_BUS.post(event))
             {
-                return false;
+                return EnumActionResult.FAIL;
             }
 
-            if (event.getResult() == Result.ALLOW)
+            if (event.getResult() == Event.Result.ALLOW)
             {
-                par1ItemStack.damageItem(1, par2EntityPlayer);
-                return true;
+                heldItem.damageItem(1, player);
+                return EnumActionResult.SUCCESS;
             }
 
-            Block block = par3World.getBlock(par4, par5, par6);
+            Block block = world.getBlockState(pos).getBlock();
 
-            if (par7 != 0 && par3World.getBlock(par4, par5 + 1, par6).isAir(par3World, par4, par5 + 1, par6) && (block == Blocks.grass || block == Blocks.dirt))
+            if (facing != EnumFacing.DOWN && world.isAirBlock(pos.up()) && (block == Blocks.GRASS || block == Blocks.DIRT))
             {
-                Block block1 = Blocks.farmland;
-                par3World.playSoundEffect((double)((float)par4 + 0.5F), (double)((float)par5 + 0.5F), (double)((float)par6 + 0.5F), block1.stepSound.getStepResourcePath(), (block1.stepSound.getVolume() + 1.0F) / 2.0F, block1.stepSound.getPitch() * 0.8F);
+                Block block1 = Blocks.FARMLAND;
+                SoundType stepSound = block1.getSoundType();
+                world.playSound((double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), stepSound.getStepSound(), SoundCategory.BLOCKS, (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F, true);
 
-                if (par3World.isRemote)
+                if (world.isRemote)
                 {
-                    return true;
+                    return EnumActionResult.SUCCESS;
                 }
                 else
                 {
-                    par3World.setBlock(par4, par5, par6, block1, 14, 3);
-                    par1ItemStack.damageItem(1, par2EntityPlayer);
-                    return true;
+                    world.setBlockState(pos, block1.getDefaultState().withProperty(BlockFarmland.MOISTURE, 14), 3);
+                    heldItem.damageItem(1, player);
+                    return EnumActionResult.SUCCESS;
                 }
             }
             else
             {
-                return false;
+                return EnumActionResult.FAIL;
             }
         }
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
 	{
-		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezHoe.one"));
-		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezHoe.two"));
+		tooltip.add("\2473" + I18n.translateToLocal("enchantment.frezHoe.one"));
+		tooltip.add("\2473" + I18n.translateToLocal("enchantment.frezHoe.two"));
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasEffect(ItemStack par1ItemStack, int pass)
+    public boolean hasEffect(ItemStack stack)
 	{
 		return true;
 	}

@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -61,8 +62,8 @@ public class HandlerMeteor
 
 		for (int i = 0; i < this.ghostMets.size(); i++) {
 			if (theWorld.getWorldTime() % 24000L >= 12000L || (!MeteorsMod.instance.meteorsFallOnlyAtNight)) {
-				GhostMeteor gMeteor = (GhostMeteor)this.ghostMets.get(i);
-				ChunkCoordIntPair coords = this.theWorld.getChunkFromBlockCoords(gMeteor.x, gMeteor.z).getChunkCoordIntPair();
+				GhostMeteor gMeteor = this.ghostMets.get(i);
+				ChunkPos coords = new ChunkPos(new BlockPos(gMeteor.x, 0, gMeteor.z));
 				if (!canSpawnNewMeteorAt(coords)) {
 					sendGhostMeteorRemovePacket(gMeteor);
 					this.ghostMets.remove(i);

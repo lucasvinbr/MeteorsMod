@@ -9,6 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
+import java.util.UUID;
+
 public class EntityCometKitty extends EntityOcelot
 {
 	public EntityCometKitty(World par1World)
@@ -26,34 +28,34 @@ public class EntityCometKitty extends EntityOcelot
 	@Override
 	public EntityOcelot createChild(EntityAgeable par1EntityAgeable)
 	{
-		EntityOcelot var2;
-		if (this.worldObj.rand.nextBoolean()) {
-			var2 = new EntityOcelot(this.worldObj);
+		EntityOcelot child;
+		if (this.getEntityWorld().rand.nextBoolean()) {
+			child = new EntityOcelot(this.getEntityWorld());
 		} else {
-			var2 = new EntityCometKitty(this.worldObj);
+			child = new EntityCometKitty(this.getEntityWorld());
 		}
 
 		if (this.isTamed())
 		{
-			var2.func_152115_b(this.func_152113_b());
-			var2.setTamed(true);
-			var2.setTameSkin(this.getTameSkin());
+			child.setOwnerId(this.getOwnerId());
+			child.setTamed(true);
+			child.setTameSkin(this.getTameSkin());
 		}
 
-		return var2;
+		return child;
 	}
 
 	@Override
 	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(16.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(16.0D);
     }
 	
 	@Override
-	public void func_152115_b(String par1Str) {
-		super.func_152115_b(par1Str);
-		EntityPlayer player = this.worldObj.getPlayerEntityByName(par1Str);
+	public void setOwnerId(UUID uuid) {
+		super.setOwnerId(uuid);
+		EntityPlayer player = this.getEntityWorld().getPlayerEntityByUUID(uuid);
 		if (player != null) {
 			player.addStat(HandlerAchievement.kittyTame, 1);
 		}

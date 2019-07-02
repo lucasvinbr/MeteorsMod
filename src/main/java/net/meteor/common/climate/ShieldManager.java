@@ -15,6 +15,7 @@ import net.meteor.common.tileentity.TileEntityMeteorShield;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -154,7 +155,7 @@ public class ShieldManager {
 				case 4:
 					items.add(new ItemStack(Items.COOKED_FISH, random.nextInt(2 * gMeteor.size) + 1));
 					if (r < 5) {
-						items.add(new ItemStack(Items.SPAWN_EGG, 1, EntityList.getEntityID(new EntityCometKitty(theWorld))));
+						items.add(new ItemStack(Items.SPAWN_EGG, 1, EntityList.getID(EntityCometKitty.class)));//TODO 1.12.2 verify
 					}
 					break;
 			}

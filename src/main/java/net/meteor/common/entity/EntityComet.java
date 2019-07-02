@@ -21,7 +21,7 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 		super(par1World);
 		this.preventEntitySpawning = true;
 		this.setSize(0.98F, 0.98F);
-		this.yOffset = (this.height / 2.0F);
+		//this.yOffset = (this.height / 2.0F);//TODO 1.12.2
 		this.meteorType = EnumMeteor.METEORITE;
 		
 		this.motionX = (rand.nextDouble() - rand.nextDouble()) * 1.2D;
@@ -100,11 +100,11 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 		nbttagcompound.setInteger("pauseTicks", this.spawnPauseTicks);
 	}
 	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public float getShadowSize() {
-		return 0.0F;
-	}
+//	@SideOnly(Side.CLIENT)
+//	@Override//TODO 1.12.2
+//	public float getShadowSize() {
+//		return 0.0F;
+//	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {

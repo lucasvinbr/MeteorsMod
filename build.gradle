@@ -43,8 +43,9 @@ repositories {
 
 dependencies {
 //	compile "mcp.mobius.waila:Waila:1.5.9_1.7.10"
-//	compile files("./Baubles-1.7.10-1.0.1.10-deobf.jar") // If Azanor has a maven repo, I'll change it over
-//    compile files("./Thaumcraft-1.7.10-4.2.3.5-deobf.jar")
+    compile files("./Hwyla-1.8.26-B41_1.12.2-deobf.jar")
+	compile files("./Baubles-1.12-1.5.2-deobf.jar") // If Azanor has a maven repo, I'll change it over
+    compile files("./Thaumcraft-1.12.2-6.1.BETA26-deobf.jar")
 }
 
 processResources

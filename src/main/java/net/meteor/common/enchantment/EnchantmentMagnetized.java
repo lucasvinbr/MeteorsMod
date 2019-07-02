@@ -2,12 +2,13 @@ package net.meteor.common.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class EnchantmentMagnetized extends Enchantment
 {
-	public EnchantmentMagnetized(int par1, int par2)
+	public EnchantmentMagnetized(Enchantment.Rarity rarityIn)
 	{
-		super(par1, par2, EnumEnchantmentType.all);
+		super(rarityIn, EnumEnchantmentType.ALL, new EntityEquipmentSlot[] {EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND, EntityEquipmentSlot.FEET, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD});
 	}
 
 	@Override

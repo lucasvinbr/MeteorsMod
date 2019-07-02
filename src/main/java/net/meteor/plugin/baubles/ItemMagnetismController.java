@@ -2,6 +2,10 @@ package net.meteor.plugin.baubles;
 
 import java.util.List;
 
+import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
+import baubles.api.IBauble;
+import baubles.api.cap.IBaublesItemHandler;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.item.ItemMeteorsMod;
 import net.minecraft.client.util.ITooltipFlag;
@@ -9,7 +13,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -91,12 +94,10 @@ public class ItemMagnetismController extends ItemMeteorsMod implements IBauble {
 	}
 	
 	public static int isMagnetizationEnabled(EntityPlayer player, int def) {
-		IInventory inv = BaublesApi.getBaubles(player);
+		IBaublesItemHandler inv = BaublesApi.getBaublesHandler(player);
 		ItemStack stack = inv.getStackInSlot(3);
-		if (stack != null) {
-			if (stack.getItem() == Baubles.MagnetismController) {
-				return (getNBTData(stack) ? Math.max(EnchantmentHelper.getEnchantmentLevel(MeteorsMod.Magnetization, stack), def) : 0);
-			}
+		if (stack.getItem() == Baubles.MagnetismController) {
+			return (getNBTData(stack) ? Math.max(EnchantmentHelper.getEnchantmentLevel(MeteorsMod.Magnetization, stack), def) : 0);
 		}
 		return def;
 	}

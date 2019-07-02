@@ -67,7 +67,7 @@ public class Thaumcraft {
 	private static void registerEntityScans() {
 		ThaumcraftApi.registerEntityTag("AlienCreeper", new AspectList().add(Aspect.PLANT, 2).add(Aspect.FIRE, 2).add(Aspect.ENERGY, 2));
 		ThaumcraftApi.registerEntityTag("CometKitty", new AspectList().add(Aspect.BEAST, 3).add(Aspect.ENTROPY, 3).add(Aspect.ENERGY, 2));
-		ThaumcraftApi.registerEntityTag("Meteor", new AspectList().add(Aspect.ENTROPY, 10).add(Aspect.FIRE, 16).add(Aspect.EARTH, 10).add(Aspect.FLIGHT, 8).add(Aspect.AIR, 10).add(Aspect.WEATHER, 4));
+		ThaumcraftApi.registerEntityTag("Meteor", new AspectList().add(Aspect.ENTROPY, 10).add(Aspect.FIRE, 16).add(Aspect.EARTH, 10).add(Aspect.FLIGHT, 8).add(Aspect.AIR, 10)/*.add(Aspect.WEATHER, 4)*/);
 	}
 
 }

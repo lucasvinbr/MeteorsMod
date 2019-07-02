@@ -4,14 +4,12 @@ import java.util.List;
 
 import net.meteor.common.MeteorsMod;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockDecoration extends BlockMeteorsMod {
 	
@@ -19,7 +17,7 @@ public class BlockDecoration extends BlockMeteorsMod {
 	private IIcon[] icons;
 
 	public BlockDecoration(String... textures) {
-		super(Material.iron);
+		super(Material.IRON);
 		this.blockTextureNames = textures;
 	}
 	

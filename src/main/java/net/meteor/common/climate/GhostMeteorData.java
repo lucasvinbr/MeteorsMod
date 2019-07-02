@@ -22,7 +22,7 @@ public class GhostMeteorData extends WorldSavedData {
 	public static GhostMeteorData forWorld(World world, HandlerMeteor metH) {
 		tempHandle = metH;
 		MapStorage storage = world.getPerWorldStorage();
-		GhostMeteorData result = (GhostMeteorData)storage.loadData(GhostMeteorData.class, key);
+		GhostMeteorData result = (GhostMeteorData)storage.getOrLoadData(GhostMeteorData.class, key);
 		if (result == null) {
 			result = new GhostMeteorData(key);
 			storage.setData(key, result);
@@ -42,8 +42,8 @@ public class GhostMeteorData extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		saveGhostMeteors(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		return saveGhostMeteors(tag);
 	}
 	
 	private ArrayList<GhostMeteor> loadGhostMeteors(NBTTagCompound tag) {
@@ -59,7 +59,7 @@ public class GhostMeteorData extends WorldSavedData {
 		return gMets;
 	}
 
-	private void saveGhostMeteors(NBTTagCompound tag) {
+	private NBTTagCompound saveGhostMeteors(NBTTagCompound tag) {
 		Iterator<GhostMeteor> iter = metHandler.ghostMets.iterator();
 		int i = 1;
 		while (iter.hasNext() && i <= 3) {
@@ -73,6 +73,7 @@ public class GhostMeteorData extends WorldSavedData {
 			}
 			i++;
 		}
+		return tag;
 	}
 	
 	@Override

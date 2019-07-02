@@ -11,6 +11,7 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -183,7 +184,7 @@ public class ContainerFreezingMachine extends Container {
 						 return null;
 					 }
 				 }
-				 else if (FluidContainerRegistry.isContainer(itemstack1))
+				 else if (itemstack1.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
 				 {
 					 if (!this.mergeItemStack(itemstack1, 3, 4, false))
 					 {
@@ -209,7 +210,7 @@ public class ContainerFreezingMachine extends Container {
 
 			 if (itemstack1.getCount() == 0)
 			 {
-				 slot.putStack((ItemStack)null);
+				 slot.putStack(ItemStack.EMPTY);
 			 }
 			 else
 			 {

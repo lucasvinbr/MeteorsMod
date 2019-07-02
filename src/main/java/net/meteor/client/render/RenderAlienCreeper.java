@@ -1,34 +1,34 @@
 package net.meteor.client.render;
 
 import net.meteor.client.model.ModelAlienCreeper;
+import net.meteor.client.render.layers.LayerAlienCreeperCharge;
 import net.meteor.common.entity.EntityAlienCreeper;
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderAlienCreeper extends RenderLiving<EntityAlienCreeper> {
 
-	private ModelBase creeperModel;
-	
-	private static final ResourceLocation skin = new ResourceLocation("meteors", "textures/entities/meteorcreeper.png");
-	private static final ResourceLocation electricity = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+	public static final Factory FACTORY = new Factory();
+	private static final ResourceLocation CREEPER_TEXTURE = new ResourceLocation("meteors", "textures/entities/meteorcreeper.png");
 
-	public RenderAlienCreeper()
+	public RenderAlienCreeper(RenderManager renderManager)
 	{
-		super(new ModelAlienCreeper(), 0.5F);
-		creeperModel = new ModelAlienCreeper(2.0F);
+		super(renderManager, new ModelAlienCreeper(), 0.5F);
+		this.addLayer(new LayerAlienCreeperCharge(this));
 	}
 
-	protected void updateCreeperScale(EntityAlienCreeper entitycreeper, float f)
+	private void updateCreeperScale(EntityAlienCreeper entitycreeper, float partialTickTime)
 	{
-		float f1 = entitycreeper.getCreeperFlashIntensity(f);
+		float f1 = entitycreeper.getCreeperFlashIntensity(partialTickTime);
 		float f2 = 1.0F + MathHelper.sin(f1 * 100F) * f1 * 0.01F;
 		if (f1 < 0.0F)
 		{
@@ -42,12 +42,12 @@ public class RenderAlienCreeper extends RenderLiving<EntityAlienCreeper> {
 		f1 *= f1;
 		float f3 = (1.0F + f1 * 0.4F) * f2;
 		float f4 = (1.0F + f1 * 0.1F) / f2;
-		GL11.glScalef(f3, f4, f3);
+		GlStateManager.scale(f3, f4, f3);
 	}
 
-	protected int updateCreeperColorMultiplier(EntityAlienCreeper entityCreeper, float par2, float par3)
+	private int updateCreeperColorMultiplier(EntityAlienCreeper entityCreeper, float lightBrightness, float partialTickTime)
 	{
-		float var5 = entityCreeper.getCreeperFlashIntensity(par3);
+		float var5 = entityCreeper.getCreeperFlashIntensity(partialTickTime);
 
 		if ((int)(var5 * 10.0F) % 2 == 0)
 		{
@@ -74,83 +74,27 @@ public class RenderAlienCreeper extends RenderLiving<EntityAlienCreeper> {
 		}
 	}
 
-	protected int func_27006_a(EntityAlienCreeper entitycreeper, int par2, float par3)
+	@Override
+	protected void preRenderCallback(EntityAlienCreeper entityliving, float partialTickTime)
 	{
-		if (entitycreeper.getPowered())
-		{
-			if (entitycreeper.isInvisible())
-			{
-				GL11.glDepthMask(false);
-			}
-			else
-			{
-				GL11.glDepthMask(true);
-			}
-
-			if (par2 == 1)
-			{
-				float var4 = (float)entitycreeper.ticksExisted + par3;
-				this.bindTexture(electricity);
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glLoadIdentity();
-				float var5 = var4 * 0.01F;
-				float var6 = var4 * 0.01F;
-				GL11.glTranslatef(var5, var6, 0.0F);
-				this.setRenderPassModel(this.creeperModel);
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glEnable(GL11.GL_BLEND);
-				float var7 = 0.5F;
-				GL11.glColor4f(var7, var7, var7, 1.0F);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-				return 1;
-			}
-
-			if (par2 == 2)
-			{
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glLoadIdentity();
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glDisable(GL11.GL_BLEND);
-			}
-		}
-
-		return -1;
-	}
-
-	protected int func_27007_b(EntityAlienCreeper entitycreeper, int i, float f)
-	{
-		return -1;
+		updateCreeperScale(entityliving, partialTickTime);
 	}
 
 	@Override
-	protected void preRenderCallback(EntityAlienCreeper entityliving, float f)
+	protected int getColorMultiplier(EntityAlienCreeper entityliving, float lightBrightness, float partialTickTime)
 	{
-		updateCreeperScale((EntityAlienCreeper)entityliving, f);
-	}
-
-	@Override
-	protected int getColorMultiplier(EntityAlienCreeper entityliving, float f, float f1)
-	{
-		return updateCreeperColorMultiplier((EntityAlienCreeper)entityliving, f, f1);
-	}
-
-	@Override
-	protected int shouldRenderPass(EntityLivingBase entityliving, int i, float f)
-	{
-		return func_27006_a((EntityAlienCreeper)entityliving, i, f);
-	}
-
-	@Override
-	protected int inheritRenderPass(EntityLivingBase entityliving, int i, float f)
-	{
-		return func_27007_b((EntityAlienCreeper)entityliving, i, f);
+		return updateCreeperColorMultiplier(entityliving, lightBrightness, partialTickTime);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityAlienCreeper entity) {
-		return skin;
+		return CREEPER_TEXTURE;
 	}
 
+	public static class Factory implements IRenderFactory<EntityAlienCreeper> {
+		@Override
+		public Render<? super EntityAlienCreeper> createRenderFor(RenderManager manager) {
+			return new RenderAlienCreeper(manager);
+		}
+	}
 }

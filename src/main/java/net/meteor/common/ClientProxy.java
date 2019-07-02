@@ -6,7 +6,6 @@ import net.meteor.client.block.TimerItemRenderer;
 import net.meteor.client.effect.ParticleFrezaDust;
 import net.meteor.client.effect.ParticleMeteorShield;
 import net.meteor.client.effect.ParticleMeteorDust;
-import net.meteor.client.model.ModelCometKitty;
 import net.meteor.client.render.RenderAlienCreeper;
 import net.meteor.client.render.RenderComet;
 import net.meteor.client.render.RenderCometKitty;
@@ -54,12 +53,12 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void loadStuff()
 	{
-		RenderingRegistry.registerEntityRenderingHandler(EntityMeteor.class, new RenderMeteor());
-		RenderingRegistry.registerEntityRenderingHandler(EntityAlienCreeper.class, new RenderAlienCreeper());
-		RenderingRegistry.registerEntityRenderingHandler(EntityCometKitty.class, new RenderCometKitty(new ModelCometKitty(), 0.4F));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySummoner.class, new RenderSummoner());
-		RenderingRegistry.registerEntityRenderingHandler(EntityComet.class, new RenderComet());
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityMeteor.class, RenderMeteor.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityAlienCreeper.class, RenderAlienCreeper.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCometKitty.class, RenderCometKitty.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySummoner.class, RenderSummoner.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityComet.class, RenderComet.FACTORY);
+
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockMeteorShield), new ShieldItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockMeteorTimer), new TimerItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlippery), new SlipperyItemRenderer());
@@ -83,10 +82,10 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 
-	public static void spawnParticle(String s, double d, double d1, double d2, double d3, double d4, double d5, World worldObj, int opt)
+	public static void spawnParticle(String s, double xIn, double yIn, double zIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, World worldObj, int opt)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		if (mc == null || mc.getRenderViewEntity() == null || mc.effectRenderer == null) {
+		if (mc.getRenderViewEntity() == null || mc.effectRenderer == null) {
 			return;
 		}
 		int i = mc.gameSettings.particleSetting;
@@ -94,9 +93,9 @@ public class ClientProxy extends CommonProxy
 			i = 2;
 		}
 		Entity renderViewEntity = mc.getRenderViewEntity();
-		double d6 = renderViewEntity.posX - d;
-		double d7 = renderViewEntity.posY - d1;
-		double d8 = renderViewEntity.posZ - d2;
+		double d6 = renderViewEntity.posX - xIn;
+		double d7 = renderViewEntity.posY - yIn;
+		double d8 = renderViewEntity.posZ - zIn;
 		Particle obj = null;
 		double d9 = 16D;
 		if (d6 * d6 + d7 * d7 + d8 * d8 > d9 * d9) {
@@ -107,16 +106,16 @@ public class ClientProxy extends CommonProxy
 		}
 		switch (s) {
 			case "meteordust":
-				obj = new ParticleMeteorDust(worldObj, d, d1, d2, (float) d3, (float) d4, (float) d5);
+				obj = new ParticleMeteorDust(worldObj, xIn, yIn, zIn, (float) xSpeedIn, (float) ySpeedIn, (float) zSpeedIn);
 				break;
 			case "frezadust":
-				obj = new ParticleFrezaDust(worldObj, d, d1, d2, (float) d3, (float) d4, (float) d5);
+				obj = new ParticleFrezaDust(worldObj, xIn, yIn, zIn, (float) xSpeedIn, (float) ySpeedIn, (float) zSpeedIn);
 				break;
 			case "meteorshield":
 				if (opt != -1)
-					obj = new ParticleMeteorShield(worldObj, d, d1, d2, d3, d4, d5, opt);
+					obj = new ParticleMeteorShield(worldObj, xIn, yIn, zIn, xSpeedIn, ySpeedIn, zSpeedIn, opt);
 				else {
-					obj = new ParticleMeteorShield(worldObj, d, d1, d2, d3, d4, d5);
+					obj = new ParticleMeteorShield(worldObj, xIn, yIn, zIn, xSpeedIn, ySpeedIn, zSpeedIn);
 				}
 				break;
 		}

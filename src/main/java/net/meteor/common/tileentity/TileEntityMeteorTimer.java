@@ -8,9 +8,10 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 
-public class TileEntityMeteorTimer extends TileEntity {
+public class TileEntityMeteorTimer extends TileEntity implements ITickable {
 
 	private int lastMeta;
 	private HandlerMeteor metHandler;
@@ -23,7 +24,7 @@ public class TileEntityMeteorTimer extends TileEntity {
 	}
 
 	@Override
-	public void updateEntity() {
+	public void update() {
 
 		// Do calculations for closeness of meteor falling to a metadata value of 0 to 15
 		// Then check if that metadata value is different then when it was updated last
@@ -82,10 +83,11 @@ public class TileEntityMeteorTimer extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		super.writeToNBT(nbt);
+		nbt = super.writeToNBT(nbt);
 		nbt.setBoolean("mode", quickMode);
+		return nbt;
 	}
 
 	@Override

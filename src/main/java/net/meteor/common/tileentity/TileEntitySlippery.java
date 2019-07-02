@@ -75,18 +75,13 @@ public class TileEntitySlippery extends TileEntity {
 	{
 		NBTTagCompound var1 = new NBTTagCompound();
 		writeToNBT(var1);
-		return new SPacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, var1);
-	}
-	
-	@Override
-	public boolean canUpdate() {
-		return false;
+		return new SPacketUpdateTileEntity(this.getPos(), 1, var1);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
+		return new AxisAlignedBB(this.getPos(), this.getPos().add(1, 1, 1));
     }
 
 }

@@ -152,8 +152,8 @@ public class MeteorsMod implements IWorldGenerator
 	private void loadStaticConfigurationValues() {
 		ModConfig config = ModConfig.instance;
 		// Enchantments 
-		Magnetization = new EnchantmentMagnetized(config.get("ENCHANTMENTS", "Magnetization Enchantment ID", 157, ""), 2).setName("Magnetization");
-		ColdTouch 	  = new EnchantmentColdTouch(config.get("ENCHANTMENTS", "Cold Touch Enchantment ID", 158, ""), 2).setName("Cold Touch");
+		Magnetization = new EnchantmentMagnetized(Enchantment.Rarity.RARE).setName("Magnetization");
+		ColdTouch 	  = new EnchantmentColdTouch(Enchantment.Rarity.RARE).setName("Cold Touch");
 		// General Configuration
 		meteorFallDistance		= config.get("Meteor Fall Radius", 350, "When determining where a meteor falls, it chooses within this radius (blocks) of a random player.");
 		kittyAttackChance		= config.get("Kitty Attack Chance", 1, "Ranges from 0 to 100");

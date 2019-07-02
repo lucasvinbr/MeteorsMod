@@ -23,7 +23,7 @@ public class CrashedChunkSetData extends WorldSavedData {
 	public static CrashedChunkSetData forWorld(World world, HandlerMeteor metH) {
 		tempHandle = metH;
 		MapStorage storage = world.getPerWorldStorage();
-		CrashedChunkSetData result = (CrashedChunkSetData)storage.loadData(CrashedChunkSetData.class, key);
+		CrashedChunkSetData result = (CrashedChunkSetData)storage.getOrLoadData(CrashedChunkSetData.class, key);
 		if (result == null) {
 			result = new CrashedChunkSetData(key);
 			storage.setData(key, result);
@@ -47,7 +47,7 @@ public class CrashedChunkSetData extends WorldSavedData {
 		return cList;
 	}
 
-	private void saveCrashedChunks(NBTTagCompound tag) {
+	private NBTTagCompound saveCrashedChunks(NBTTagCompound tag) {
 		Iterator<CrashedChunkSet> iter = metHandler.crashedChunks.iterator();
 		int i = 1;
 		while (iter.hasNext() && i <= 20) {
@@ -66,6 +66,8 @@ public class CrashedChunkSetData extends WorldSavedData {
 		if (forecast.getLastCrashLocation() != null) {
 			forecast.getLastCrashLocation().toNBT(tag);
 		}
+
+		return tag;
 	}
 
 	@Override
@@ -78,8 +80,8 @@ public class CrashedChunkSetData extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		saveCrashedChunks(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		return saveCrashedChunks(tag);
 	}
 	
 	@Override

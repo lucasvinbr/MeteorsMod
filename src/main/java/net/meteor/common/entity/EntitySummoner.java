@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -68,7 +69,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 			if (isRandom) {
 				rgbIndex = this.getEntityWorld().rand.nextInt(5);
 			}
-			getEntityWorld().spawnParticle("mobSpell", this.posX, this.posY, this.posZ, spellRGB[rgbIndex][0], spellRGB[rgbIndex][1], spellRGB[rgbIndex][2]);
+			getEntityWorld().spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX, this.posY, this.posZ, spellRGB[rgbIndex][0], spellRGB[rgbIndex][1], spellRGB[rgbIndex][2]);
 		}
 	}
 
@@ -77,7 +78,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 	{
 		for (int i = 0; i < 8; i++)
 		{
-			this.getEntityWorld().spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+			this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOWBALL, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
 		}
 
 		EntityPlayer player = (EntityPlayer)this.getThrower();

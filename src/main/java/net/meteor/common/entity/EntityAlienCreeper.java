@@ -18,7 +18,7 @@ public class EntityAlienCreeper extends EntityCreeper
 	@Override
 	protected Item getDropItem()
 	{
-		if (this.worldObj.rand.nextBoolean()) {
+		if (this.getEntityWorld().rand.nextBoolean()) {
 			return MeteorItems.itemRedMeteorGem;
 		}
 		return MeteorItems.itemMeteorChips;

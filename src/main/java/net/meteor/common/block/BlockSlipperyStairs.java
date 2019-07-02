@@ -88,7 +88,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 	    	NBTTagCompound nbt = slipItem.hasTagCompound() ? slipItem.getTagCompound() : new NBTTagCompound();
 	    	nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, teSlippery.getFacadeBlockName());
 	    	slipItem.setTagCompound(nbt);
-	    	this.dropBlockAsItem(world, [], slipItem);
+	    	this.dropBlockAsItem(world, x, y, z, slipItem);
 		}
     	return super.removedByPlayer(world, player, x, y, z, willHarvest);
 	}

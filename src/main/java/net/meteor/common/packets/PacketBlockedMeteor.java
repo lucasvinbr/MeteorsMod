@@ -5,6 +5,7 @@ import net.meteor.common.EnumMeteor;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -65,7 +66,7 @@ public class PacketBlockedMeteor implements IMessage {
 	            double d6 = 0.20000000298023224D + d3 / 100.0D;
 	            double d7 = (double)(MathHelper.cos(f3) * 0.2F) * d5 * d5 * (d3 + 0.2D);
 	            double d8 = (double)(MathHelper.sin(f3) * 0.2F) * d5 * d5 * (d3 + 0.2D);
-	            world.spawnParticle("blockcrack_" + Block.getIdFromBlock(block) + "_1", (double)((float)message.x + 0.5F), (double)((float)message.y + 1.0F), (double)((float)message.z + 0.5F), d7, d6, d8);
+	            world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, (double)((float)message.x + 0.5F), (double)((float)message.y + 1.0F), (double)((float)message.z + 0.5F), d7, d6, d8, Block.getStateId(block.getDefaultState()));
 	        }
 	        return null;
 		}

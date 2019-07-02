@@ -36,7 +36,7 @@ public class HandlerWorld {
 	
 	private void addRule(GameRules rules, String key, String val) {
 		if (!rules.hasRule(key)) {
-			rules.addGameRule(key, val);
+			rules.addGameRule(key, val, GameRules.ValueType.ANY_VALUE);
 		}
 	}
 
