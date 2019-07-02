@@ -108,7 +108,7 @@ public class TileEntityMeteorTimer extends TileEntity implements ITickable {
 	{
 		NBTTagCompound var1 = new NBTTagCompound();
 		writeToNBT(var1);
-		return new SPacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, var1);
+		return new SPacketUpdateTileEntity(this.getPos(), 1, var1);
 	}
 
 }

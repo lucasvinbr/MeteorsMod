@@ -11,6 +11,7 @@ public class ArmorEffectController
 	private static Field fireImmunityField;
 	
 	// TODO Always check for correct field name in each update
+	// Checked for 1.12.2
 	public static void setImmuneToFire(EntityPlayer player, boolean flag)
 	{
 		if (player.isImmuneToFire() != flag) {

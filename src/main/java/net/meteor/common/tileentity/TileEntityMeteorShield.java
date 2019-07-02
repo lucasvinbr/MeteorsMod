@@ -22,7 +22,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -31,7 +33,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISidedInventory, IMeteorShield
+public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISidedInventory, IMeteorShield, ITickable
 {
 
 	public static final int CHARGE_TIME = 1600;
@@ -48,7 +50,8 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	public int age;
 
 	// Inventory stuff
-	private ItemStack[] inv;
+	private NonNullList<ItemStack> inv = NonNullList.withSize(13, ItemStack.EMPTY);
+
 
 	public TileEntityMeteorShield() {
 		this.range = 0;
@@ -56,7 +59,6 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		this.age = 0;
 		this.shieldedChunks = false;
 		this.blockComets = false;
-		this.inv = new ItemStack[13];
 	}
 
 	public TileEntityMeteorShield(String theOwner) {
@@ -65,19 +67,19 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	@Override
-	public void updateEntity()
+	public void update()
 	{
 		++age;
 		
 		if (!this.shieldedChunks) {
 			if (powerLevel > 0) {
 				if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-					MeteorsMod.proxy.metHandlers.get(getWorld().provider.dimensionId).getShieldManager().addShield(this);
+					MeteorsMod.proxy.metHandlers.get(getWorld().provider.getDimension()).getShieldManager().addShield(this);
 				}
 				this.shieldedChunks = true;
 				this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			} else if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				GenerateParticles(this.getWorld(), this.xCoord, this.yCoord, this.zCoord, this.worldObj.rand);
+				generateParticles(this.getWorld(), this.getX(), this.getY(), this.getZ(), this.getWorld().rand);
 			} else if (age >= CHARGE_TIME) {
 				setCharged();
 				if (!getWorld().isRemote) {
@@ -148,9 +150,9 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 			int k = 5;
 			if (par1ItemStack.isStackable()) {
 				while (par1ItemStack.getCount() > 0 && k >= 5 && k < this.getSizeInventory()) {
-					itemstack1 = inv[k];
+					itemstack1 = inv.get(k);
 
-					if (itemstack1 != null && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1)) {
+					if (itemstack1 != ItemStack.EMPTY && itemstack1.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, itemstack1)) {
 						int l = itemstack1.getCount() + par1ItemStack.getCount();
 
 						if (l <= par1ItemStack.getMaxStackSize()) {
@@ -170,10 +172,10 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 				k = 5;
 
 				while (k >= 5 && k < this.getSizeInventory()) {
-					itemstack1 = inv[k];
+					itemstack1 = inv.get(k);
 
-					if (itemstack1 == null) {
-						inv[k] = par1ItemStack.copy();
+					if (itemstack1 == ItemStack.EMPTY) {
+						inv.set(k, par1ItemStack.copy());
 						par1ItemStack.setCount(0);
 						break;
 					}
@@ -195,9 +197,9 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void GenerateParticles(World world, int x, int y, int z, Random random)
+	private void generateParticles(World world, int x, int y, int z, Random random)
 	{
-		if (world.getBlock(x, y + 1, z).isOpaqueCube()) return;
+		if (world.getBlockState(new BlockPos(x, y + 1, z)).isOpaqueCube()) return;
 		for (int currX = x - 2; currX <= x + 2; currX++)
 		{
 			for (int currZ = z - 2; currZ <= z + 2; currZ++)
@@ -210,7 +212,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 				{
 					for (int currY = y; currY <= y + 1; currY++)
 					{
-						if (!world.isAirBlock((currX - x) / 2 + x, currY, (currZ - z) / 2 + z))
+						if (!world.isAirBlock(new BlockPos((currX - x) / 2 + x, currY, (currZ - z) / 2 + z)))
 						{
 							break;
 						}
@@ -241,20 +243,20 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		}
 
 		NBTTagList nbttaglist = nbt.getTagList("Items", 10);
-		this.inv = new ItemStack[this.getSizeInventory()];
+		this.inv.clear();
 
 		for (int tagIndex = 0; tagIndex < nbttaglist.tagCount(); tagIndex++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(tagIndex);
 			int slot = nbttagcompound1.getByte("Slot") & 255;
 
-			if (slot >= 0 && slot < this.inv.length) {
-				this.inv[slot] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+			if (slot >= 0 && slot < this.getSizeInventory()) {
+				this.inv.set(slot, new ItemStack(nbttagcompound1));
 			}
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
 		nbt.setString("owner", this.owner);
@@ -267,16 +269,17 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		}
 
 		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inv.length; i++) {
-			if (inv[i] != null) {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			if (inv.get(i) != ItemStack.EMPTY) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte)i);
-				this.inv[i].writeToNBT(nbttagcompound1);
+				this.inv.get(i).writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
 		}
 
 		nbt.setTag("Items", nbttaglist);
+		return nbt;
 	}
 
 	@Override
@@ -290,23 +293,23 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	{
 		NBTTagCompound var1 = new NBTTagCompound();
 		writeToNBT(var1);
-		return new SPacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, var1);
+		return new SPacketUpdateTileEntity(this.getPos(), 1, var1);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1.5, zCoord + 1);
+		return new AxisAlignedBB(getX(), getY(), getZ(), getX() + 1, getY() + 1.5, getZ() +1);
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return inv.length;
+		return inv.size();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inv[i];
+		return inv.get(i);
 	}
 
 	@Override
@@ -333,24 +336,24 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		if (itemstack == null) {
-			inv[i] = null;
+		if (itemstack == ItemStack.EMPTY) {
+			inv.set(i, ItemStack.EMPTY);
 			if (i > 0 && i < 5 && powerLevel > 1) {
 				this.updateRange();
 			}
 		} else if (isItemValidForSlot(i, itemstack)) {
 			if (i < 5 && itemstack.getCount() > 1) {
-				itemstack.getCount() = 1;
+				itemstack.setCount(1);
 			}
 			if (i == 0) {
 				this.setCharged();
-				this.getWorld().playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "meteors:shield.powerup", 1.0F, 0.6F);
+				this.getWorld().playSound(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, new SoundEvent(new ResourceLocation("meteors:shield.powerup")), SoundCategory.PLAYERS, 1.0F, 0.6F, true);
 				this.markDirty();
 			} else if (i > 0 && i < 5) {
-				inv[i] = itemstack;
+				inv.set(i, itemstack);
 				this.updateRange();
 			} else {
-				inv[i] = itemstack;
+				inv.set(i, itemstack);
 			}
 		}
 	}
@@ -368,7 +371,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (itemstack.getItem() == MeteorItems.itemRedMeteorGem && i > 0 && i < 5) {
-			return powerLevel > 0 && powerLevel < 5 && inv[i] == null;
+			return powerLevel > 0 && powerLevel < 5 && inv.get(i) == ItemStack.EMPTY;
 		} else if (itemstack.getItem() == MeteorItems.itemMeteorChips && i == 0) {
 			return powerLevel == 0;
 		}
@@ -377,25 +380,25 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Meteor Shield";
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer player) {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer player) {}
 	
 	private void updateRange() {
 		int powerCrystals = 0;
 		for (int i = 1; i <= 4; i++) {
-			if (inv[i] != null && inv[i].getItem() == MeteorItems.itemRedMeteorGem) {
+			if (inv.get(i) != ItemStack.EMPTY && inv.get(i).getItem() == MeteorItems.itemRedMeteorGem) {
 				powerCrystals++;
 			}
 		}
@@ -406,7 +409,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		
 		if (powerLevel > oldLevel) {
-			this.getWorld().playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "meteors:shield.powerup", 1.0F, powerLevel / 10.0F + 0.5F);
+			this.getWorld().playSound(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, new SoundEvent(new ResourceLocation("meteors:shield.powerup")), SoundCategory.BLOCKS, 1.0F, powerLevel / 10.0F + 0.5F, true);
 			EntityPlayer player = getWorld().getPlayerEntityByName(owner);
 			if (powerLevel == 5 && player != null) {
 				player.addStat(HandlerAchievement.shieldFullyUpgraded, 1);
@@ -430,17 +433,17 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 
 	@Override
 	public int getX() {
-		return this.xCoord;
+		return this.getPos().getX();
 	}
 
 	@Override
 	public int getY() {
-		return this.yCoord;
+		return this.getPos().getY();
 	}
 
 	@Override
 	public int getZ() {
-		return this.zCoord;
+		return this.getPos().getZ();
 	}
 
 	@Override
@@ -471,13 +474,13 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	public void onChunkUnload() {
 		if (!this.getWorld().isRemote) {
 			HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(getWorld().provider.getDimension());
-			metHandler.getShieldManager().addShield(new MeteorShieldData(xCoord, yCoord, zCoord, powerLevel, owner, blockComets));
+			metHandler.getShieldManager().addShield(new MeteorShieldData(getPos(), powerLevel, owner, blockComets));
 		}
 		this.invalidate();
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		int[] slots = new int[8];
 		for (int i = 0; i < 8; i++) {
 			slots[i] = i + 5;
@@ -487,12 +490,12 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack item, int side) {
+	public boolean canInsertItem(int slot, ItemStack item, EnumFacing side) {
 		return slot < 5 && isItemValidForSlot(slot, item);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack item, int side) {
+	public boolean canExtractItem(int slot, ItemStack item, EnumFacing side) {
 		return slot > 4;
 	}
 

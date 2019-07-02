@@ -6,6 +6,7 @@ import net.meteor.common.block.BlockSlipperyStairs;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -16,11 +17,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ItemBlockSlippery extends ItemBlock {
 	
@@ -32,10 +36,10 @@ public class ItemBlockSlippery extends ItemBlock {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean advancedTip) {
+    public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		checkNBT(itemStack);
-		int slipperiness = getSlipperiness(this.field_150939_a);
-		info.add(I18n.translateToLocalFormatted("info.slipperyBlock.one", slipperiness));
+		int slipperiness = getSlipperiness(this.getBlock());
+        tooltip.add(I18n.translateToLocalFormatted("info.slipperyBlock.one", slipperiness));
 	}
 
 	@Override
@@ -109,7 +113,7 @@ public class ItemBlockSlippery extends ItemBlock {
         {
             return EnumActionResult.FAIL;
         }
-        else if (y == 255 && storedBlock.getMaterial().isSolid())
+        else if (y == 255 && storedBlock.getMaterial(storedBlock.getDefaultState()).isSolid())
         {
             return EnumActionResult.FAIL;
         }
@@ -120,7 +124,7 @@ public class ItemBlockSlippery extends ItemBlock {
 
             if (placeBlockAt(itemStack, player, world, newPos, facing, hitX, hitY, hitZ, newState))
             {
-                world.playSound((double)((float)newPos.getX() + 0.5F), (double)((float)newPos.getY() + 0.5F), (double)((float)newPos.getZ() + 0.5F), storedBlock.stepSound.func_150496_b(), (storedBlock.stepSound.getVolume() + 1.0F) / 2.0F, storedBlock.stepSound.getPitch() * 0.8F);
+                world.playSound((double)((float)newPos.getX() + 0.5F), (double)((float)newPos.getY() + 0.5F), (double)((float)newPos.getZ() + 0.5F), storedBlock.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (storedBlock.getSoundType().getVolume() + 1.0F) / 2.0F, storedBlock.getSoundType().getPitch() * 0.8F, true);
                 itemStack.shrink(1);
             }
 

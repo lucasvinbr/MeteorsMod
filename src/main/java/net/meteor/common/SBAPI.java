@@ -180,7 +180,7 @@ public class SBAPI {
 	 * @param mData		Metadata of block to be placed. Useful for rotations and different textures of blocks.
 	 */
 	public static void placeBlock(World world, int x, int y, int z, Block block, int mData) {
-		if (block == Blocks.wooden_door) {
+		if (block == Blocks.OAK_DOOR) {
 			if (mData >= TopOfDoor) {
 				if (world.getBlock(x, y - 1, z) != block) {
 					world.setBlock(x, y - 1, z, block, mData - TopOfDoor, 3);
@@ -190,7 +190,7 @@ public class SBAPI {
 					world.setBlock(x, y + 1, z, block, mData + TopOfDoor, 3);
 				}
 			}
-		} else if (block == Blocks.iron_door) {
+		} else if (block == Blocks.IRON_DOOR) {
 			if (mData >= TopOfDoor) {
 				if (world.getBlock(x, y - 1, z) != block) {
 					world.setBlock(x, y - 1, z, block, mData - TopOfDoor, 3);
@@ -200,35 +200,35 @@ public class SBAPI {
 					world.setBlock(x, y + 1, z, block, mData + TopOfDoor, 3);
 				}
 			}
-		} else if (block == Blocks.bed) {
+		} else if (block == Blocks.BED) {
 			if (mData >= HeadOfBed) {
 				boolean bedTowardNorthSouth = getBedPlacementDirectionNorthOrSouth(mData - 8);
 				if (bedTowardNorthSouth) {
 					if ((mData - 8) == PlaceBedNorthward) {
-						world.setBlock(x, y, z - 1, Blocks.bed, PlaceBedNorthward, 3);
+						world.setBlock(x, y, z - 1, Blocks.BED, PlaceBedNorthward, 3);
 					} else if ((mData - 8) == PlaceBedSouthward) {
-						world.setBlock(x, y, z + 1, Blocks.bed, PlaceBedSouthward, 3);
+						world.setBlock(x, y, z + 1, Blocks.BED, PlaceBedSouthward, 3);
 					}
 				} else {
 					if ((mData - 8) == PlaceBedEastward) {
-						world.setBlock(x + 1, y, z, Blocks.bed, PlaceBedEastward, 3);
+						world.setBlock(x + 1, y, z, Blocks.BED, PlaceBedEastward, 3);
 					} else if ((mData - 8) == PlaceBedWestward) {
-						world.setBlock(x - 1, y, z, Blocks.bed, PlaceBedWestward, 3);
+						world.setBlock(x - 1, y, z, Blocks.BED, PlaceBedWestward, 3);
 					}
 				}
 			} else if (mData < HeadOfBed) {
 				boolean bedTowardNorthSouth = getBedPlacementDirectionNorthOrSouth(mData);
 				if (bedTowardNorthSouth) {
 					if (mData == PlaceBedNorthward) {
-						world.setBlock(x, y, z - 1, Blocks.bed, PlaceBedNorthward + HeadOfBed, 3);
+						world.setBlock(x, y, z - 1, Blocks.BED, PlaceBedNorthward + HeadOfBed, 3);
 					} else if (mData == PlaceBedSouthward) {
-						world.setBlock(x, y, z + 1, Blocks.bed, PlaceBedSouthward + HeadOfBed, 3);
+						world.setBlock(x, y, z + 1, Blocks.BED, PlaceBedSouthward + HeadOfBed, 3);
 					}
 				} else {
 					if (mData == PlaceBedEastward) {
-						world.setBlock(x + 1, y, z, Blocks.bed, PlaceBedEastward + HeadOfBed, 3);
+						world.setBlock(x + 1, y, z, Blocks.BED, PlaceBedEastward + HeadOfBed, 3);
 					} else if (mData == PlaceBedWestward) {
-						world.setBlock(x - 1, y, z, Blocks.bed, PlaceBedWestward + HeadOfBed, 3);
+						world.setBlock(x - 1, y, z, Blocks.BED, PlaceBedWestward + HeadOfBed, 3);
 					}
 				}
 			}

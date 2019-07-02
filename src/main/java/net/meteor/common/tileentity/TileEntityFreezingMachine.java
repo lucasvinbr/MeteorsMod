@@ -132,7 +132,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	private void checkFluidContainer() {
 		ItemStack item = inv.get(3);
 
-		if (item != null && item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+		if (item != ItemStack.EMPTY && item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 			if (!item.isEmpty()) {
 				FluidStack fluid = FluidUtil.getFluidContained(item);
 				if (fluid != null && (fluid.isFluidEqual(tank.getFluid())) || tank.getFluidAmount() == 0) {
@@ -153,7 +153,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 								inv.set(4, emptyContainer);
 								decrStackSize(3, 1);
 								this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-							} else if (inv[4].isItemEqual(emptyContainer) && inv[4].getCount() + 1 <= inv[4].getMaxStackSize()) {
+							} else if (inv.get(4).isItemEqual(emptyContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
 								tank.fill(fluid, true);
 								inv.get(4).grow(1);
 								decrStackSize(3, 1);
@@ -168,14 +168,14 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				if (fluidInTank != null) {
 					ItemStack filledContainer = FluidContainerRegistry.fillFluidContainer(fluidInTank, item);
 					if (filledContainer != null) {
-						if (inv[4] == null) {
+						if (inv.get(4) == ItemStack.EMPTY) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
-							inv[4] = filledContainer;
+							inv.set(4, filledContainer);
 							decrStackSize(3, 1);
 							this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-						} else if (inv[4].isItemEqual(filledContainer) && inv[4].getCount() + 1 <= inv[4].getMaxStackSize()) {
+						} else if (inv.get(4).isItemEqual(filledContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
-							inv[4].grow(1);
+							inv.get(4).grow(1);
 							decrStackSize(3, 1);
 							this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 						}
@@ -230,7 +230,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 		for (int i = 0; i < this.inv.size(); ++i)
 		{
-			if (this.inv.get(i) != ItemStack.EMPTY-)
+			if (this.inv.get(i) != ItemStack.EMPTY)
 			{
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte)i);
@@ -455,7 +455,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 
 	private boolean canFreeze() {
-		FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv[0], tank.getFluid(), this.acceptedRecipeType);
+		FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv.get(0), tank.getFluid(), this.acceptedRecipeType);
 		if (recipe == null) return false;
 		ItemStack result = recipe.getResult(inv.get(0));
 		if (this.inv.get(2) == ItemStack.EMPTY) {
@@ -488,7 +488,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	public void freezeItem() {
 		if (this.canFreeze())
 		{
-			FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv[0], tank.getFluid(), this.acceptedRecipeType);
+			FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv.get(0), tank.getFluid(), this.acceptedRecipeType);
 
 			if (this.inv.get(2) == ItemStack.EMPTY)
 			{

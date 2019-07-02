@@ -2,6 +2,7 @@ package net.meteor.common.climate;
 
 import net.meteor.common.IMeteorShield;
 import net.meteor.common.MeteorsMod;
+import net.minecraft.util.math.BlockPos;
 
 public class MeteorShieldData implements IMeteorShield
 {
@@ -25,6 +26,10 @@ public class MeteorShieldData implements IMeteorShield
 		this.range = powerLevel * MeteorsMod.instance.ShieldRadiusMultiplier;
 		this.owner = o;
 		this.blockComets = bComets;
+	}
+
+	public MeteorShieldData(BlockPos pos, int powerLevel, String owner, boolean bComets) {
+		this(pos.getX(), pos.getY(), pos.getZ(), powerLevel, owner, bComets);
 	}
 
 	public boolean equals(Object o)
