@@ -31,9 +31,10 @@ public class ItemMeteorsMod extends Item
 			tooltip.add(TextFormatting.WHITE + I18n.translateToLocal("item.RedMeteorGem.desc.two"));
 		}
 	}
-	
-	public Item setTexture(String s) {
-		return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	}
+
+	//TODO 1.12.2
+	//public Item setTexture(String s) {
+	//	return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
+	//}
 	
 }

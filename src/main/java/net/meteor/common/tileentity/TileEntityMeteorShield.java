@@ -77,8 +77,9 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 					MeteorsMod.proxy.metHandlers.get(getWorld().provider.getDimension()).getShieldManager().addShield(this);
 				}
 				this.shieldedChunks = true;
-				this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-			} else if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+				//TODO 1.12.2 don't think this is needed anymore
+				//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+				} else if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 				generateParticles(this.getWorld(), this.getX(), this.getY(), this.getZ(), this.getWorld().rand);
 			} else if (age >= CHARGE_TIME) {
 				setCharged();
@@ -184,7 +185,8 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 				}
 			}
 		}
-		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+		//TODO 1.12.2 don't think this is needed anymore
+		//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.markDirty();
 	}
 	
@@ -192,7 +194,8 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		this.cometX = (int)comet.posX;
 		this.cometZ = (int)comet.posZ;
 		this.cometType = comet.meteorType.getID();
-		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+		//TODO 1.12.2 don't think this is needed anymore
+		//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.markDirty();
 	}
 
@@ -228,7 +231,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	{
 		super.readFromNBT(nbt);
 		this.owner = nbt.getString("owner");
-		if (owner == null || owner.trim().isEmpty()) {
+		if (owner.trim().isEmpty()) {
 			owner = "None";
 		}
 		
@@ -363,10 +366,11 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		return 64;
 	}
 
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return true; // TODO put in some proper checks for this
-	}
+	//TODO 1.12.2
+	//@Override
+	//public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	//	return true; // TODO put in some proper checks for this
+	//}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -406,13 +410,15 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		int oldLevel = this.powerLevel;
 		this.powerLevel = 1 + powerCrystals;
 		this.range = MeteorsMod.instance.ShieldRadiusMultiplier * powerLevel;
-		this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-		
+		//TODO 1.12.2 don't think this is needed anymore
+		//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+
 		if (powerLevel > oldLevel) {
 			this.getWorld().playSound(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, new SoundEvent(new ResourceLocation("meteors:shield.powerup")), SoundCategory.BLOCKS, 1.0F, powerLevel / 10.0F + 0.5F, true);
 			EntityPlayer player = getWorld().getPlayerEntityByName(owner);
 			if (powerLevel == 5 && player != null) {
-				player.addStat(HandlerAchievement.shieldFullyUpgraded, 1);
+				//TODO 1.12.2
+				//player.addStat(HandlerAchievement.shieldFullyUpgraded, 1);
 			}
 			if (MeteorsMod.instance.ShieldRadiusMultiplier <= 0 && !getWorld().isRemote) {
 				if (player != null) {

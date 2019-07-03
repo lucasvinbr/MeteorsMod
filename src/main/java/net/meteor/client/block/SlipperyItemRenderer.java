@@ -3,13 +3,16 @@ package net.meteor.client.block;
 import net.meteor.common.item.ItemBlockSlippery;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-public class SlipperyItemRenderer implements IItemRenderer {
+public class SlipperyItemRenderer { // implements IItemRenderer {
+	//TODO 1.12.2
 
+	/*
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		switch (type) {
@@ -30,15 +33,15 @@ public class SlipperyItemRenderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderBlocks renderBlocks = (RenderBlocks) data[0];
 		Block facadeBlock = ItemBlockSlippery.getStoredBlock(item);
 		if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-			GL11.glTranslated(0.5, 0.5, 0.5);
+			GlStateManager.translate(0.5, 0.5, 0.5);
 		}
         renderBlocks.renderBlockAsItem(facadeBlock, item.getItemDamage(), 1.0F);
-		GL11.glPopMatrix();
-	}
+		GlStateManager.popMatrix();
+	}*/
 
 }

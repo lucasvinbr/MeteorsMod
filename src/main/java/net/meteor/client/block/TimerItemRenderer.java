@@ -2,13 +2,11 @@ package net.meteor.client.block;
 
 import net.meteor.client.tileentity.TileEntityMeteorTimerRenderer;
 import net.meteor.common.MeteorsMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
-public class TimerItemRenderer implements IItemRenderer {
-	
+public class TimerItemRenderer {// implements IItemRenderer {
+	//TODO 1.12.2
+
 	private static final ResourceLocation timerTex = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/metTimer.png");
 	
 	TileEntityMeteorTimerRenderer timerRend;
@@ -16,7 +14,7 @@ public class TimerItemRenderer implements IItemRenderer {
 	public TimerItemRenderer() {
 		timerRend = new TileEntityMeteorTimerRenderer();
 	}
-
+/*
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		switch (type) {
@@ -49,6 +47,6 @@ public class TimerItemRenderer implements IItemRenderer {
 			break;
 		}
 		
-	}
+	}*/
 
 }

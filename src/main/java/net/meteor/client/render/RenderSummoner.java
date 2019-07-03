@@ -33,10 +33,11 @@ public class RenderSummoner extends Render<EntitySummoner>
 	@Override
     public void doRender(EntitySummoner par1Entity, double par2, double par4, double par6, float par8, float par9)
 	{
+		//TODO 1.12.2
 		if (!par1Entity.isRandom) {
-			this.icon = MeteorItems.itemMeteorSummoner.getIconFromDamage(par1Entity.mID + 1);
+//			this.icon = MeteorItems.itemMeteorSummoner.getIconFromDamage(par1Entity.mID + 1);
 		} else {
-			this.icon = MeteorItems.itemMeteorSummoner.getIconFromDamage(0);
+//			this.icon = MeteorItems.itemMeteorSummoner.getIconFromDamage(0);
 		}
 		GL11.glPushMatrix();
         GL11.glTranslatef((float)par2, (float)par4, (float)par6);

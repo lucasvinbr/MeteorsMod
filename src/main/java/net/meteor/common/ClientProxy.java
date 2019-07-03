@@ -59,6 +59,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoner.class, RenderSummoner.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityComet.class, RenderComet.FACTORY);
 
+		//TODO 1.12.2
+		/*
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockMeteorShield), new ShieldItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockMeteorTimer), new TimerItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlippery), new SlipperyItemRenderer());
@@ -69,6 +71,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsTwo), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsThree), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsFour), new SlipperyItemRenderer());
+		 */
 		
 		if (Baubles.isBaublesLoaded()) {
 			MinecraftForge.EVENT_BUS.register(new MagnetizationOverlay());

@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.meteor.client.TextureDetector;
 import net.meteor.common.ClientHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -44,7 +45,7 @@ public class ItemDetector extends ItemMeteorsMod {
 			}
 		} else if (type == 0) {
 			tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal("Detector.proximity"));
-			if (ClientHandler.getClosestIncomingMeteor(par2EntityPlayer.posX, par2EntityPlayer.posZ) == null) {
+			if (ClientHandler.getClosestIncomingMeteor(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posZ) == null) {//TODO confirm for 1.12.2
 				tooltip.add(I18n.translateToLocal("Detector.scanning") + dots);
 			} else {
 				tooltip.add(TextFormatting.GREEN + I18n.translateToLocal("Detector.detected"));
@@ -64,13 +65,14 @@ public class ItemDetector extends ItemMeteorsMod {
 		}
 		
 	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-    public void registerIcons(IIconRegister par1IconRegister) {
-		TextureMap map = (TextureMap)par1IconRegister;
-		map.setTextureEntry(this.iconString, new TextureDetector(this.iconString, type));
-		this.itemIcon = map.getTextureExtry(this.iconString);
-	}
+
+	//TODO 1.12.2
+	//@SideOnly(Side.CLIENT)
+	//@Override
+    //public void registerIcons(IIconRegister par1IconRegister) {
+	//	TextureMap map = (TextureMap)par1IconRegister;
+	//	map.setTextureEntry(this.iconString, new TextureDetector(this.iconString, type));
+	//	this.itemIcon = map.getTextureExtry(this.iconString);
+	//}
 
 }

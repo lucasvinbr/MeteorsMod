@@ -26,7 +26,6 @@ public class ClimateUpdater {
 		this.meteorHandler = metHandler;
 	}
 
-	//TODO where is my subscribeevent O_o
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		World world = event.world;
 		if (!world.isRemote) {
@@ -84,7 +83,7 @@ public class ClimateUpdater {
 								
 								if (!blocked) {
                                     for (IMeteorShield ims : shields) {
-                                        TileEntityMeteorShield shield = (TileEntityMeteorShield) world.getTileEntity(ims.getX(), ims.getY(), ims.getZ());
+                                        TileEntityMeteorShield shield = (TileEntityMeteorShield) world.getTileEntity(new BlockPos(ims.getX(), ims.getY(), ims.getZ()));
                                         if (shield != null) {
                                             shield.detectComet(comet);
                                         }

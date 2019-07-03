@@ -66,7 +66,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return inv[slot];
+		return inv.get(slot);
 	}
 
 	@Override
@@ -152,12 +152,14 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 								tank.fill(fluid, true);
 								inv.set(4, emptyContainer);
 								decrStackSize(3, 1);
-								this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+								//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+								//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 							} else if (inv.get(4).isItemEqual(emptyContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
 								tank.fill(fluid, true);
 								inv.get(4).grow(1);
 								decrStackSize(3, 1);
-								this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+								//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+								//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 							}
 						}
 
@@ -166,18 +168,20 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			} else {
 				FluidStack fluidInTank = tank.getFluid();
 				if (fluidInTank != null) {
-					ItemStack filledContainer = FluidContainerRegistry.fillFluidContainer(fluidInTank, item);
+					FluidUtil.tryFillContainer(item, tank, 1000, null, false);//TODO 1.12.2 should this be false? seems forge changed logic a lot
 					if (filledContainer != null) {
 						if (inv.get(4) == ItemStack.EMPTY) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv.set(4, filledContainer);
 							decrStackSize(3, 1);
-							this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 						} else if (inv.get(4).isItemEqual(filledContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv.get(4).grow(1);
 							decrStackSize(3, 1);
-							this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 						}
 					}
 				}
@@ -426,15 +430,17 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			if (flag != this.burnTime > 0)
 			{
 				flag1 = true;
-				int meta = getWorld().getBlockMetadata(xCoord, yCoord, zCoord);
-				this.getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, burnTime > 0 ? meta + 4 : meta - 4, 2);
+				//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+				//int meta = getWorld().getBlockMetadata(xCoord, yCoord, zCoord);
+				//this.getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, burnTime > 0 ? meta + 4 : meta - 4, 2);
 			}
 		}
 
 		if (flag1)
 		{
 			this.markDirty();
-			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 	}
 
@@ -465,7 +471,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				this.cookTime = 0;
 				this.lastKnownItem = result;
 				this.markDirty();
-				getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+				//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+				//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			return true;
 		}
@@ -478,7 +485,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				this.cookTime = 0;
 				this.lastKnownItem = result;
 				this.markDirty();
-				getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+				//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+				//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			return true;
 		}
@@ -512,8 +520,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				tank.drain(recipe.getFluidAmount(), true);
 
 				if (tank.getFluidAmount() == 0) {
-					getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-				}
+					//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+					//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+					}
 			}
 
 		}
@@ -524,8 +533,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	public int fill(FluidStack resource, boolean doFill)
 	{
 		if (tank.getFluidAmount() == 0) {
-			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
+			//TODO 1.12.2 don't think this is needed anymore
+			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
 		return tank.fill(resource, doFill);
 	}
 
@@ -534,7 +544,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	{
 		if (resource == null || !resource.isFluidEqual(tank.getFluid()))
 		{
-			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+			// getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 			return null;
 		}
 		return tank.drain(resource.amount, doDrain);
@@ -544,7 +555,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	public FluidStack drain(int maxDrain, boolean doDrain)
 	{
 		if (doDrain && tank.getFluidAmount() - maxDrain <= 0) {
-			getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
+			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 		return tank.drain(maxDrain, doDrain);
 	}

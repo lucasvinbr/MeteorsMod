@@ -3,13 +3,16 @@ package net.meteor.common.item;
 import java.util.List;
 
 import net.meteor.common.MeteorsMod;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.I18n;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ItemFrezariteAxe extends ItemAxe
 {
@@ -20,15 +23,15 @@ public class ItemFrezariteAxe extends ItemAxe
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
 	{
-		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezAxe.one"));
-		par3List.add("\2473" + I18n.translateToLocal("enchantment.frezAxe.two"));
+		tooltip.add("\2473" + I18n.translateToLocal("enchantment.frezAxe.one"));
+		tooltip.add("\2473" + I18n.translateToLocal("enchantment.frezAxe.two"));
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasEffect(ItemStack par1ItemStack, int pass)
+	public boolean hasEffect(ItemStack stack)
 	{
 		return true;
 	}
@@ -38,9 +41,10 @@ public class ItemFrezariteAxe extends ItemAxe
 	{
 		return 0;
 	}
-	
-	public Item setTexture(String s) {
-		return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	}
+
+	//TODO 1.12.2
+	//public Item setTexture(String s) {
+	//	return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
+	//}
 	
 }

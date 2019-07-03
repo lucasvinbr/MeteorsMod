@@ -4,25 +4,25 @@ import java.util.List;
 
 import net.meteor.common.climate.HandlerMeteor;
 import net.meteor.common.entity.EntitySummoner;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSummoner extends ItemMeteorsMod
 {
 	private String[] names = { "random", "meteorite", "frezarite", "kreknorite", "unknown", "kitty" };
-	
-	private IIcon metIcon;
-	private IIcon frezIcon;
-	private IIcon krekIcon;
-	private IIcon unkIcon;
-	private IIcon kittyIcon;
+
+	//TODO 1.12.2
+//	private IIcon metIcon;
+//	private IIcon frezIcon;
+//	private IIcon krekIcon;
+//	private IIcon unkIcon;
+//	private IIcon kittyIcon;
 
 	public ItemSummoner() {
 		super();
@@ -32,21 +32,24 @@ public class ItemSummoner extends ItemMeteorsMod
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
-		if (!entityplayer.capabilities.isCreativeMode)
+		ItemStack itemStack = playerIn.getHeldItem(handIn);
+		if (!playerIn.capabilities.isCreativeMode)
 		{
-			itemstack.getCount()--;
+			itemStack.shrink(1);
 		}
-		world.playSoundAtEntity(entityplayer, "random.bow", 0.5F, 0.4F / (this.itemRand.nextFloat() * 0.4F + 0.8F));
-		if (!world.isRemote)
+		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, new SoundEvent(new ResourceLocation("minecraft:random.bow")), SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		if (!worldIn.isRemote)
 		{
-			int i = itemstack.getItemDamage();
-			world.spawnEntityInWorld(new EntitySummoner(world, entityplayer, i == 0 ? HandlerMeteor.getMeteorType().getID() : i - 1, i == 0));
+			int i = itemStack.getItemDamage();//TODO 1.12.2, need to remove meta :'(
+			worldIn.spawnEntity(new EntitySummoner(worldIn, playerIn, i == 0 ? HandlerMeteor.getMeteorType().getID() : i - 1, i == 0));
 		}
-		return itemstack;
+		return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
 	}
 
+	//TODO 1.12.2
+	/*
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamage(int i)
@@ -66,7 +69,7 @@ public class ItemSummoner extends ItemMeteorsMod
 			return this.itemIcon;
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
     public void registerIcons(IIconRegister par1IconRegister) {
@@ -92,5 +95,5 @@ public class ItemSummoner extends ItemMeteorsMod
 		for (int var4 = 0; var4 < 6; var4++) {
 			par3List.add(new ItemStack(par1, 1, var4));
 		}
-	}
+	}*/
 }

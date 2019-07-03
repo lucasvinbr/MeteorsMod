@@ -97,7 +97,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					EntityPlayer playerOwner = getEntityWorld().getPlayerEntityByName(owner);
 					if (playerOwner != null) {
 						playerOwner.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
-						playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
+						///TODO 1.12.2
+						// playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
 					}
 					metHandler.getShieldManager().sendMeteorMaterialsToShield(shield, new GhostMeteor((int)posX, (int)posZ, size, 0, meteorType));
 					this.getEntityWorld().playSound(posX, posY, posZ, new SoundEvent(new ResourceLocation("minecraft:random.explode")), SoundCategory.BLOCKS, 5F, (1.0F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.2F) * 0.7F, true);
@@ -144,7 +145,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					AxisAlignedBB aabb = new AxisAlignedBB(posX - 40D, posY - 20D, posZ - 40D, posX + 40D, posY + 20D, posZ + 40D);
 					List<EntityPlayer> players = this.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, aabb);
 					for (EntityPlayer player : players) {
-						player.addStat(HandlerAchievement.foundMeteor, 1);
+						//TODO 1.12.2
+						// player.addStat(HandlerAchievement.foundMeteor, 1);
 					}
 					
 					HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(getEntityWorld().provider.getDimension());

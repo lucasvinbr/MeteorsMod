@@ -8,10 +8,10 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.GameData;
 
 public class TileEntitySlippery extends TileEntity {
 	
@@ -30,12 +30,12 @@ public class TileEntitySlippery extends TileEntity {
 	}
 	
 	public static Block getBlockFromName(String name, Block def) {
-		Block block = GameData.getBlockRegistry().getObject(name);
+		Block block = Block.REGISTRY.getObject(new ResourceLocation(name));
 		return block == null ? def : block;
 	}
 	
-	public static String getNameFromBlock(Block block) {
-		return GameData.getBlockRegistry().getNameForObject(block);
+	public static ResourceLocation getNameFromBlock(Block block) {
+		return Block.REGISTRY.getNameForObject(block);
 	}
 	
 	public void setFacadeBlockName(String name) {
@@ -59,9 +59,10 @@ public class TileEntitySlippery extends TileEntity {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, blockName);
+		return nbt;
 	}
 	
 	@Override

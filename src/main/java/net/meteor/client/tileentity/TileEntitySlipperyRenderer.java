@@ -3,12 +3,14 @@ package net.meteor.client.tileentity;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntitySlipperyRenderer extends TileEntitySpecialRenderer<TileEntitySlippery> {
@@ -28,12 +30,14 @@ public class TileEntitySlipperyRenderer extends TileEntitySpecialRenderer<TileEn
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		Tessellator tess = Tessellator.getInstance();
-		tess.startDrawingQuads();
-		RenderBlocks renderBlocks = new RenderBlocks(slippery.getWorldObj());
-		tess.setTranslation(-slippery.xCoord, -slippery.yCoord, -slippery.zCoord);
-		renderBlocks.renderBlockByRenderType(facadeBlock, slippery.xCoord, slippery.yCoord, slippery.zCoord);
+		BufferBuilder buffer = tess.getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);//TODO 1.12.2
+		//TODO 1.12.2 errrrr
+		//RenderBlocks renderBlocks = new RenderBlocks(slippery.getWorld());
+		//buffer.setTranslation(-slippery.getPos().getX(), -slippery.getPos().getY(), -slippery.getPos().getZ());
+		//renderBlocks.renderBlockByRenderType(facadeBlock, slippery.getPos().getX(), slippery.getPos().getY(), slippery.getPos().getZ());
 		tess.draw();
-		tess.setTranslation(0, 0, 0);
+		buffer.setTranslation(0, 0, 0);
 		GlStateManager.popMatrix();
 		RenderHelper.enableStandardItemLighting();
 		GlStateManager.disableBlend();

@@ -47,7 +47,7 @@ public class ItemBlockSlippery extends ItemBlock {
 		checkNBT(itemStack);
 		Block storedBlock = getStoredBlock(itemStack);
 		String facadeName = new ItemStack(Item.getItemFromBlock(storedBlock), 1, itemStack.getItemDamage()).getDisplayName();
-		return I18n.translateToLocalFormatted(this.getUnlocalizedName() + ".name", facadeName);
+		return I18n.translateToLocalFormatted(this.getRegistryName() + ".name", facadeName);
     }
 	
 	@Override
@@ -68,11 +68,11 @@ public class ItemBlockSlippery extends ItemBlock {
         Block storedBlock = getStoredBlock(itemStack);
         BlockPos newPos = new BlockPos(pos);
 
-        if (block == Blocks.SNOW_LAYER && (world.getBlockMetadata(x, y, z) & 7) < 1)
+        if (block == Blocks.SNOW_LAYER/* && (world.getBlockMetadata(x, y, z) & 7) < 1*/)//TODO 1.12.2 what is this checking?
         {
             facing = EnumFacing.UP;
         }
-        else if (block != Blocks.VINE && block != Blocks.TALLGRASS && block != Blocks.DEADBUSH && !block.isReplaceable(world, x, y, z))
+        else if (block != Blocks.VINE && block != Blocks.TALLGRASS && block != Blocks.DEADBUSH && !block.isReplaceable(world, pos))
         {
             if (facing == EnumFacing.DOWN)
             {
@@ -113,14 +113,14 @@ public class ItemBlockSlippery extends ItemBlock {
         {
             return EnumActionResult.FAIL;
         }
-        else if (y == 255 && storedBlock.getMaterial(storedBlock.getDefaultState()).isSolid())
+        else if (pos.getY() == 255 && storedBlock.getMaterial(storedBlock.getDefaultState()).isSolid())
         {
             return EnumActionResult.FAIL;
         }
-        else if (world.canPlaceEntityOnSide(storedBlock, newPos, false, facing, player, itemStack))
+        else if (world.mayPlace(storedBlock, newPos, false, facing, player))
         {
             int i1 = this.getMetadata(itemStack.getItemDamage());
-            IBlockState newState = storedBlock.getDefaultState();//TODO 1.12.2 verify
+            IBlockState newState = storedBlock.getDefaultState();//TODO 1.12.2 verify, guessing we should save the block state too ?
 
             if (placeBlockAt(itemStack, player, world, newPos, facing, hitX, hitY, hitZ, newState))
             {
@@ -147,7 +147,7 @@ public class ItemBlockSlippery extends ItemBlock {
 					def = Blocks.OAK_STAIRS;
 				}
 			}
-			nbt.setString(FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(def));
+			nbt.setString(FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(def).toString());
 			itemStack.setTagCompound(nbt);
 		}
 	}

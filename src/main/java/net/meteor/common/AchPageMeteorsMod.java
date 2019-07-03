@@ -1,7 +1,7 @@
 package net.meteor.common;
 
 import net.minecraft.stats.Achievement;
-import net.minecraft.util.I18n;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.AchievementPage;
 
 public class AchPageMeteorsMod extends AchievementPage

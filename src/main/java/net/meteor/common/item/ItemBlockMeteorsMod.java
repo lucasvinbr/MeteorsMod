@@ -5,14 +5,18 @@ import java.util.List;
 import net.meteor.common.MeteorBlocks;
 import net.meteor.common.MeteorsMod;
 import net.minecraft.block.Block;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ItemBlockMeteorsMod extends ItemBlock
 {
@@ -24,14 +28,15 @@ public class ItemBlockMeteorsMod extends ItemBlock
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (this == Item.getItemFromBlock(MeteorBlocks.torchMeteorShieldActive)) {
-			par3List.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal("ProtectionTorch.usage"));
+			tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal("ProtectionTorch.usage"));
 		}
 	}
-	
-	public Item setTexture(String s) {
-		return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	}
+
+	//TODO 1.12.2
+	//public Item setTexture(String s) {
+	//	return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
+	//}
 	
 }

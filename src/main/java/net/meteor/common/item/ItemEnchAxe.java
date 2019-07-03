@@ -34,10 +34,11 @@ public class ItemEnchAxe extends ItemAxe
 		}
 		return super.getDamage(stack);
 	}
-	
-	public ItemEnchAxe setTexture(String s) {
-		return (ItemEnchAxe) this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	}
+
+	//TODO 1.12.2
+	//public ItemEnchAxe setTexture(String s) {
+	//	return (ItemEnchAxe) this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
+	//}
 	
 	private boolean isRestricted(ItemStack item) {
 		if (item.hasTagCompound()) {
