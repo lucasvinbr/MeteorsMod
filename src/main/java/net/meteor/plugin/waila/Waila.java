@@ -2,10 +2,10 @@ package net.meteor.plugin.waila;
 
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.meteor.common.MeteorsMod;
-import net.meteor.common.block.BlockFrezarite;
-import net.meteor.common.block.BlockMeteor;
-import net.meteor.common.block.BlockMeteorShield;
-import net.meteor.common.block.BlockMeteorTimer;
+import net.meteor.common.block.FreezariteBlock;
+import net.meteor.common.block.MeteorBlock;
+import net.meteor.common.block.MeteorShieldBlock;
+import net.meteor.common.block.MeteorTimerBlock;
 
 public class Waila {
 	
@@ -17,10 +17,10 @@ public class Waila {
 		reg.addConfig("Falling Meteors", "meteors.timerMode", "Show Timer Mode");
 		
 		// Registration
-		reg.registerBodyProvider(new TimerDataProvider(), BlockMeteorTimer.class);
-		reg.registerBodyProvider(new MeteorDataProvider(), BlockMeteor.class);
-		reg.registerBodyProvider(new MeteorDataProvider(), BlockFrezarite.class);
-		reg.registerBodyProvider(new ShieldDataProvider(), BlockMeteorShield.class);
+		reg.registerBodyProvider(new TimerDataProvider(), MeteorTimerBlock.class);
+		reg.registerBodyProvider(new MeteorDataProvider(), MeteorBlock.class);
+		reg.registerBodyProvider(new MeteorDataProvider(), FreezariteBlock.class);
+		reg.registerBodyProvider(new ShieldDataProvider(), MeteorShieldBlock.class);
 		
 		MeteorsMod.log.info("Waila mod found. Waila integration enabled.");
 		

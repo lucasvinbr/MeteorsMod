@@ -4,17 +4,17 @@ import net.meteor.common.MeteorsMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
-public class BlockMeteorsMod extends Block
+import java.util.Random;
+
+public class MeteorsBaseBlock extends Block
 {
-	public BlockMeteorsMod(Material par2Material)
+
+	protected static final Random RANDOM = new Random();
+
+	public MeteorsBaseBlock(Material par2Material)
 	{
 		super(par2Material);
 		this.setCreativeTab(MeteorsMod.meteorTab);
-	}
-	
-	@Override
-	public Block setBlockTextureName(String s) {
-		return super.setBlockTextureName(MeteorsMod.MOD_ID + ":" + s);
 	}
 
 }

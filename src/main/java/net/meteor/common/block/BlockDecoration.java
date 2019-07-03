@@ -11,7 +11,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockDecoration extends BlockMeteorsMod {
+public class BlockDecoration extends MeteorsBaseBlock {
 	
 	private String[] blockTextureNames;
 	private IIcon[] icons;

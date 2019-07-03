@@ -4,8 +4,8 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.SpecialChars;
-import net.meteor.common.block.BlockFrezarite;
-import net.meteor.common.block.BlockMeteor;
+import net.meteor.common.block.FreezariteBlock;
+import net.meteor.common.block.MeteorBlock;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -29,13 +29,13 @@ public class MeteorDataProvider implements IWailaDataProvider {
 			
 			String tip = "Temperature: ";
 			
-			if (accessor.getBlock() instanceof BlockMeteor) {
+			if (accessor.getBlock() instanceof MeteorBlock) {
 				if (accessor.getMetadata() != 0) {
 					tip += SpecialChars.RED + "Burning Hot";
 				} else {
 					tip += SpecialChars.WHITE + "Cooled";
 				}
-			} else if (accessor.getBlock() instanceof BlockFrezarite) {
+			} else if (accessor.getBlock() instanceof FreezariteBlock) {
 				tip += SpecialChars.AQUA + "Freezing Cold";
 			}
 			

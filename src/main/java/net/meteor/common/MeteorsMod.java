@@ -16,10 +16,15 @@ import net.meteor.common.entity.EntityComet;
 import net.meteor.common.entity.EntityCometKitty;
 import net.meteor.common.entity.EntityMeteor;
 import net.meteor.common.entity.EntitySummoner;
+import net.meteor.common.item.ItemBlockMeteorsMod;
+import net.meteor.common.item.ItemBlockMeteorsModMetadata;
+import net.meteor.common.item.ItemBlockSlippery;
 import net.meteor.plugin.baubles.Baubles;
 import net.meteor.plugin.thaumcraft.Thaumcraft;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -29,13 +34,16 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.MinecraftForge;
 
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid=MeteorsMod.MOD_ID, name=MeteorsMod.MOD_NAME, version=MeteorsMod.VERSION, dependencies="after:Waila;after:Baubles;after:Thaumcraft")
@@ -137,6 +145,14 @@ public class MeteorsMod implements IWorldGenerator
 		MinecraftForge.EVENT_BUS.register(new HandlerPlayerBreakSpeed());
 		MinecraftForge.EVENT_BUS.register(new HandlerWorld());
 		MinecraftForge.EVENT_BUS.register(new TooltipProvider());
+		// Ore Dictionary
+		OreDictionary.registerOre("oreMeteorite", MeteorBlocks.blockMeteorOre);
+		OreDictionary.registerOre("oreFrezarite", MeteorBlocks.blockFrezariteOre);
+		// TODO - investigate whether this is correct for decoration blocks, I've yet to work on making this stateful
+		OreDictionary.registerOre("blockMeteorite", new ItemStack(MeteorBlocks.blockDecorator, 1, 0));
+		OreDictionary.registerOre("blockFrezarite", new ItemStack(MeteorBlocks.blockDecorator, 1, 1));
+		OreDictionary.registerOre("blockKreknorite", new ItemStack(MeteorBlocks.blockDecorator, 1, 2));
+		OreDictionary.registerOre("blockRedMeteorGem", MeteorBlocks.blockRedMeteorGem);
 		FMLCommonHandler.instance().bus().register(recipeHandler);
 		FMLCommonHandler.instance().bus().register(achHandler);
 		GameRegistry.registerFuelHandler(recipeHandler);
@@ -213,6 +229,30 @@ public class MeteorsMod implements IWorldGenerator
 		evt.registerServerCommand(new CommandDebugMeteors());
 		evt.registerServerCommand(new CommandSpawnMeteor());
 		evt.registerServerCommand(new CommandSpawnComet());
+	}
+
+	@SubscribeEvent
+	public void registerBlocks(RegistryEvent.Register<Block> event) {
+		event.getRegistry().register(MeteorBlocks.blockMeteorOre);
+		event.getRegistry().register(MeteorBlocks.blockMeteor);
+		event.getRegistry().register(MeteorBlocks.blockRareMeteor);
+		event.getRegistry().register(MeteorBlocks.blockMeteorShield);
+		event.getRegistry().register(MeteorBlocks.torchMeteorShieldActive);
+		event.getRegistry().register(MeteorBlocks.blockFrezarite);
+		event.getRegistry().register(MeteorBlocks.blockKreknorite);
+		event.getRegistry().register(MeteorBlocks.blockMeteorTimer);
+		event.getRegistry().register(MeteorBlocks.blockRedMeteorGem);
+		event.getRegistry().register(MeteorBlocks.blockDecorator);
+		event.getRegistry().register(MeteorBlocks.blockFreezer);
+		event.getRegistry().register(MeteorBlocks.blockSlippery);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyTwo);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyThree);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyFour);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairs);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsTwo);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsThree);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsFour);
+		event.getRegistry().register(MeteorBlocks.blockFrezariteOre);
 	}
 
 	private void registerEntities() {
