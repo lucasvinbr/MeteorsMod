@@ -16,15 +16,11 @@ import net.meteor.common.entity.EntityComet;
 import net.meteor.common.entity.EntityCometKitty;
 import net.meteor.common.entity.EntityMeteor;
 import net.meteor.common.entity.EntitySummoner;
-import net.meteor.common.item.ItemBlockMeteorsMod;
-import net.meteor.common.item.ItemBlockMeteorsModMetadata;
-import net.meteor.common.item.ItemBlockSlippery;
 import net.meteor.plugin.baubles.Baubles;
 import net.meteor.plugin.thaumcraft.Thaumcraft;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -149,13 +145,13 @@ public class MeteorsMod implements IWorldGenerator
 		MinecraftForge.EVENT_BUS.register(new HandlerWorld());
 		MinecraftForge.EVENT_BUS.register(new TooltipProvider());
 		// Ore Dictionary
-		OreDictionary.registerOre("oreMeteorite", MeteorBlocks.blockMeteorOre);
-		OreDictionary.registerOre("oreFrezarite", MeteorBlocks.blockFrezariteOre);
+		OreDictionary.registerOre("oreMeteorite", MeteorBlocks.METEOR_ORE);
+		OreDictionary.registerOre("oreFrezarite", MeteorBlocks.FREEZARITE_ORE);
 		// TODO - investigate whether this is correct for decoration blocks, I've yet to work on making this stateful
-		OreDictionary.registerOre("blockMeteorite", new ItemStack(MeteorBlocks.blockDecorator, 1, 0));
-		OreDictionary.registerOre("blockFrezarite", new ItemStack(MeteorBlocks.blockDecorator, 1, 1));
-		OreDictionary.registerOre("blockKreknorite", new ItemStack(MeteorBlocks.blockDecorator, 1, 2));
-		OreDictionary.registerOre("blockRedMeteorGem", MeteorBlocks.blockRedMeteorGem);
+		OreDictionary.registerOre("blockMeteorite", MeteorBlocks.DECORATOR_METEORITE);
+		OreDictionary.registerOre("blockFrezarite", MeteorBlocks.DECORATOR_FREEZARITE);
+		OreDictionary.registerOre("blockKreknorite", MeteorBlocks.DECORATOR_KREKNORITE);
+		OreDictionary.registerOre("blockRedMeteorGem", MeteorBlocks.RED_METEOR_GEM);
 		FMLCommonHandler.instance().bus().register(recipeHandler);
 		FMLCommonHandler.instance().bus().register(achHandler);
 		GameRegistry.registerFuelHandler(recipeHandler);
@@ -236,17 +232,19 @@ public class MeteorsMod implements IWorldGenerator
 
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		event.getRegistry().register(MeteorBlocks.blockMeteorOre);
-		event.getRegistry().register(MeteorBlocks.blockMeteor);
-		event.getRegistry().register(MeteorBlocks.blockRareMeteor);
-		event.getRegistry().register(MeteorBlocks.blockMeteorShield);
-		event.getRegistry().register(MeteorBlocks.torchMeteorShieldActive);
-		event.getRegistry().register(MeteorBlocks.blockFrezarite);
-		event.getRegistry().register(MeteorBlocks.blockKreknorite);
-		event.getRegistry().register(MeteorBlocks.blockMeteorTimer);
-		event.getRegistry().register(MeteorBlocks.blockRedMeteorGem);
-		event.getRegistry().register(MeteorBlocks.blockDecorator);
-		event.getRegistry().register(MeteorBlocks.blockFreezer);
+		event.getRegistry().register(MeteorBlocks.METEOR_ORE);
+		event.getRegistry().register(MeteorBlocks.METEOR);
+		event.getRegistry().register(MeteorBlocks.RARE_METEOR);
+		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD);
+		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD_TORCH);
+		event.getRegistry().register(MeteorBlocks.FREEZARITE);
+		event.getRegistry().register(MeteorBlocks.KRENKONITE);
+		event.getRegistry().register(MeteorBlocks.METEOR_TIMER);
+		event.getRegistry().register(MeteorBlocks.RED_METEOR_GEM);
+		event.getRegistry().register(MeteorBlocks.DECORATOR_FREEZARITE);
+		event.getRegistry().register(MeteorBlocks.DECORATOR_KREKNORITE);
+		event.getRegistry().register(MeteorBlocks.DECORATOR_METEORITE);
+		event.getRegistry().register(MeteorBlocks.FREEZER);
 		event.getRegistry().register(MeteorBlocks.blockSlippery);
 		event.getRegistry().register(MeteorBlocks.blockSlipperyTwo);
 		event.getRegistry().register(MeteorBlocks.blockSlipperyThree);
@@ -255,7 +253,7 @@ public class MeteorsMod implements IWorldGenerator
 		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsTwo);
 		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsThree);
 		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsFour);
-		event.getRegistry().register(MeteorBlocks.blockFrezariteOre);
+		event.getRegistry().register(MeteorBlocks.FREEZARITE_ORE);
 	}
 
 	private void registerEntities() {
@@ -298,7 +296,7 @@ public class MeteorsMod implements IWorldGenerator
 				int randX = x + rand.nextInt(16);
 				int randY = rand.nextInt(16) + 6;
 				int randZ = z + rand.nextInt(16);
-				(new WorldGenMinable(MeteorBlocks.blockMeteorOre.getDefaultState(), this.oreGenSize)).generate(world, rand, new BlockPos(randX, randY, randZ));
+				(new WorldGenMinable(MeteorBlocks.METEOR_ORE.getDefaultState(), this.oreGenSize)).generate(world, rand, new BlockPos(randX, randY, randZ));
 			}
 			
 			for (int i = 0; i < this.chunkChecks; i++) {
@@ -306,7 +304,7 @@ public class MeteorsMod implements IWorldGenerator
 				int randY = rand.nextInt(20) + 32;
 				int randZ = z + rand.nextInt(16);
 				if (world.getBiomeForCoordsBody(new BlockPos(randX, 0, randZ)).getDefaultTemperature() <= 0.15F) {
-					(new WorldGenMinable(MeteorBlocks.blockFrezariteOre.getDefaultState(), this.oreGenSize)).generate(world, rand, new BlockPos(randX, randY, randZ));
+					(new WorldGenMinable(MeteorBlocks.FREEZARITE_ORE.getDefaultState(), this.oreGenSize)).generate(world, rand, new BlockPos(randX, randY, randZ));
 				}
 			}
 		}

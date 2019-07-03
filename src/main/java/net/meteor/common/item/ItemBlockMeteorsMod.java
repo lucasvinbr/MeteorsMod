@@ -6,7 +6,6 @@ import net.meteor.common.MeteorBlocks;
 import net.meteor.common.MeteorsMod;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,7 @@ public class ItemBlockMeteorsMod extends ItemBlock
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (this == Item.getItemFromBlock(MeteorBlocks.torchMeteorShieldActive)) {
+		if (this == Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD_TORCH)) {
 			tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal("ProtectionTorch.usage"));
 		}
 	}

@@ -13,7 +13,7 @@ public class RareFallenHotMeteorBlock extends HotMeteorBlock {
 
     @Override
     protected IBlockState getCooledBlockState() {
-        return MeteorBlocks.blockRareMeteor.getDefaultState();
+        return MeteorBlocks.RARE_METEOR.getDefaultState();
     }
 
     @Override

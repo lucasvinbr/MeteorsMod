@@ -24,12 +24,13 @@ import java.util.Random;
 
 public class MeteorShieldTorchBlock extends BlockTorch {
 
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    private final boolean isActive;
 
-    public MeteorShieldTorchBlock() {
+    // TODO - investigate whether we need the active differential
+    public MeteorShieldTorchBlock(boolean active) {
         super();
         setTickRandomly(true);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(ACTIVE, true));
+        this.isActive = active;
         this.setHardness(0.0F).setLightLevel(0.5F);
         this.setSoundType(SoundType.WOOD);
     }
@@ -52,23 +53,23 @@ public class MeteorShieldTorchBlock extends BlockTorch {
     private void checkArea(World world, BlockPos pos, IBlockState state) {
         final HandlerMeteor handlerMeteor = MeteorsMod.proxy.metHandlers.get(world.provider.getDimension());
         boolean isSafeChunk = handlerMeteor.getShieldManager().getClosestShieldInRange(pos.getX(), pos.getZ()) != null;
-        if (state.getValue(ACTIVE)) {
+        if (this.isActive) {
             if (!isSafeChunk) {
-                world.setBlockState(pos, state.withProperty(ACTIVE, false), Constants.BlockFlags.DEFAULT);
+                world.setBlockState(pos, MeteorBlocks.METEOR_SHIELD_TORCH_INACTIVE.getDefaultState().withProperty(FACING, state.getValue(FACING)), Constants.BlockFlags.DEFAULT);
             }
         } else if (isSafeChunk) {
-            world.setBlockState(pos, state.withProperty(ACTIVE, true), Constants.BlockFlags.DEFAULT);
+            world.setBlockState(pos, MeteorBlocks.METEOR_SHIELD_TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)), Constants.BlockFlags.DEFAULT);
         }
     }
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(MeteorBlocks.torchMeteorShieldActive);
+        return Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD_TORCH);
     }
 
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        if (state.getValue(ACTIVE)) {
+        if (this.isActive) {
             checkArea(worldIn, pos, state);
         }
         super.onBlockAdded(worldIn, pos, state);

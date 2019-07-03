@@ -3,7 +3,6 @@ package net.meteor.common.block;
 import net.meteor.common.MeteorBlocks;
 import net.meteor.common.util.MeteorConstants;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -38,8 +37,7 @@ public class HotMeteorBlock extends MeteorBlock {
     }
 
     @Override
-    protected BlockStateContainer createBlockState()
-    {
+    protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, HEAT);
     }
 
@@ -115,7 +113,7 @@ public class HotMeteorBlock extends MeteorBlock {
     }
 
     protected IBlockState getCooledBlockState() {
-        return MeteorBlocks.blockMeteor.getDefaultState();
+        return MeteorBlocks.METEOR.getDefaultState();
     }
 
     private void triggerLavaMixEffects(World world, BlockPos pos) {

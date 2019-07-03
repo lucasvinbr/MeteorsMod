@@ -12,11 +12,11 @@ import net.minecraft.util.text.translation.I18n;
 public enum EnumMeteor
 implements Serializable
 {
-	METEORITE(0, MeteorBlocks.blockMeteor, MeteorBlocks.blockRareMeteor, true, "met", TextFormatting.LIGHT_PURPLE, new ItemStack(MeteorBlocks.blockMeteor, 1, 1), MeteorBlocks.blockMeteor),
-	FREZARITE(1, MeteorBlocks.blockFrezarite, Blocks.ICE, false, "freza", TextFormatting.AQUA, new ItemStack(MeteorBlocks.blockFrezarite, 1, 1), MeteorBlocks.blockFrezarite),
-	KREKNORITE(2, MeteorBlocks.blockKreknorite, Blocks.LAVA, true, "krekno", TextFormatting.RED, new ItemStack(MeteorBlocks.blockKreknorite, 1, 1), MeteorBlocks.blockKreknorite),
+	METEORITE(0, MeteorBlocks.METEOR, MeteorBlocks.RARE_METEOR, true, "met", TextFormatting.LIGHT_PURPLE, new ItemStack(MeteorBlocks.METEOR, 1, 1), MeteorBlocks.METEOR),
+	FREZARITE(1, MeteorBlocks.FREEZARITE, Blocks.ICE, false, "freza", TextFormatting.AQUA, new ItemStack(MeteorBlocks.FREEZARITE, 1, 1), MeteorBlocks.FREEZARITE),
+	KREKNORITE(2, MeteorBlocks.KRENKONITE, Blocks.LAVA, true, "krekno", TextFormatting.RED, new ItemStack(MeteorBlocks.KRENKONITE, 1, 1), MeteorBlocks.KRENKONITE),
 	UNKNOWN(3, Blocks.AIR, Blocks.AIR, true, "unk", TextFormatting.GRAY, new ItemStack(Blocks.CHEST, 1), Blocks.GLOWSTONE),
-	KITTY(4, Blocks.AIR, Blocks.AIR, false, "kitty", TextFormatting.GREEN, new ItemStack(Items.FISH, 1), MeteorBlocks.blockMeteor),
+	KITTY(4, Blocks.AIR, Blocks.AIR, false, "kitty", TextFormatting.GREEN, new ItemStack(Items.FISH, 1), MeteorBlocks.METEOR),
 	CUSTOM(5, Blocks.AIR, Blocks.AIR, false, "custom", TextFormatting.GOLD, new ItemStack(Blocks.STONE, 1), Blocks.STONE);
 
 	private final int ID;

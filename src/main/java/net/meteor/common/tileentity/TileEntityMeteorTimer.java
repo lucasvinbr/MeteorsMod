@@ -88,7 +88,7 @@ public class TileEntityMeteorTimer extends TileEntity implements ITickable {
     private void updateMeta(int powerLevel) {
         if (lastPowerLevel != powerLevel) {
             this.getWorld().setBlockState(this.getPos(), this.getBlockType().getDefaultState().withProperty(MeteorTimerBlock.POWER, powerLevel), 3);
-            //this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, MeteorsMod.blockMeteorTimer.blockID);
+            //this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, MeteorsMod.METEOR_TIMER.blockID);
             lastPowerLevel = powerLevel;
         }
     }

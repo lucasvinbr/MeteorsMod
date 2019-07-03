@@ -3,9 +3,11 @@ package net.meteor.common.block;
 import net.meteor.common.ClientHandler;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.tileentity.TileEntityMeteorShield;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,12 +27,9 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-public class MeteorShieldBlock extends BlockContainerMeteorsMod implements ITileEntityProvider {
-
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+public class MeteorShieldBlock extends DirectionalContainerBlock {
 
     public MeteorShieldBlock() {
-        super(Material.ROCK);
         this.setLightOpacity(0);
         this.setHardness(2.5F);
         this.setSoundType(SoundType.METAL);
@@ -65,28 +64,9 @@ public class MeteorShieldBlock extends BlockContainerMeteorsMod implements ITile
         return new TileEntityMeteorShield();
     }
 
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX,
-        float hitY, float hitZ) {
-        player.openGui(MeteorsMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
-        return true;
-    }
-
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        EnumFacing enumfacing = placer.getHorizontalFacing().getOpposite();
-        state = state.withProperty(FACING, enumfacing);
-        worldIn.setBlockState(pos, state, Constants.BlockFlags.DEFAULT);
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         if ((placer instanceof EntityPlayer)) {
             EntityPlayer player = (EntityPlayer) placer;
             if (!worldIn.isRemote) {
@@ -100,7 +80,16 @@ public class MeteorShieldBlock extends BlockContainerMeteorsMod implements ITile
                 worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), sound, SoundCategory.BLOCKS, 1.0F, 1.0F, true);
             }
         }
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+    }
+
+    /**
+     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
+     * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
 }

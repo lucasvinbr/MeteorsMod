@@ -61,8 +61,8 @@ public class ClientProxy extends CommonProxy
 
 		//TODO 1.12.2
 		/*
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockMeteorShield), new ShieldItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockMeteorTimer), new TimerItemRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD), new ShieldItemRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.METEOR_TIMER), new TimerItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlippery), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyTwo), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyThree), new SlipperyItemRenderer());

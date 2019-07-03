@@ -23,8 +23,8 @@ public class MeteorTimerBlock extends BlockContainerMeteorsMod {
 		super(Material.REDSTONE_LIGHT);
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.WOOD);
-
-		// TODO - figure out this
+		this.setDefaultState(this.blockState.getBaseState().withProperty(POWER, 0));
+		// TODO - figure out this bit, not sure how it's supposed to work
 //		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 	}
 

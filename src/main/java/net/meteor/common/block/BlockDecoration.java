@@ -1,26 +1,18 @@
 package net.meteor.common.block;
 
-import java.util.List;
-
-import net.meteor.common.MeteorsMod;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockDecoration extends MeteorsBaseBlock {
-	
-	private String[] blockTextureNames;
-	//private IIcon[] icons;
 
-	public BlockDecoration(String... textures) {
+	public BlockDecoration(String textures) {
 		super(Material.IRON);
-		this.blockTextureNames = textures;
+		this.setRegistryName(textures);
+		this.setHardness(5.0F).setResistance(10.0F);
+		this.setSoundType(SoundType.METAL);
 	}
 
 	//TODO 1.12.2
@@ -30,7 +22,7 @@ public class BlockDecoration extends MeteorsBaseBlock {
     {
 		return meta >= this.icons.length ? null : this.icons[meta];
     }
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg)
@@ -40,7 +32,7 @@ public class BlockDecoration extends MeteorsBaseBlock {
 			icons[i] = reg.registerIcon(MeteorsMod.MOD_ID + ":" + blockTextureNames[i]);
 		}
     }*/
-	
+
 	/**
      * Determines the damage on the item the block drops. Used in cloth and wood.
      */
@@ -62,9 +54,8 @@ public class BlockDecoration extends MeteorsBaseBlock {
     }
 	*/
 
-	@Override
-    public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon)
-    {
+    @Override
+    public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon) {
         return true;
     }
 

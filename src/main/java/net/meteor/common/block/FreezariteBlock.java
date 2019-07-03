@@ -6,6 +6,7 @@ import net.meteor.common.util.MeteorDamageSources;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -95,6 +96,11 @@ public class FreezariteBlock extends MeteorsBaseBlock {
         entityIn.attackEntityFrom(MeteorDamageSources.FROZEN_FLOOR, 1.0F * (blockState.getValue(FROZEN_LEVEL) + 1));
 
         super.onEntityWalk(worldIn, pos, entityIn);
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FROZEN_LEVEL);
     }
 
     @Override
