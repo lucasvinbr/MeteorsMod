@@ -42,6 +42,16 @@ public class HotMeteorBlock extends MeteorBlock {
     }
 
     @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(HEAT, meta);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(HEAT);
+    }
+
+    @Override
     public int getLightValue(IBlockState state) {
         return Math.max(2, Math.min(state.getValue(HEAT) * 2, MeteorConstants.MAXIMUM_LIGHT_VALUE));
     }

@@ -234,6 +234,8 @@ public class MeteorsMod implements IWorldGenerator
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
 		event.getRegistry().register(MeteorBlocks.METEOR_ORE);
 		event.getRegistry().register(MeteorBlocks.METEOR);
+		event.getRegistry().register(MeteorBlocks.HOT_METEOR);
+		event.getRegistry().register(MeteorBlocks.HOT_RARE_METEOR);
 		event.getRegistry().register(MeteorBlocks.RARE_METEOR);
 		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD);
 		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD_TORCH);
