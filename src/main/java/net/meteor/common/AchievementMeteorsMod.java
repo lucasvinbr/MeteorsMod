@@ -1,15 +1,11 @@
 package net.meteor.common;
 
 import net.minecraft.advancements.Advancement;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.Achievement;
 
-public class AchievementMeteorsMod extends Advancement
+public class AchievementMeteorsMod // extends Advancement
 {
-
+//TODO 1.12.2
+	/*
 	public AchievementMeteorsMod(String par1, String par2Str, int par3, int par4, Item par5Item, Advancement par6Achievement)
 	{
 		this(par1, par2Str, par3, par4, new ItemStack(par5Item), par6Achievement);
@@ -28,5 +24,5 @@ public class AchievementMeteorsMod extends Advancement
 		tag.setBoolean("enchant-set", true);
 		par5ItemStack.setTagCompound(tag);
 	}
-	
+	*/
 }

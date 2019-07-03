@@ -136,11 +136,11 @@ public class FreezerRecipes {
 				res.setTagCompound(nbt);
 				return res;
 				
-			} else if (block.getRenderType() == 10) {
+			} /*else if (block.getRenderType() == 10) {//TODO 1.12.2
 				
 				res = new ItemStack(MeteorBlocks.blockSlipperyStairs, 1, neededItem.getItemDamage());
 				
-			}
+			}*/
 			
 			NBTTagCompound nbt = res.hasTagCompound() ? res.getTagCompound() : new NBTTagCompound();
 			nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(block).toString());

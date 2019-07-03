@@ -16,9 +16,9 @@ import javax.annotation.Nullable;
 
 public class ItemFrezariteAxe extends ItemAxe
 {
-	public ItemFrezariteAxe(Item.ToolMaterial toolMaterial)
+	public ItemFrezariteAxe(Item.ToolMaterial toolMaterial, float damage, float speed)
 	{
-		super(toolMaterial);
+		super(toolMaterial, damage, speed);
 		this.setCreativeTab(MeteorsMod.meteorTab);
 	}
 

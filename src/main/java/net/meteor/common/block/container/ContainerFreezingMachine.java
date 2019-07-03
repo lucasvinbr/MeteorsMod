@@ -49,7 +49,7 @@ public class ContainerFreezingMachine extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return iceMaker.isUseableByPlayer(player);
+		return iceMaker.isUsableByPlayer(player);
 	}
 
 	@Override

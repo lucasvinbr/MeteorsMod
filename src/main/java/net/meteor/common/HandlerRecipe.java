@@ -15,20 +15,21 @@ public class HandlerRecipe implements IFuelHandler {
 	@SubscribeEvent
 	public void onCrafting(PlayerEvent.ItemCraftedEvent event)
 	{
+		//TODO 1.12.2 stats
 		Item item = event.crafting.getItem();
 		EntityPlayer player = event.player;
 		if (item == Item.getItemFromBlock(MeteorBlocks.blockMeteorShield)) {
-			player.addStat(HandlerAchievement.shieldCrafted, 1);
+			//player.addStat(HandlerAchievement.shieldCrafted, 1);
 		} else if (item == MeteorItems.KreknoriteSword) {
-			player.addStat(HandlerAchievement.craftedKreknoSword, 1);
+			//player.addStat(HandlerAchievement.craftedKreknoSword, 1);
 		} else if (item == MeteorItems.itemMeteorProximityDetector ||
 				   item == MeteorItems.itemMeteorTimeDetector ||
 				   item == MeteorItems.itemMeteorCrashDetector) {
-			player.addStat(HandlerAchievement.craftedDetector, 1);
+			//player.addStat(HandlerAchievement.craftedDetector, 1);
 		} else if (item == Item.getItemFromBlock(MeteorBlocks.blockMeteorTimer)) {
-			player.addStat(HandlerAchievement.craftedMeteorTimer, 1);
+			//player.addStat(HandlerAchievement.craftedMeteorTimer, 1);
 		} else if (item == Item.getItemFromBlock(MeteorBlocks.blockFreezer)) {
-			player.addStat(HandlerAchievement.craftedFreezer, 1);
+			//player.addStat(HandlerAchievement.craftedFreezer, 1);
 		}
 			
 	}

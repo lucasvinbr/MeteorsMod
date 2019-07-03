@@ -5,6 +5,7 @@ package net.meteor.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -180,6 +181,8 @@ public class SBAPI {
 	 * @param mData		Metadata of block to be placed. Useful for rotations and different textures of blocks.
 	 */
 	public static void placeBlock(World world, int x, int y, int z, Block block, int mData) {
+		//TODO 1.12.2
+		/*
 		if (block == Blocks.OAK_DOOR) {
 			if (mData >= TopOfDoor) {
 				if (world.getBlock(x, y - 1, z) != block) {
@@ -232,8 +235,9 @@ public class SBAPI {
 					}
 				}
 			}
-		}
-		world.setBlock(x, y, z, block, mData, 3);
+		}*/
+		//TODO 1.12.2 meta / change to schematic
+		world.setBlockState(new BlockPos(x, y, z), block.getDefaultState(), 3);
 	}
 
 	/** Place block at defined coordinates. Has support for automatic placing of the second block of Doors and Beds.

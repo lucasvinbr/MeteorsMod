@@ -7,37 +7,43 @@ import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvider {
 
 	public BlockSlipperyStairs(float slipperiness) {
-		super(Blocks.PACKED_ICE, 0);
+		super(Blocks.PACKED_ICE.getDefaultState());
 		this.slipperiness = slipperiness;
 		this.setCreativeTab(null);
+		setSoundType(SoundType.GLASS);
 	}
 
 	@Override
-    public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
+	public void breakBlock(World world, BlockPos pos, IBlockState state)
     {
-        super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
-        p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+        super.breakBlock(world, pos, state);
+        world.removeTileEntity(pos);
     }
 
     @Override
-    public boolean onBlockEventReceived(World p_149696_1_, int p_149696_2_, int p_149696_3_, int p_149696_4_, int p_149696_5_, int p_149696_6_)
+	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param)
     {
-        super.onBlockEventReceived(p_149696_1_, p_149696_2_, p_149696_3_, p_149696_4_, p_149696_5_, p_149696_6_);
-        TileEntity tileentity = p_149696_1_.getTileEntity(p_149696_2_, p_149696_3_, p_149696_4_);
-        return tileentity != null ? tileentity.receiveClientEvent(p_149696_5_, p_149696_6_) : false;
+        super.eventReceived(state, worldIn, pos, id, param);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        return tileentity != null ? tileentity.receiveClientEvent(id, param) : false;
     }
 
 	@Override
@@ -50,7 +56,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
      * adjacent blocks and also whether the player can attach torches, REDSTONE wire, etc to this block.
      */
 	@Override
-    public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
     
@@ -58,55 +64,61 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
      * The type of render function that is called for this block
      */
 	@Override
-    public int getRenderType() {
-        return -1;
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
     
     /**
      * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
      */
-	@Override
+    //TODO 1.12.2
+/*	@Override
     public boolean renderAsNormalBlock() {
         return false;
-    }
+    }*/
 	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack item) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		
-		TileEntitySlippery tileEntity = (TileEntitySlippery) world.getTileEntity(x, y, z);
-		tileEntity.setFacadeBlockName(item.getTagCompound().getString(ItemBlockSlippery.FACADE_BLOCK_KEY));
+		TileEntitySlippery tileEntity = (TileEntitySlippery) world.getTileEntity(pos);
+		tileEntity.setFacadeBlockName(stack.getTagCompound().getString(ItemBlockSlippery.FACADE_BLOCK_KEY));
 		tileEntity.markDirty();
 		
-		super.onBlockPlacedBy(world, x, y, z, entity, item);
+		super.onBlockPlacedBy(world, pos, state, placer, stack);
 	}
 	
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		if (!world.isRemote && !player.capabilities.isCreativeMode) {
-			TileEntitySlippery teSlippery = (TileEntitySlippery) world.getTileEntity(x, y, z);
+			//TODO 1.12.2 kill meta
+/*
+			TileEntitySlippery teSlippery = (TileEntitySlippery) world.getTileEntity(pos);
 			ItemStack slipItem = new ItemStack(this, 1, teSlippery.getFacadeBlock().damageDropped(world.getBlockMetadata(x, y, z)));
 	    	NBTTagCompound nbt = slipItem.hasTagCompound() ? slipItem.getTagCompound() : new NBTTagCompound();
 	    	nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, teSlippery.getFacadeBlockName());
 	    	slipItem.setTagCompound(nbt);
-	    	this.dropBlockAsItem(world, x, y, z, slipItem);
+	    	this.dropBlockAsItem(world, pos, slipItem);
+*/
 		}
-    	return super.removedByPlayer(world, player, x, y, z, willHarvest);
+    	return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 	
 	@Override
-	public int quantityDropped(int meta, int fortune, Random random) {
+	public int quantityDropped(IBlockState state, int fortune, Random random) {
 		return 0;
 	}
 	
 	@Override
-	public ItemStack getPickBlock(RayTraceResult target, World world, int x, int y, int z, EntityPlayer player) {
-		Item item = getItem(world, x, y, z);
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		Item item = getItem(world, pos, state).getItem();
 
-        if (item == null)
+        if (item == Items.AIR)
         {
             return null;
         }
-        
+
+        //TODO 1.12.2, kill meta
+		/*
         BlockSlipperyStairs block = (BlockSlipperyStairs)world.getBlock(x, y, z);
         ItemStack stack = new ItemStack(item, 1, block.getDamageValue(world, x, y, z));
         NBTTagCompound nbt = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
@@ -114,6 +126,8 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 		nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, tileEntity.getFacadeBlockName());
 		stack.setTagCompound(nbt);
 		return stack;
+	*/
+		return null;
 	}
 	
 }

@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class HandlerAchievement
 {
+	//TODO 1.12.2
+	/*
 	public static final Achievement materialGather = new AchievementMeteorsMod("metMaterialGather", "materialGather", 0, 0, MeteorItems.itemMeteorChips, null).registerStat();
 	public static final Achievement meteorManipulator = new AchievementMeteorsMod("metMeteorManipulator", "meteorManipulator", 2, 0, MeteorItems.itemRedMeteorGem, null).registerStat();
 	public static final Achievement shieldCrafted = new AchievementMeteorsMod("metShieldCrafted", "shieldCrafted", -2, 2, MeteorBlocks.blockMeteorShield, materialGather).registerStat();
@@ -57,5 +59,5 @@ public class HandlerAchievement
 			}
 		}
 			
-	}
+	}*/
 }

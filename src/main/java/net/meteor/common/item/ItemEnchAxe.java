@@ -12,9 +12,9 @@ public class ItemEnchAxe extends ItemAxe
 	protected Enchantment enchantment;
 	protected int level;
 
-	public ItemEnchAxe(Item.ToolMaterial toolMaterial)
+	public ItemEnchAxe(Item.ToolMaterial toolMaterial, float damage, float speed)
 	{
-		super(toolMaterial);
+		super(toolMaterial, damage, speed);
 		this.setCreativeTab(MeteorsMod.meteorTab);
 	}
 

@@ -43,11 +43,14 @@ public class SlotTakeOnly extends Slot {
 		
 		if (item != null && this.thePlayer != null) {
 			if (item.getItem() == Item.getItemFromBlock(Blocks.ICE)) {
-				this.thePlayer.addStat(HandlerAchievement.freezeWater, 1);
+				//TODO 1.12.2
+				//this.thePlayer.addStat(HandlerAchievement.freezeWater, 1);
 			} else if (item.getItem() == Item.getItemFromBlock(Blocks.PACKED_ICE)) {
-				this.thePlayer.addStat(HandlerAchievement.freezeIce, 1);
+				//TODO 1.12.2
+				//this.thePlayer.addStat(HandlerAchievement.freezeIce, 1);
 			} else if (Block.getBlockFromItem(item.getItem()) instanceof BlockSlippery || Block.getBlockFromItem(item.getItem()) instanceof BlockSlipperyStairs) {
-				this.thePlayer.addStat(HandlerAchievement.freezeBlocks, 1);
+				//TODO 1.12.2
+				//this.thePlayer.addStat(HandlerAchievement.freezeBlocks, 1);
 			}
 		}
 		
@@ -57,7 +60,7 @@ public class SlotTakeOnly extends Slot {
 	@Override
 	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
 		this.onCrafting(itemStack);
-		super.onTake(player, itemStack);
+		return super.onTake(player, itemStack);
     }
 
 }

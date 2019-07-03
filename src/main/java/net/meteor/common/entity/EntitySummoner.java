@@ -132,7 +132,8 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 			if (canHit) {
 				if (player != null) {
 					player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorSummoner.incomingMeteor"), TextFormatting.LIGHT_PURPLE));
-					player.triggerAchievement(HandlerAchievement.summonMeteor);
+					//TODO 1.12.2
+					//player.triggerAchievement(HandlerAchievement.summonMeteor);
 				}
 				EntityMeteor meteorToSpawn = new EntityMeteor(this.getEntityWorld(), HandlerMeteor.getMeteorSize(), this.posX, this.posZ, EnumMeteor.getTypeFromID(this.mID), true);
 				this.getEntityWorld().spawnEntity(meteorToSpawn);

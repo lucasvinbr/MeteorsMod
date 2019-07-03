@@ -77,7 +77,8 @@ public class HandlerMeteor
 							EntityPlayer player = theWorld.getPlayerEntityByName(owner);
 							if (player != null) {
 								player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
-								player.addStat(HandlerAchievement.meteorBlocked, 1);
+								//TODO 1.12.2
+								//player.addStat(HandlerAchievement.meteorBlocked, 1);
 							}
 							shieldManager.sendMeteorMaterialsToShield(shield, gMeteor);
 						} else if (gMeteor.type == EnumMeteor.KITTY) {
@@ -115,7 +116,8 @@ public class HandlerMeteor
 						EntityPlayer playerOwner = theWorld.getPlayerEntityByName(owner);
 						if (playerOwner != null) {
 							playerOwner.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
-							playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
+							//TODO 1.12.2
+							//playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
 						}
 						shieldManager.sendMeteorMaterialsToShield(shield, new GhostMeteor(x, z, 1, 0, EnumMeteor.KITTY));
 					} else {
@@ -124,7 +126,8 @@ public class HandlerMeteor
 						this.theWorld.spawnEntity(fKitty);
 					}
 				}
-				player.addStat(HandlerAchievement.kittyEvent, 1);
+				//TODO 1.12.2
+				//player.addStat(HandlerAchievement.kittyEvent, 1);
 			}	
 		}
 	}
@@ -155,7 +158,8 @@ public class HandlerMeteor
 			AxisAlignedBB aabb = new AxisAlignedBB(x - 60D, 0, z - 60D, x + 60D, theWorld.getHeight(), z + 60D);
 			List<EntityPlayer> players = this.theWorld.getEntitiesWithinAABB(EntityPlayer.class, aabb);
 			for (EntityPlayer player : players) {
-				player.addStat(HandlerAchievement.foundMeteor, 1);
+				//TODO 1.12.2
+				//player.addStat(HandlerAchievement.foundMeteor, 1);
 			}
 		}
 	}

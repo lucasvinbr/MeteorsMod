@@ -57,7 +57,8 @@ public class EntityCometKitty extends EntityOcelot
 		super.setOwnerId(uuid);
 		EntityPlayer player = this.getEntityWorld().getPlayerEntityByUUID(uuid);
 		if (player != null) {
-			player.addStat(HandlerAchievement.kittyTame, 1);
+			//TODO 1.12.2
+			//player.addStat(HandlerAchievement.kittyTame, 1);
 		}
 	}
 	

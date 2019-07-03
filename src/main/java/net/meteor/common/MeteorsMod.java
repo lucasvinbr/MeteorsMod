@@ -31,6 +31,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -105,7 +106,8 @@ public class MeteorsMod implements IWorldGenerator
 		loadStaticConfigurationValues();
 		
 		MeteorBlocks.registerBlocks();
-		MeteorItems.registerItems();
+		//TODO 1.12.2 should be registered by event
+		//MeteorItems.registerItems();
 		MeteorItems.readyItems();
 		loadPlugins();
 		
@@ -139,7 +141,8 @@ public class MeteorsMod implements IWorldGenerator
 
 		this.playerTickHandler = new HandlerPlayerTick();
 
-		this.achHandler.readyAchievements();
+		//TODO 1.12.2
+		//this.achHandler.readyAchievements();
 		proxy.loadStuff();
 
 		MinecraftForge.EVENT_BUS.register(new HandlerPlayerBreakSpeed());
@@ -286,7 +289,7 @@ public class MeteorsMod implements IWorldGenerator
 	}
 
 	@Override
-	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
+	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider)
 	{
 		if ((chunkGenerator instanceof ChunkProviderServer)) {//TODO 1.12.2 verify this is right
 			int x = chunkX << 4;
@@ -295,7 +298,7 @@ public class MeteorsMod implements IWorldGenerator
 				int randX = x + rand.nextInt(16);
 				int randY = rand.nextInt(16) + 6;
 				int randZ = z + rand.nextInt(16);
-				(new WorldGenMinable(MeteorBlocks.blockMeteorOre.getDefaultState(), this.oreGenSize)).generate(world, rand, randX, randY, randZ);
+				(new WorldGenMinable(MeteorBlocks.blockMeteorOre.getDefaultState(), this.oreGenSize)).generate(world, rand, new BlockPos(randX, randY, randZ));
 			}
 			
 			for (int i = 0; i < this.chunkChecks; i++) {
@@ -303,7 +306,7 @@ public class MeteorsMod implements IWorldGenerator
 				int randY = rand.nextInt(20) + 32;
 				int randZ = z + rand.nextInt(16);
 				if (world.getBiomeForCoordsBody(new BlockPos(randX, 0, randZ)).getDefaultTemperature() <= 0.15F) {
-					(new WorldGenMinable(MeteorBlocks.blockFrezariteOre.getDefaultState(), this.oreGenSize)).generate(world, rand, randX, randY, randZ);
+					(new WorldGenMinable(MeteorBlocks.blockFrezariteOre.getDefaultState(), this.oreGenSize)).generate(world, rand, new BlockPos(randX, randY, randZ));
 				}
 			}
 		}

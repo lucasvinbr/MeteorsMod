@@ -1,11 +1,10 @@
 package net.meteor.common;
 
-import net.minecraft.stats.Achievement;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.common.AchievementPage;
 
-public class AchPageMeteorsMod extends AchievementPage
+public class AchPageMeteorsMod //extends AchievementPage
 {
+	//TODO 1.12.2
+/*
 	public AchPageMeteorsMod(String name, Achievement[] achievements)
 	{
 		super(name, achievements);
@@ -16,5 +15,6 @@ public class AchPageMeteorsMod extends AchievementPage
 	{
 		return I18n.translateToLocal(super.getName());
 	}
+*/
 
 }

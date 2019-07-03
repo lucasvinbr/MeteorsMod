@@ -46,7 +46,7 @@ public class ContainerMeteorShield extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return this.shield.isUseableByPlayer(entityplayer);
+		return this.shield.isUsableByPlayer(entityplayer);
 	}
 	
 	@Override

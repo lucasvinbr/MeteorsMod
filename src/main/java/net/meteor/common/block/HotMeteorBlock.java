@@ -3,7 +3,9 @@ package net.meteor.common.block;
 import net.meteor.common.MeteorBlocks;
 import net.meteor.common.util.MeteorConstants;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -33,6 +35,12 @@ public class HotMeteorBlock extends MeteorBlock {
         this.setTickRandomly(true);
         this.setHarvestLevel(MeteorConstants.PICKAXE_TOOL_ID, 2);
         this.setDefaultState(this.blockState.getBaseState().withProperty(HEAT, 0));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, HEAT);
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.meteor.common.item.ItemFrezariteSword;
 import net.meteor.common.item.ItemKreknoSword;
 import net.meteor.common.item.ItemMeteorsMod;
 import net.meteor.common.item.ItemSummoner;
+import net.meteor.common.util.MeteorConstants;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -54,7 +55,7 @@ public class MeteorItems {
 	public static final Item MeteoriteBody 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(MeteorsMod.Magnetization, 1)/*.setTexture("MeteoriteChest").setArmorTexture("Meteorite")*/.setRegistryName("MeteoriteChest");
 	public static final Item MeteoriteLegs 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(MeteorsMod.Magnetization, 1)/*.setTexture("MeteoriteLegs").setArmorTexture("Meteorite")*/.setRegistryName("MeteoriteLegs");
 	public static final Item MeteoriteBoots 			= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.FEET).setEnch(MeteorsMod.Magnetization, 1)/*.setTexture("MeteoriteBoots").setArmorTexture("Meteorite")*/.setRegistryName("MeteoriteBoots");
-	public static final Item MeteoriteAxe 				= new ItemEnchAxe(MeteoriteTool)/*.setTexture("MeteoriteAxe")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteAxe");
+	public static final Item MeteoriteAxe 				= new ItemEnchAxe(MeteoriteTool, MeteorConstants.MeteorTools.METEORITE_AXE_DAMAGE, MeteorConstants.MeteorTools.METEORITE_AXE_SPEED)/*.setTexture("MeteoriteAxe")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteAxe");
 	public static final Item MeteoriteSpade 			= new ItemEnchSpade(MeteoriteTool)./*setTexture("MeteoriteSpade").*/setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteSpade");
 	public static final Item MeteoriteSword 			= new ItemEnchSword(MeteoriteTool)/*.setTexture("MeteoriteSword")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteSword");
 	public static final Item MeteoritePickaxe 			= new ItemEnchPickaxe(MeteoriteTool)/*.setTexture("MeteoritePickaxe")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoritePickaxe");
@@ -66,7 +67,7 @@ public class MeteorItems {
 	public static final Item FrezaritePickaxe 			= new ItemFrezaritePickaxe(FrezariteTool)/*.setTexture("FrezaritePickaxe")*/.setRegistryName("FrezaritePickaxe");
 	public static final Item FrezariteSpade 			= new ItemFrezariteSpade(FrezariteTool)/*.setTexture("FrezariteSpade")*/.setRegistryName("FrezariteSpade");
 	public static final Item FrezariteSword 			= new ItemFrezariteSword(FrezariteTool)/*.setTexture("FrezariteSword")*/.setRegistryName("FrezariteSword");
-	public static final Item FrezariteAxe 				= new ItemFrezariteAxe(FrezariteTool)/*.setTexture("FrezariteAxe")*/.setRegistryName("FrezariteAxe");
+	public static final Item FrezariteAxe 				= new ItemFrezariteAxe(FrezariteTool, MeteorConstants.MeteorTools.FREZARITE_AXE_DAMAGE, MeteorConstants.MeteorTools.FREZARITE_AXE_SPEED)/*.setTexture("FrezariteAxe")*/.setRegistryName("FrezariteAxe");
 	public static final Item FrezariteHoe 				= new ItemFrezariteHoe(FrezariteTool)/*.setTexture("FrezariteHoe")*/.setRegistryName("FrezariteHoe");
 	public static final Item KreknoriteHelmet 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(Enchantments.FIRE_PROTECTION, 4)/*.setTexture("KreknoriteHelmet").setArmorTexture("Kreknorite")*/.setRegistryName("KreknoriteHelmet");
 	public static final Item KreknoriteBody 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(Enchantments.FIRE_PROTECTION, 4)/*.setTexture("KreknoriteChest").setArmorTexture("Kreknorite")*/.setRegistryName("KreknoriteChest");
