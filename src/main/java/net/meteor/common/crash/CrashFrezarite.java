@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.Random;
 
 import net.meteor.common.EnumMeteor;
+import net.meteor.common.ExplosionMeteor;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class CrashFrezarite extends CrashMeteorite
 {
-	public CrashFrezarite(int Size, Explosion expl, EnumMeteor metType)
+	public CrashFrezarite(int Size, ExplosionMeteor expl, EnumMeteor metType)
 	{
 		super(Size, expl, metType);
 	}

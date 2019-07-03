@@ -28,8 +28,9 @@ public class Baubles {
 		baublesLoaded = true;
 		MagnetismController = new ItemMagnetismController().setTranslationKey("MagnetizationController");// TODO 1.12.2 .setTextureName("MagnetizationController");
 		MagneticFieldDisruptor = new ItemMeteorsMod().setTranslationKey("MagneticFieldDisruptor");// TODO 1.12.2 .setTextureName("MagneticFieldDisruptor");
-		GameRegistry.registerItem(MagnetismController, "MagnetizationController");
-		GameRegistry.registerItem(MagneticFieldDisruptor, "MagneticFieldDisruptor");
+		//TODO 1.12.2
+		//GameRegistry.registerItem(MagnetismController, "MagnetizationController");
+		//GameRegistry.registerItem(MagneticFieldDisruptor, "MagneticFieldDisruptor");
 		
 		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MagneticFieldDisruptor, 1), "oro", "mdm", "omo", 'o', Blocks.OBSIDIAN, 'r', MeteorItems.itemRedMeteorGem,
 				'd', "gemDiamond", 'm', MeteorItems.MeteoriteIngot);

@@ -17,18 +17,11 @@ import javax.annotation.Nullable;
 
 public class ItemMetArmor extends ItemArmor
 {
-	
-	private String armorTex;
-	
-	public ItemMetArmor(ItemArmor.ArmorMaterial armorMaterial, int j, EntityEquipmentSlot slot)
+
+	public ItemMetArmor(ItemArmor.ArmorMaterial armorMaterial, int renderIndexIn, EntityEquipmentSlot slot)
 	{
-		super(armorMaterial, j, slot);
+		super(armorMaterial, renderIndexIn, slot);
 		this.setCreativeTab(MeteorsMod.meteorTab);
-	}
-	
-	public ItemMetArmor setArmorTexture(String tex) {
-		this.armorTex = tex;
-		return this;
 	}
 
 	//TODO 1.12.2

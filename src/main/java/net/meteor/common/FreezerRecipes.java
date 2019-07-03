@@ -143,7 +143,7 @@ public class FreezerRecipes {
 			}
 			
 			NBTTagCompound nbt = res.hasTagCompound() ? res.getTagCompound() : new NBTTagCompound();
-			nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(block));
+			nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(block).toString());
 			res.setTagCompound(nbt);
 			return res;
 		}

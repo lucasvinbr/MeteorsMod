@@ -5,7 +5,6 @@ import net.meteor.common.climate.GhostMeteor;
 import net.meteor.common.climate.HandlerMeteor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -76,8 +75,8 @@ public class TileEntityMeteorTimer extends TileEntity implements ITickable {
 
 	private void updateMeta(int meta) {
 		if (lastMeta != meta) {
-			this.getWorld().setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, meta, 3);
-			//this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, MeteorsMod.blockMeteorTimer.blockID);
+			//TODO 1.12.2, kill meta!
+			//this.getWorld().setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, meta, 3);
 			lastMeta = meta;
 		}
 	}
@@ -104,11 +103,8 @@ public class TileEntityMeteorTimer extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
+	public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound var1 = new NBTTagCompound();
-		writeToNBT(var1);
-		return new SPacketUpdateTileEntity(this.getPos(), 1, var1);
+		return writeToNBT(new NBTTagCompound());
 	}
-
 }

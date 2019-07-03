@@ -87,7 +87,7 @@ public class HandlerPlayerTick
 	}
 
 	public static int getMagnetizationLevel(EntityPlayer player) {
-		int enchLevel = Math.max(EnchantmentHelper.getMaxEnchantmentLevel(MeteorsMod.Magnetization, player.getLastActiveItems()), EnchantmentHelper.getEnchantmentLevel(MeteorsMod.Magnetization, player.getHeldItem(EnumHand.MAIN_HAND)));
+		int enchLevel = Math.max(EnchantmentHelper.getMaxEnchantmentLevel(MeteorsMod.Magnetization, player), EnchantmentHelper.getEnchantmentLevel(MeteorsMod.Magnetization, player.getHeldItem(EnumHand.MAIN_HAND)));
 		if (Baubles.isBaublesLoaded()) {
 			return Baubles.canAttractItems(player, enchLevel);
 		} else {

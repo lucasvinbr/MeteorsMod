@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -33,7 +32,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	private NonNullList<ItemStack> inv = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
 	private ItemStack lastKnownItem = null;
-	private FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
+	private FluidTank tank = new FluidTank(1000 * 10);//TODO 1.12.2
 	private RecipeType acceptedRecipeType = RecipeType.either;
 
 	public int cookTime;
@@ -109,11 +108,6 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return null;
-	}
-
-	@Override
 	public void setInventorySlotContents(int slot, ItemStack item) {
 		
 		this.inv.set(slot, item);
@@ -140,12 +134,13 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 						// Try to insert it into the bottom slot
 						ItemStack emptyContainer = null;
-						FluidContainerData[] containerData = FluidContainerRegistry.getRegisteredFluidContainerData();
-						for (FluidContainerData containerDatum : containerData) {
-							if (containerDatum.filledContainer.isItemEqual(item)) {
-								emptyContainer = containerDatum.emptyContainer.copy();
-							}
-						}
+						//TODO 1.12.2
+						//FluidContainerData[] containerData = FluidContainerRegistry.getRegisteredFluidContainerData();
+						//for (FluidContainerData containerDatum : containerData) {
+						//	if (containerDatum.filledContainer.isItemEqual(item)) {
+						//		emptyContainer = containerDatum.emptyContainer.copy();
+						//	}
+						//}
 
 						if (emptyContainer != null) {
 							if (inv.get(4) == ItemStack.EMPTY) {
@@ -168,8 +163,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			} else {
 				FluidStack fluidInTank = tank.getFluid();
 				if (fluidInTank != null) {
-					FluidUtil.tryFillContainer(item, tank, 1000, null, false);//TODO 1.12.2 should this be false? seems forge changed logic a lot
-					if (filledContainer != null) {
+					FluidActionResult fluidActionResult = FluidUtil.tryFillContainer(item, tank, 1000, null, false);//TODO 1.12.2 should this be false? seems forge changed logic a lot
+					if (fluidActionResult.isSuccess()) {
+						ItemStack filledContainer = fluidActionResult.getResult();
 						if (inv.get(4) == ItemStack.EMPTY) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv.set(4, filledContainer);
@@ -255,11 +251,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
+	public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound var1 = new NBTTagCompound();
-		writeToNBT(var1);
-		return new SPacketUpdateTileEntity(this.pos, 1, var1);
+		return writeToNBT(super.getUpdateTag());
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package net.meteor.common.item;
 
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,9 +11,9 @@ public class ItemEnchArmor extends ItemMetArmor
 	protected Enchantment enchantment;
 	protected int level;
 
-	public ItemEnchArmor(ItemArmor.ArmorMaterial armorMaterial, int par3, int par4)
+	public ItemEnchArmor(ItemArmor.ArmorMaterial armorMaterial, int renderIndexIn, EntityEquipmentSlot slot)
 	{
-		super(armorMaterial, par3, par4);
+		super(armorMaterial, renderIndexIn, slot);
 	}
 
 	public ItemEnchArmor setEnch(Enchantment ench, int lvl) {

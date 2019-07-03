@@ -72,11 +72,9 @@ public class TileEntitySlippery extends TileEntity {
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
+	public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound var1 = new NBTTagCompound();
-		writeToNBT(var1);
-		return new SPacketUpdateTileEntity(this.getPos(), 1, var1);
+		return writeToNBT(new NBTTagCompound());
 	}
 	
 	@Override

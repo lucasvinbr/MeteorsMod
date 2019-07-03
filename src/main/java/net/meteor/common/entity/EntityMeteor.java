@@ -7,7 +7,6 @@ import java.util.List;
 import net.meteor.common.ClientHandler;
 import net.meteor.common.EnumMeteor;
 import net.meteor.common.ExplosionMeteor;
-import net.meteor.common.HandlerAchievement;
 import net.meteor.common.IMeteorShield;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.climate.CrashLocation;
@@ -30,7 +29,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -173,9 +171,9 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
-	protected Explosion explode() {
+	protected ExplosionMeteor explode() {
 		float f = (float) (this.size * MeteorsMod.instance.ImpactExplosionMultiplier);
-		Explosion explosion = new ExplosionMeteor(getEntityWorld(), this, posX, posY, posZ, f, meteorType.getFieryExplosion(), true);
+		ExplosionMeteor explosion = new ExplosionMeteor(getEntityWorld(), this, posX, posY, posZ, f, meteorType.getFieryExplosion(), true);
         explosion.doExplosionA();
         explosion.doExplosionB(true);
         return explosion;

@@ -16,7 +16,8 @@ public abstract class TileEntityNetworkBase extends TileEntity {
 
 	public void postButtonPress(int buttonID) {
 		this.markDirty();
-		this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+		//TODO 1.12.2
+		//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
 }

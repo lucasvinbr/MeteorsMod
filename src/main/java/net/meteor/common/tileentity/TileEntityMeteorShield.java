@@ -16,6 +16,7 @@ import net.meteor.common.climate.MeteorShieldData;
 import net.meteor.common.entity.EntityComet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -65,6 +66,109 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		this();
 		this.owner = theOwner;
 	}
+
+	/**
+	 * IInventory
+	 */
+
+	public boolean isEmpty()
+	{
+		for (ItemStack itemstack : this.inv)
+		{
+			if (!itemstack.isEmpty())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack item, EnumFacing side) {
+		return slot < 5 && isItemValidForSlot(slot, item);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack item, EnumFacing side) {
+		return slot > 4;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return inv.size();
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inv.get(i);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+		ItemStack stack = getStackInSlot(i);
+		if (stack != null) {
+			if (stack.getCount() <= j) {
+				setInventorySlotContents(i, ItemStack.EMPTY);
+			} else {
+				ItemStack stack2 = stack.splitStack(j);
+				if (stack.getCount() <= 0) {
+					setInventorySlotContents(i, ItemStack.EMPTY);
+				}
+				stack = stack2;
+			}
+		}
+		return stack;
+	}
+
+	public ItemStack removeStackFromSlot(int index)
+	{
+		return ItemStackHelper.getAndRemove(this.inv, index);
+	}
+
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return true; // TODO put in some proper checks for this
+	}
+
+	@Override
+	public String getName() {
+		return "Meteor Shield";
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return false;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer player) {}
+
+	@Override
+	public void closeInventory(EntityPlayer player) {}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		this.inv.clear();
+	}
+
+	//End of IInventory
 
 	@Override
 	public void update()
@@ -292,49 +396,15 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
+	public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound var1 = new NBTTagCompound();
-		writeToNBT(var1);
-		return new SPacketUpdateTileEntity(this.getPos(), 1, var1);
+		return writeToNBT(new NBTTagCompound());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(getX(), getY(), getZ(), getX() + 1, getY() + 1.5, getZ() +1);
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return inv.size();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inv.get(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		ItemStack stack = getStackInSlot(i);
-		if (stack != null) {
-			if (stack.getCount() <= j) {
-				setInventorySlotContents(i, null);
-			} else {
-				ItemStack stack2 = stack.splitStack(j);
-				if (stack.getCount() <= 0) {
-					setInventorySlotContents(i, null);
-				}
-				stack = stack2;
-			}
-		}
-		return stack;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return null; // not needed, no items should be dropped
 	}
 
 	@Override
@@ -366,12 +436,6 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		return 64;
 	}
 
-	//TODO 1.12.2
-	//@Override
-	//public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-	//	return true; // TODO put in some proper checks for this
-	//}
-
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (itemstack.getItem() == MeteorItems.itemRedMeteorGem && i > 0 && i < 5) {
@@ -383,22 +447,6 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		return true;
 	}
 
-	@Override
-	public String getName() {
-		return "Meteor Shield";
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
-	}
-
-	@Override
-	public void openInventory(EntityPlayer player) {}
-
-	@Override
-	public void closeInventory(EntityPlayer player) {}
-	
 	private void updateRange() {
 		int powerCrystals = 0;
 		for (int i = 1; i <= 4; i++) {
@@ -493,16 +541,6 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 		}
 		
 		return slots;
-	}
-
-	@Override
-	public boolean canInsertItem(int slot, ItemStack item, EnumFacing side) {
-		return slot < 5 && isItemValidForSlot(slot, item);
-	}
-
-	@Override
-	public boolean canExtractItem(int slot, ItemStack item, EnumFacing side) {
-		return slot > 4;
 	}
 
 	@Override

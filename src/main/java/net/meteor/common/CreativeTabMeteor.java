@@ -35,7 +35,7 @@ public class CreativeTabMeteor extends CreativeTabs {
 	private ItemStack getSlipperyStairItemStack(Block block) {
 		ItemStack stack = new ItemStack(block, 1);
 		NBTTagCompound nbt = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-		nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(Blocks.OAK_STAIRS));
+		nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(Blocks.OAK_STAIRS).toString());
 		stack.setTagCompound(nbt);
 		return stack;
 	}

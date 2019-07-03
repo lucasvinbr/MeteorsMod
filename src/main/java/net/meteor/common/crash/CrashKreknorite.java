@@ -1,13 +1,13 @@
 package net.meteor.common.crash;
 
 import net.meteor.common.EnumMeteor;
+import net.meteor.common.ExplosionMeteor;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.SBAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class CrashKreknorite extends CrashMeteorite
 {
-	public CrashKreknorite(int Size, Explosion expl, EnumMeteor metType)
+	public CrashKreknorite(int Size, ExplosionMeteor expl, EnumMeteor metType)
 	{
 		super(Size, expl, metType);
 	}
