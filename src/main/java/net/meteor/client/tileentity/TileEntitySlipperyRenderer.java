@@ -2,6 +2,7 @@ package net.meteor.client.tileentity;
 
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,7 +18,7 @@ public class TileEntitySlipperyRenderer extends TileEntitySpecialRenderer<TileEn
 
 	@Override
 	public void render(TileEntitySlippery slippery, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		Block facadeBlock = slippery.getFacadeBlock();
+		IBlockState facadeBlock = slippery.getFacadeBlock();
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

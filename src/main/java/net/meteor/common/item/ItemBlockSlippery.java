@@ -3,7 +3,6 @@ package net.meteor.common.item;
 import java.util.List;
 
 import net.meteor.common.block.BlockSlipperyStairs;
-import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
@@ -147,7 +147,7 @@ public class ItemBlockSlippery extends ItemBlock {
 					def = Blocks.OAK_STAIRS;
 				}
 			}
-			nbt.setString(FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(def).toString());
+            nbt.setString(FACADE_BLOCK_KEY, Block.REGISTRY.getNameForObject(def).toString());
 			itemStack.setTagCompound(nbt);
 		}
 	}
@@ -161,8 +161,8 @@ public class ItemBlockSlippery extends ItemBlock {
 					def = Blocks.OAK_STAIRS;
 				}
 			}
-			return TileEntitySlippery.getBlockFromName(itemStack.getTagCompound().getString(FACADE_BLOCK_KEY), def);
-		}
+            return  ForgeRegistries.BLOCKS.getValue(new ResourceLocation(itemStack.getTagCompound().getString(FACADE_BLOCK_KEY)));
+        }
 		return Blocks.STONE;
 	}
 	

@@ -166,18 +166,18 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 					FluidActionResult fluidActionResult = FluidUtil.tryFillContainer(item, tank, 1000, null, false);//TODO 1.12.2 should this be false? seems forge changed logic a lot
 					if (fluidActionResult.isSuccess()) {
 						ItemStack filledContainer = fluidActionResult.getResult();
-						if (inv.get(4) == ItemStack.EMPTY) {
+						if (inv.get(4).isEmpty()) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv.set(4, filledContainer);
 							decrStackSize(3, 1);
-							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							this.markDirty();
+							this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), true);
 						} else if (inv.get(4).isItemEqual(filledContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv.get(4).grow(1);
 							decrStackSize(3, 1);
-							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							this.markDirty();
+							this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), true);
 						}
 					}
 				}
@@ -538,8 +538,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	{
 		if (resource == null || !resource.isFluidEqual(tank.getFluid()))
 		{
-			//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-			// getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			this.markDirty();
+			this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), true);
 			return null;
 		}
 		return tank.drain(resource.amount, doDrain);

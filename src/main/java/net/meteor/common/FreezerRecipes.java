@@ -2,14 +2,12 @@ package net.meteor.common;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.meteor.common.block.BlockSlippery;
+import net.meteor.common.block.SlipperyBlock;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.meteor.common.item.ItemBlockSlippery;
-import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -106,7 +104,7 @@ public class FreezerRecipes {
 			Block block = itemBlock.getBlock();
 			ItemStack res = new ItemStack(MeteorBlocks.blockSlippery, 1, neededItem.getItemDamage());
 			
-			if (block instanceof BlockSlippery) {
+			if (block instanceof SlipperyBlock) {
 				
 				if (block.slipperiness == 0.98F) {
 					res = new ItemStack(MeteorBlocks.blockSlipperyTwo, 1, neededItem.getItemDamage());
@@ -143,7 +141,7 @@ public class FreezerRecipes {
 			}*/
 			
 			NBTTagCompound nbt = res.hasTagCompound() ? res.getTagCompound() : new NBTTagCompound();
-			nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(block).toString());
+			nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, Block.REGISTRY.getNameForObject(block).toString());
 			res.setTagCompound(nbt);
 			return res;
 		}
@@ -235,7 +233,7 @@ public class FreezerRecipes {
 		if (MeteorsMod.instance.slipperyBlocksEnabled && item != null && item.getItem() instanceof ItemBlock) {
 			ItemBlock itemBlock = (ItemBlock) item.getItem();
 			Block block = itemBlock.getBlock();
-			return BlockSlippery.canBeSlippery(block);
+			return SlipperyBlock.canBeSlippery(block);
 		}
 		return false;
 	}

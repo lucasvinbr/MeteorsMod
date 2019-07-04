@@ -8,9 +8,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public class BlockDecoration extends Block {
+public class DecorationBlock extends Block {
 
-	public BlockDecoration(String textures) {
+	public DecorationBlock(String textures) {
 		super(Material.IRON);
         this.setCreativeTab(MeteorsMod.meteorTab);
         this.setRegistryName(textures);
@@ -35,15 +35,6 @@ public class BlockDecoration extends Block {
 			icons[i] = reg.registerIcon(MeteorsMod.MOD_ID + ":" + blockTextureNames[i]);
 		}
     }*/
-
-	/**
-     * Determines the damage on the item the block drops. Used in cloth and wood.
-     */
-    @Override
-    public int damageDropped(IBlockState p_149692_1_)
-    {//TODO 1.12.2
-        return 0;
-    }
 
     //TODO 1.12.2
 /*	@Override

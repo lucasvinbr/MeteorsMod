@@ -1,6 +1,6 @@
 package net.meteor.common.block.container;
 
-import net.meteor.common.block.BlockSlippery;
+import net.meteor.common.block.SlipperyBlock;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,7 +50,7 @@ public class SlotTakeOnly extends Slot {
 			} else if (item.getItem() == Item.getItemFromBlock(Blocks.PACKED_ICE)) {
 				//TODO 1.12.2
 				//this.thePlayer.addStat(HandlerAchievement.freezeIce, 1);
-			} else if (Block.getBlockFromItem(item.getItem()) instanceof BlockSlippery || Block.getBlockFromItem(item.getItem()) instanceof BlockSlipperyStairs) {
+			} else if (Block.getBlockFromItem(item.getItem()) instanceof SlipperyBlock || Block.getBlockFromItem(item.getItem()) instanceof BlockSlipperyStairs) {
 				//TODO 1.12.2
 				//this.thePlayer.addStat(HandlerAchievement.freezeBlocks, 1);
 			}

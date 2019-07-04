@@ -7,8 +7,6 @@ import net.meteor.common.item.ItemBlockSlippery;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -25,12 +22,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockSlippery extends BlockContainer {
+public class SlipperyBlock extends BlockContainer {
 
-    public BlockSlippery(float slipperiness) {
+    public SlipperyBlock(float slipperiness) {
         super(Material.ICE);
         this.setCreativeTab(MeteorsMod.meteorTab);
         this.setDefaultSlipperiness(slipperiness);
@@ -38,7 +33,7 @@ public class BlockSlippery extends BlockContainer {
     }
 
     public static boolean canBeSlippery(Block block) {
-        if ((block instanceof BlockSlippery || block instanceof BlockSlipperyStairs) && block.slipperiness < 1.1F) {
+        if ((block instanceof SlipperyBlock || block instanceof BlockSlipperyStairs) && block.slipperiness < 1.1F) {
             return true;
         }
         //TODO 1.12.2

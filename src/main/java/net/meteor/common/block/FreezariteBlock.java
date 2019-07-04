@@ -3,7 +3,6 @@ package net.meteor.common.block;
 import net.meteor.common.MeteorItems;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.util.MeteorConstants;
-import net.meteor.common.util.MeteorDamageSources;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -96,7 +95,7 @@ public class FreezariteBlock extends Block {
         }
         final IBlockState blockState = worldIn.getBlockState(pos);
         // TODO - Add Freeze absorption enchantment.
-        entityIn.attackEntityFrom(MeteorDamageSources.FROZEN_FLOOR, 1.0F * (blockState.getValue(FROZEN_LEVEL) + 1));
+        entityIn.attackEntityFrom(MeteorConstants.DamageSources.FROZEN_FLOOR, 1.0F * (blockState.getValue(FROZEN_LEVEL) + 1));
 
         super.onEntityWalk(worldIn, pos, entityIn);
     }
