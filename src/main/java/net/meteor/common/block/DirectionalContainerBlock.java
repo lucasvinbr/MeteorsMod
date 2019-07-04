@@ -1,6 +1,7 @@
 package net.meteor.common.block;
 
 import net.meteor.common.MeteorsMod;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -16,12 +17,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-public abstract class DirectionalContainerBlock extends BlockContainerMeteorsMod {
+public abstract class DirectionalContainerBlock extends BlockContainer {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
     public DirectionalContainerBlock() {
         super(Material.ROCK);
+        this.setCreativeTab(MeteorsMod.meteorTab);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 

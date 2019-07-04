@@ -1,8 +1,10 @@
 package net.meteor.common.block;
 
 import net.meteor.common.MeteorItems;
+import net.meteor.common.MeteorsMod;
 import net.meteor.common.util.MeteorConstants;
 import net.meteor.common.util.MeteorDamageSources;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -22,13 +24,14 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
 
-public class FreezariteBlock extends MeteorsBaseBlock {
+public class FreezariteBlock extends Block {
 
     public static final PropertyInteger FROZEN_LEVEL = PropertyInteger.create("frozen_level", 0, MeteorConstants.MAX_METEOR_HEAT);
     private Random rand = new Random();
 
     public FreezariteBlock() {
         super(Material.ROCK);
+        this.setCreativeTab(MeteorsMod.meteorTab);
         this.setDefaultSlipperiness(0.98F);
         setTickRandomly(true);
         this.setHardness(8.5F).setResistance(150F);
@@ -42,7 +45,7 @@ public class FreezariteBlock extends MeteorsBaseBlock {
         final int currentFrozen = state.getValue(FROZEN_LEVEL);
         if (!(temp > 0.15F)) {
             if (currentFrozen < MeteorConstants.MAX_METEOR_HEAT) {
-                if (RANDOM.nextInt(100) < 10) {
+                if (world.rand.nextInt(100) < 10) {
                     world.setBlockState(pos, state.withProperty(FROZEN_LEVEL, currentFrozen + 1), Constants.BlockFlags.SEND_TO_CLIENTS);
                     // TODO - maybe throw a sound for "hardening"
                 }
@@ -71,8 +74,8 @@ public class FreezariteBlock extends MeteorsBaseBlock {
             world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, d0 + Math.random(), d1 + 1.2D, d2 + Math.random(), 0.0D, 0.0D, 0.0D);
         }
         world.playSound(null, (float) pos.getX() + 0.5F, (double) ((float) pos.getY() + 0.5F), (double) ((float) pos.getZ() + 0.5F),
-            SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, (this.blockSoundType.getVolume() + 1.0F + RANDOM.nextFloat()) / 2.0F,
-            this.blockSoundType.getPitch() * (RANDOM.nextFloat() * 0.7F + 0.3F));
+            SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, (this.blockSoundType.getVolume() + 1.0F + world.rand.nextFloat()) / 2.0F,
+            this.blockSoundType.getPitch() * (world.rand.nextFloat() * 0.7F + 0.3F));
 
     }
 

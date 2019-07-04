@@ -1,6 +1,7 @@
 package net.meteor.common.block;
 
 import net.meteor.common.MeteorItems;
+import net.meteor.common.MeteorsMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +24,7 @@ public class RareFallenMeteorBlock extends MeteorBlock {
 
     @Override
     public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
-        return MathHelper.getInt(RANDOM, 2, 5);
+        return MathHelper.getInt(MeteorsMod.RANDOM, 2, 5);
     }
 
     @Override

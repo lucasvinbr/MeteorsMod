@@ -52,6 +52,7 @@ public class MeteorsMod implements IWorldGenerator
 	public static final String VERSION 	= "2.14.3"; 		// Switch to automatic versioning later on
 	
 	public static final boolean loggable = false;		// For Debugging Purposes Only TODO change to false when releasing
+	public static final Random RANDOM = new Random();
 
 	public static Logger log;
 

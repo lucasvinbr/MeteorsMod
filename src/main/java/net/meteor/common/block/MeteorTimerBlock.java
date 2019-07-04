@@ -1,7 +1,9 @@
 package net.meteor.common.block;
 
+import net.meteor.common.MeteorsMod;
 import net.meteor.common.tileentity.TileEntityMeteorTimer;
 import net.meteor.common.util.MeteorConstants;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -17,11 +19,12 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class MeteorTimerBlock extends BlockContainerMeteorsMod {
+public class MeteorTimerBlock extends BlockContainer {
 
 	public static final PropertyInteger POWER = PropertyInteger.create("power", 0, MeteorConstants.MeteorTimer.MAX_TIMER_POWER);
 	public MeteorTimerBlock() {
 		super(Material.REDSTONE_LIGHT);
+		this.setCreativeTab(MeteorsMod.meteorTab);
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.WOOD);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWER, 0));

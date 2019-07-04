@@ -82,8 +82,8 @@ public class HotMeteorBlock extends MeteorBlock {
         }
         final int heatLevel = state.getValue(HEAT);
 
-        if (RANDOM.nextInt(100) < (RANDOM.nextInt(heatLevel) / MeteorConstants.MAX_METEOR_HEAT) * 100) {
-            player.setFire(1 + RANDOM.nextInt(heatLevel));
+        if (player.getRNG().nextInt(100) < (player.getRNG().nextInt(heatLevel) / MeteorConstants.MAX_METEOR_HEAT) * 100) {
+            player.setFire(1 + player.getRNG().nextInt(heatLevel));
         }
     }
 

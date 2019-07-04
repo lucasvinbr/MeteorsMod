@@ -1,8 +1,10 @@
 package net.meteor.common.block;
 
 import net.meteor.common.MeteorItems;
+import net.meteor.common.MeteorsMod;
 import net.meteor.common.entity.EntityAlienCreeper;
 import net.meteor.common.util.MeteorConstants;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,10 +24,11 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-public class MeteorBlock extends MeteorsBaseBlock {
+public class MeteorBlock extends Block {
 
     public MeteorBlock() {
         super(Material.ROCK);
+        this.setCreativeTab(MeteorsMod.meteorTab);
         this.setSoundType(SoundType.STONE);
         this.setHarvestLevel(MeteorConstants.PICKAXE_TOOL_ID, 2);
         this.setHardness(10F)
@@ -100,7 +103,7 @@ public class MeteorBlock extends MeteorsBaseBlock {
 
     @Override
     public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
-        return MathHelper.getInt(RANDOM, 2, 5);
+        return MathHelper.getInt(MeteorsMod.RANDOM, 2, 5);
     }
 
     @Override

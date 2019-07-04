@@ -2,17 +2,20 @@ package net.meteor.common.block;
 
 import java.util.Random;
 
+import net.meteor.common.MeteorsMod;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 
-public class MeteorOreBlock extends MeteorsBaseBlock {
+public class MeteorOreBlock extends Block {
 
     private final Item droppedItem;
 
     public MeteorOreBlock(Item droppedItem) {
         super(Material.IRON);
+        this.setCreativeTab(MeteorsMod.meteorTab);
         this.setHarvestLevel("pickaxe", 2);
         this.setHardness(10F).setResistance(200F);
         this.setSoundType(SoundType.STONE);

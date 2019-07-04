@@ -123,15 +123,15 @@ public class HandlerRecipe implements IFuelHandler {
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.DECORATOR_METEORITE, 1, 0), "iii", "iii", "iii", 'i', MeteorItems.MeteoriteIngot);
 
-		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.MeteoriteIngot, 9), new ItemStack(MeteorBlocks.DECORATOR_METEORITE, 1, 0));
+		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.MeteoriteIngot, 9), new ItemStack(MeteorBlocks.DECORATOR_METEORITE, 1));
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1), "iii", "iii", "iii", 'i', MeteorItems.FrozenIron);
 
-		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.FrozenIron, 9), new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1, 1));
+		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.FrozenIron, 9), new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1));
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.DECORATOR_KREKNORITE, 1), "iii", "iii", "iii", 'i', MeteorItems.KreknoriteIngot);
 
-		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.KreknoriteIngot, 9), new ItemStack(MeteorBlocks.DECORATOR_KREKNORITE, 1, 2));
+		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.KreknoriteIngot, 9), new ItemStack(MeteorBlocks.DECORATOR_KREKNORITE, 1));
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorProximityDetector, 1), " m ", "mrm", " m ", 'm', MeteorItems.MeteoriteIngot, 'r', Items.REDSTONE);
 

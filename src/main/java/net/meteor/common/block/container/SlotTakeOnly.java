@@ -1,6 +1,5 @@
 package net.meteor.common.block.container;
 
-import net.meteor.common.HandlerAchievement;
 import net.meteor.common.block.BlockSlippery;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.minecraft.block.Block;
@@ -11,6 +10,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Rewrite to be similar to FurnaceOuputSlot.
+ */
 public class SlotTakeOnly extends Slot {
 	
 	private EntityPlayer thePlayer;
