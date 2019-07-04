@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class TileEntityMeteorTimerRenderer extends TileEntitySpecialRenderer<TileEntityMeteorTimer> {
 
-	private static final ResourceLocation timerTex = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/metTimer.png");
+	private static final ResourceLocation timerTex = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/mettimer.png");
 
 	public ModelMeteorTimer modelMetTimer;
 

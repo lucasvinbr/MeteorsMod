@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 public class TimerItemRenderer {// implements IItemRenderer {
 	//TODO 1.12.2
 
-	private static final ResourceLocation timerTex = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/metTimer.png");
+	private static final ResourceLocation timerTex = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/mettimer.png");
 	
 	TileEntityMeteorTimerRenderer timerRend;
 	

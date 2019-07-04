@@ -24,10 +24,10 @@ public class RenderMeteor extends Render<EntityMeteor> {
 	public static final HashMap<Integer, ResourceLocation> skins = new HashMap<>();
 	
 	static {
-		skins.put(0, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/fallingMeteor.png"));
-		skins.put(1, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/frezaMeteor.png"));
-		skins.put(2, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/kreknoMeteor.png"));
-		skins.put(3, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/unknownMeteor.png"));
+		skins.put(0, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/fallingmeteor.png"));
+		skins.put(1, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/frezameteor.png"));
+		skins.put(2, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/kreknometeor.png"));
+		skins.put(3, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/unknownmeteor.png"));
 		skins.put(4, new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/kitty.png"));
 	}
 

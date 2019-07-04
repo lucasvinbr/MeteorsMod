@@ -104,6 +104,16 @@ public class FreezariteBlock extends MeteorsBaseBlock {
     }
 
     @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(FROZEN_LEVEL, meta);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FROZEN_LEVEL);
+    }
+
+    @Override
     public int quantityDropped(IBlockState state, int fortune, Random random) {
         return random.nextInt(1 + state.getValue(FROZEN_LEVEL) + random.nextInt(fortune + 1));
     }

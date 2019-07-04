@@ -9,6 +9,7 @@ import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class CrashFrezarite extends CrashMeteorite
@@ -30,7 +31,7 @@ public class CrashFrezarite extends CrashMeteorite
 			boolean j2 = world.isAirBlock(pos);
 			IBlockState block = world.getBlockState(pos.down());
 			if (j2 && block.isOpaqueCube() && (random.nextInt(2) == 0)) {
-				world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, random.nextInt(5)), 2);
+				world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.getInt(random, 1,5)), 2);
 			}
 		}
 	}

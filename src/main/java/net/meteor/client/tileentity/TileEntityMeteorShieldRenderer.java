@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class TileEntityMeteorShieldRenderer extends TileEntitySpecialRenderer<TileEntityMeteorShield>
 {
-	private static final ResourceLocation shieldTexture = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/meteorShield.png");
+	private static final ResourceLocation shieldTexture = new ResourceLocation(MeteorsMod.MOD_ID, "textures/entities/meteorshield.png");
 
 	private ModelMeteorShield modelShield;
 

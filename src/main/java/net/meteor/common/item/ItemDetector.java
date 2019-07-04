@@ -30,6 +30,9 @@ public class ItemDetector extends ItemMeteorsMod {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(worldIn == null)
+			return;//TODO 1.12.2 verify
+
 		long worldTime = worldIn.getTotalWorldTime();
 		if (worldTime - lastDot > 10L) {
 			lastDot = worldTime;

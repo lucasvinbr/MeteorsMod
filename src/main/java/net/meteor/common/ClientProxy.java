@@ -53,11 +53,6 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void loadStuff()
 	{
-		RenderingRegistry.registerEntityRenderingHandler(EntityMeteor.class, RenderMeteor.FACTORY);
-		RenderingRegistry.registerEntityRenderingHandler(EntityAlienCreeper.class, RenderAlienCreeper.FACTORY);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCometKitty.class, RenderCometKitty.FACTORY);
-		RenderingRegistry.registerEntityRenderingHandler(EntitySummoner.class, RenderSummoner.FACTORY);
-		RenderingRegistry.registerEntityRenderingHandler(EntityComet.class, RenderComet.FACTORY);
 
 		//TODO 1.12.2
 		/*
@@ -83,6 +78,12 @@ public class ClientProxy extends CommonProxy
 		if (Baubles.isBaublesLoaded()) {
 			Baubles.setupBaubleClient();
 		}
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityMeteor.class, RenderMeteor.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityAlienCreeper.class, RenderAlienCreeper.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCometKitty.class, RenderCometKitty.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySummoner.class, RenderSummoner.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityComet.class, RenderComet.FACTORY);
 	}
 
 	public static void spawnParticle(String s, double xIn, double yIn, double zIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, World worldObj, int opt)

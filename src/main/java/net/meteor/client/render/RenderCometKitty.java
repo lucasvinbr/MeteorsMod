@@ -14,7 +14,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 public class RenderCometKitty extends RenderOcelot {
 
 	public static final Factory FACTORY = new Factory();
-	private static final ResourceLocation skin = new ResourceLocation("meteors", "textures/entities/cometKitty.png");
+	private static final ResourceLocation skin = new ResourceLocation("meteors", "textures/entities/comet_kitty.png");
 
 	public RenderCometKitty(RenderManager renderManager) {
 		super(renderManager);

@@ -5,6 +5,7 @@ import net.meteor.common.util.MeteorConstants;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +27,21 @@ public class MeteorTimerBlock extends BlockContainerMeteorsMod {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(POWER, 0));
 		// TODO - figure out this bit, not sure how it's supposed to work
 //		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, POWER);
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(POWER, meta);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(POWER);
 	}
 
 	@SuppressWarnings("deprecation")
