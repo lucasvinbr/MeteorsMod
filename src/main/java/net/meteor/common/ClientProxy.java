@@ -25,17 +25,27 @@ import net.meteor.common.tileentity.TileEntityMeteorTimer;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.meteor.plugin.baubles.Baubles;
 import net.meteor.plugin.baubles.MagnetizationOverlay;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+
+@Mod.EventBusSubscriber
 public class ClientProxy extends CommonProxy
 {
 	
@@ -72,7 +82,35 @@ public class ClientProxy extends CommonProxy
 			MinecraftForge.EVENT_BUS.register(new MagnetizationOverlay());
 		}
 	}
-	
+
+	@SubscribeEvent
+	public static void onModelRegister(ModelRegistryEvent event)
+	{
+		Class<MeteorItems> meteorItemsClass = MeteorItems.class;
+		Field[] fields = meteorItemsClass.getDeclaredFields();
+		Arrays.stream(fields).forEach(field -> {
+			try {
+				Object o = field.get(null);
+				if (o instanceof Item)
+					ModelLoader.setCustomModelResourceLocation((Item) o, 0, new ModelResourceLocation(((Item) o).getRegistryName().toString()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+
+		Class<MeteorBlocks> meteorBlocksClass = MeteorBlocks.class;
+		fields = meteorBlocksClass.getDeclaredFields();
+		Arrays.stream(fields).forEach(field -> {
+			try {
+				Object o = field.get(null);
+				if (o instanceof Block)
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock((Block) o), 0, new ModelResourceLocation(((Block) o).getRegistryName().toString()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
 	@Override
 	public void preInit() {
 		if (Baubles.isBaublesLoaded()) {

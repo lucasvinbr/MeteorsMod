@@ -2,7 +2,6 @@ package net.meteor.common;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -167,7 +166,7 @@ public class FreezerRecipes {
 	
 	private FreezerRecipes() {
 		addRecipe(new ItemStack(Blocks.ICE, 1), FluidRegistry.WATER, 1000, new ItemStack(Blocks.PACKED_ICE,  1));
-		addRecipe(Items.IRON_INGOT, new ItemStack(MeteorItems.FrozenIron, 1));
+		addRecipe(Items.IRON_INGOT, new ItemStack(MeteorItems.FrozenIronIngot, 1));
 		addRecipe(new SlipperyRecipe());
 		addRecipe(FluidRegistry.WATER, 1000, new ItemStack(Blocks.ICE, 1));
 		addRecipe(FluidRegistry.LAVA, 1000, new ItemStack(Blocks.OBSIDIAN, 1));

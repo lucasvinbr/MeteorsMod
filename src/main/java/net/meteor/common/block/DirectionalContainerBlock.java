@@ -33,6 +33,16 @@ public abstract class DirectionalContainerBlock extends BlockContainer {
     }
 
     @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FACING).getIndex();
+    }
+
+    @Override
     public abstract TileEntity createNewTileEntity(World world, int meta);
 
     @Override

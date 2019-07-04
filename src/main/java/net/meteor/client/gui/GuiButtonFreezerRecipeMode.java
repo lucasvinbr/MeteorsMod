@@ -46,11 +46,11 @@ public class GuiButtonFreezerRecipeMode extends GuiButton {
 			int state = freezer.getRecipeMode().getID();
 
 			TextureAtlasSprite waterTexture = mc.getTextureMapBlocks().getTextureExtry(FluidRegistry.WATER.getStill().toString());
-			TextureAtlasSprite itemIcon = renderitem.getItemModelMesher().getParticleIcon(MeteorItems.FrozenIron);
+			TextureAtlasSprite itemIcon = renderitem.getItemModelMesher().getParticleIcon(MeteorItems.FrozenIronIngot);
 
 			if (state == 0) {	// Item Only - Frozen Iron
 				
-				renderitem.renderItemAndEffectIntoGUI(new ItemStack(MeteorItems.FrozenIron), x + 2, y + 2);
+				renderitem.renderItemAndEffectIntoGUI(new ItemStack(MeteorItems.FrozenIronIngot), x + 2, y + 2);
 			
 			} else if (state == 1) { // Fluid only - Water
 

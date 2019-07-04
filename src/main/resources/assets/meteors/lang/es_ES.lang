@@ -53,7 +53,7 @@ item.MeteorDetectorProximity.name=Detector de proximidad del meteoro
 item.MeteorDetectorTime.name=Detector de tiempo de Meteoro
 item.MeteorDetectorCrash.name=Detector de Choque de Meteorito
 item.MeteoriteIngot.name=Lingote de Meteorito
-item.FrozenIron.name=Hierro Congelado
+item.FrozenIronIngot.name=Hierro Congelado
 item.KreknoriteIngot.name=Lingote de Kreknorito
 
 entity.AlienCreeper.name=Creeper Alienigena

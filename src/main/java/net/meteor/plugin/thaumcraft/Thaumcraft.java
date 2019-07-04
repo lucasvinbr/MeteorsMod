@@ -23,7 +23,7 @@ public class Thaumcraft {
 		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorItems.itemKreknoChip), new AspectList().add(Aspect.METAL, 1).add(Aspect.FIRE, 3));
 		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorItems.itemRedMeteorGem), new AspectList().add(Aspect.ENERGY, 6).add(Aspect.CRYSTAL, 1));
 		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorItems.MeteoriteIngot), new AspectList().add(Aspect.METAL, 2).add(Aspect.ENERGY, 2).add(Aspect.EARTH, 1));
-		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorItems.FrozenIron), new AspectList().add(Aspect.METAL, 2).add(Aspect.COLD, 3));
+		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorItems.FrozenIronIngot), new AspectList().add(Aspect.METAL, 2).add(Aspect.COLD, 3));
 		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorItems.KreknoriteIngot), new AspectList().add(Aspect.METAL, 2).add(Aspect.FIRE, 3));
 		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorBlocks.METEOR), new AspectList().add(Aspect.METAL, 1).add(Aspect.ENERGY, 2).add(Aspect.EARTH, 1).add(Aspect.FIRE, 1));
 		ThaumcraftApi.registerObjectTag(new ItemStack(MeteorBlocks.RARE_METEOR), new AspectList().add(Aspect.METAL, 1).add(Aspect.ENERGY, 2).add(Aspect.EARTH, 1).add(Aspect.FIRE, 1).add(Aspect.CRYSTAL, 1));

@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "meteors:items/weapons/kreknorite_sword"
+  }
+}

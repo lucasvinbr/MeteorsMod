@@ -88,9 +88,10 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 				player.sendMessage(new TextComponentString(I18n.translateToLocal("MeteorSummoner.wrongDimension")));
 				if (!player.capabilities.isCreativeMode) {
 					if (this.isRandom) {
-						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1));
+						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 					} else {
-						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
+						//TODO 1.12.2
+						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
 					}
 				}
 			}
@@ -108,9 +109,10 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 				player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorSummoner.cannotSummon"), TextFormatting.RED));
 				if (!player.capabilities.isCreativeMode) {
 					if (this.isRandom) {
-						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1));
+						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 					} else {
-						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
+						//TODO 1.12.2
+						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
 					}
 				}
 			} else if ((!MeteorsMod.instance.allowSummonedMeteorGrief) && (player != null)) {
@@ -120,9 +122,10 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 					player.sendMessage(new TextComponentString(I18n.translateToLocal("MeteorSummoner.landProtected")));
 					if (!player.capabilities.isCreativeMode) {
 						if (this.isRandom) {
-							player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1)); 
+							player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 						} else {
-							player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1)); 
+							//TODO 1.12.2
+							//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
 						}
 					}
 				}

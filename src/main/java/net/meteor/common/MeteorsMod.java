@@ -101,10 +101,7 @@ public class MeteorsMod implements IWorldGenerator
 		log = event.getModLog();
 		ModConfig.instance.load(event.getSuggestedConfigurationFile());
 		loadStaticConfigurationValues();
-		
-		MeteorBlocks.registerBlocks();
-		//TODO 1.12.2 should be registered by event
-		//MeteorItems.registerItems();
+
 		MeteorItems.readyItems();
 		loadPlugins();
 		
@@ -229,34 +226,6 @@ public class MeteorsMod implements IWorldGenerator
 		evt.registerServerCommand(new CommandDebugMeteors());
 		evt.registerServerCommand(new CommandSpawnMeteor());
 		evt.registerServerCommand(new CommandSpawnComet());
-	}
-
-	@SubscribeEvent
-	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		event.getRegistry().register(MeteorBlocks.METEOR_ORE);
-		event.getRegistry().register(MeteorBlocks.METEOR);
-		event.getRegistry().register(MeteorBlocks.HOT_METEOR);
-		event.getRegistry().register(MeteorBlocks.HOT_RARE_METEOR);
-		event.getRegistry().register(MeteorBlocks.RARE_METEOR);
-		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD);
-		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD_TORCH);
-		event.getRegistry().register(MeteorBlocks.FREEZARITE);
-		event.getRegistry().register(MeteorBlocks.KRENKONITE);
-		event.getRegistry().register(MeteorBlocks.METEOR_TIMER);
-		event.getRegistry().register(MeteorBlocks.RED_METEOR_GEM);
-		event.getRegistry().register(MeteorBlocks.DECORATOR_FREEZARITE);
-		event.getRegistry().register(MeteorBlocks.DECORATOR_KREKNORITE);
-		event.getRegistry().register(MeteorBlocks.DECORATOR_METEORITE);
-		event.getRegistry().register(MeteorBlocks.FREEZER);
-		event.getRegistry().register(MeteorBlocks.blockSlippery);
-		event.getRegistry().register(MeteorBlocks.blockSlipperyTwo);
-		event.getRegistry().register(MeteorBlocks.blockSlipperyThree);
-		event.getRegistry().register(MeteorBlocks.blockSlipperyFour);
-		event.getRegistry().register(MeteorBlocks.blockSlipperyStairs);
-		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsTwo);
-		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsThree);
-		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsFour);
-		event.getRegistry().register(MeteorBlocks.FREEZARITE_ORE);
 	}
 
 	private void registerEntities() {

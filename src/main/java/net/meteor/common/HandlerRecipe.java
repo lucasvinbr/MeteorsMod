@@ -77,13 +77,13 @@ public class HandlerRecipe implements IFuelHandler {
 
 		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(Blocks.ICE, 4), Items.WATER_BUCKET, MeteorItems.itemFrezaCrystal);
 
-		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteHelmet, 1), "ccc", "c c", 'c', MeteorItems.FrozenIron);
+		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteHelmet, 1), "ccc", "c c", 'c', MeteorItems.FrozenIronIngot);
 
-		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteBody, 1), "c c", "ccc", "ccc", 'c', MeteorItems.FrozenIron);
+		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteBody, 1), "c c", "ccc", "ccc", 'c', MeteorItems.FrozenIronIngot);
 
-		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteLegs, 1), "ccc", "c c", "c c", 'c', MeteorItems.FrozenIron);
+		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteLegs, 1), "ccc", "c c", "c c", 'c', MeteorItems.FrozenIronIngot);
 
-		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteBoots, 1), "c c", "c c", 'c', MeteorItems.FrozenIron);
+		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.FrezariteBoots, 1), "c c", "c c", 'c', MeteorItems.FrozenIronIngot);
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.KreknoriteHelmet, 1), "ccc", "c c", 'c', MeteorItems.KreknoriteIngot);
 
@@ -99,21 +99,21 @@ public class HandlerRecipe implements IFuelHandler {
 
 		MeteorCraftingHelper.addShapelessOreRecipe(new ItemStack(MeteorItems.itemChocolateIceCream, 4), Items.BOWL, Items.SUGAR, Items.MILK_BUCKET, MeteorItems.itemFrezaCrystal, "dyeBrown");
 
-		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezaritePickaxe, 1), "ccc", " s ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood");
+		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezaritePickaxe, 1), "ccc", " s ", " s ", 'c', MeteorItems.FrozenIronIngot, 's', "stickWood");
 
-		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteSpade, 1), "c", "s", "s", 'c', MeteorItems.FrozenIron, 's', "stickWood");
+		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteSpade, 1), "c", "s", "s", 'c', MeteorItems.FrozenIronIngot, 's', "stickWood");
 
-		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteAxe, 1), " cc", " sc", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood");
+		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteAxe, 1), " cc", " sc", " s ", 'c', MeteorItems.FrozenIronIngot, 's', "stickWood");
 
-		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteAxe, 1), "cc ", "cs ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood");
+		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteAxe, 1), "cc ", "cs ", " s ", 'c', MeteorItems.FrozenIronIngot, 's', "stickWood");
 
-		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteHoe, 1), "cc ", " s ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood");
+		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteHoe, 1), "cc ", " s ", " s ", 'c', MeteorItems.FrozenIronIngot, 's', "stickWood");
 
-		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteHoe, 1), " cc", " s ", " s ", 'c', MeteorItems.FrozenIron, 's', "stickWood");
+		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteHoe, 1), " cc", " s ", " s ", 'c', MeteorItems.FrozenIronIngot, 's', "stickWood");
 
-		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteSword, 1), "c", "c", "s", 'c', MeteorItems.FrozenIron, 's', "stickWood");
+		MeteorCraftingHelper.addShapedOreRecipe(new ItemStack(MeteorItems.FrezariteSword, 1), "c", "c", "s", 'c', MeteorItems.FrozenIronIngot, 's', "stickWood");
 
-		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.METEOR_TIMER, 1), "mfk", "brb", 'm', MeteorItems.MeteoriteIngot, 'f', MeteorItems.FrozenIron,
+		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.METEOR_TIMER, 1), "mfk", "brb", 'm', MeteorItems.MeteoriteIngot, 'f', MeteorItems.FrozenIronIngot,
 				'k', MeteorItems.KreknoriteIngot, 'b', new ItemStack(MeteorBlocks.DECORATOR_METEORITE, 1),
 				'r', Items.REDSTONE);
 
@@ -125,9 +125,9 @@ public class HandlerRecipe implements IFuelHandler {
 
 		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.MeteoriteIngot, 9), new ItemStack(MeteorBlocks.DECORATOR_METEORITE, 1));
 
-		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1), "iii", "iii", "iii", 'i', MeteorItems.FrozenIron);
+		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1), "iii", "iii", "iii", 'i', MeteorItems.FrozenIronIngot);
 
-		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.FrozenIron, 9), new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1));
+		MeteorCraftingHelper.addShapelessRecipe(new ItemStack(MeteorItems.FrozenIronIngot, 9), new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1));
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.DECORATOR_KREKNORITE, 1), "iii", "iii", "iii", 'i', MeteorItems.KreknoriteIngot);
 
@@ -135,7 +135,7 @@ public class HandlerRecipe implements IFuelHandler {
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorProximityDetector, 1), " m ", "mrm", " m ", 'm', MeteorItems.MeteoriteIngot, 'r', Items.REDSTONE);
 
-		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorTimeDetector, 1), " f ", "frf", " f ", 'f', MeteorItems.FrozenIron, 'r', MeteorItems.itemRedMeteorGem);
+		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorTimeDetector, 1), " f ", "frf", " f ", 'f', MeteorItems.FrozenIronIngot, 'r', MeteorItems.itemRedMeteorGem);
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorCrashDetector, 1), " k ", "krk", " k ", 'k', MeteorItems.KreknoriteIngot, 'r', MeteorItems.itemRedMeteorGem);
 
@@ -155,14 +155,14 @@ public class HandlerRecipe implements IFuelHandler {
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 4), "rmr", "ksk", "rfr", 'm', new ItemStack(MeteorBlocks.blockDecorator, 1, 0), 's', MeteorItems.itemMeteorSummoner,
 				'k', new ItemStack(MeteorBlocks.blockDecorator, 1, 2), 'f', new ItemStack(MeteorBlocks.blockDecorator, 1, 1),
 				'r', MeteorItems.itemRedMeteorGem);
-*/
+
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 5), "mfm", "fsf", "mfm", 'm', MeteorItems.MeteoriteIngot, 's', MeteorItems.itemMeteorSummoner,
 				'f', Items.FISH);
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorSummoner, 1, 5), "mfm", "fsf", "mfm", 'm', MeteorItems.MeteoriteIngot, 's', MeteorItems.itemMeteorSummoner,
 				'f', Items.COOKED_FISH);
-
+*/
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorBlocks.FREEZER, 1), "ifi", "fbf", "ifi", 'i', Items.IRON_INGOT, 'f', MeteorItems.itemFrezaCrystal,
 				'b', Items.BUCKET);
 		

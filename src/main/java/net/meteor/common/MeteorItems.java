@@ -27,12 +27,11 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 @Mod.EventBusSubscriber(modid = MeteorsMod.MOD_ID)
 public class MeteorItems {
-	
+
 	public static final ArmorMaterial MeteoriteArmor = EnumHelper.addArmorMaterial("METEORITE", "meteors:meteorite", 36, new int[] { 2, 7, 5, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
 	public static final ArmorMaterial FrezariteArmor = EnumHelper.addArmorMaterial("FREZARITE", "meteors:frezarite", 7, new int[] { 2, 5, 3, 1 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
 	public static final ArmorMaterial KreknoriteArmor = EnumHelper.addArmorMaterial("KREKNORITE", "meteors:kreknorite", 40, new int[] { 3, 8, 6, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
@@ -43,7 +42,12 @@ public class MeteorItems {
 	//TODO 1.12.2 change setTranslationKey to be registered in the event.
 	public static final Item itemMeteorChips 			= new ItemMeteorsMod()/*.setTexture("MeteorChips")*/.setMaxStackSize(64).setRegistryName("MeteorChips").setTranslationKey("MeteorChips");
 	public static final Item itemRedMeteorGem 			= new ItemMeteorsMod()/*.setTexture("RedMeteorGem")*/.setMaxStackSize(64).setRegistryName("RedMeteorGem").setTranslationKey("RedMeteorGem");
-	public static final Item itemMeteorSummoner 		= new ItemSummoner()/*.setTexture("MeteorSummoner")*/.setRegistryName("MeteorSummoner").setTranslationKey("MeteorSummoner");
+	public static final Item itemMeteorSummonerRandom 		= new ItemSummoner().setRegistryName("MeteorSummonerRandom").setTranslationKey("MeteorSummonerRandom");
+	public static final Item itemMeteorSummonerMeteorite 		= new ItemSummoner().setRegistryName("MeteorSummonerMeteorite").setTranslationKey("MeteorSummonerMeteorite");
+	public static final Item itemMeteorSummonerFrezarite 		= new ItemSummoner().setRegistryName("MeteorSummonerFrezarite").setTranslationKey("MeteorSummonerFrezarite");
+	public static final Item itemMeteorSummonerKreknorite 		= new ItemSummoner().setRegistryName("MeteorSummonerKreknorite").setTranslationKey("MeteorSummonerKreknorite");
+	public static final Item itemMeteorSummonerUnknown 		= new ItemSummoner().setRegistryName("MeteorSummonerUnknown").setTranslationKey("MeteorSummonerUnknown");
+	public static final Item itemMeteorSummonerKitty 		= new ItemSummoner().setRegistryName("MeteorSummonerKitty").setTranslationKey("MeteorSummonerKitty");
 	public static final Item itemFrezaCrystal 			= new ItemMeteorsMod()/*.setTexture("FrezariteCrystal")*/.setMaxStackSize(64).setRegistryName("FrezariteCrystal").setTranslationKey("FrezariteCrystal");
 	public static final Item itemKreknoChip 			= new ItemMeteorsMod()/*.setTexture("KreknoriteChip")*/.setMaxStackSize(64).setRegistryName("KreknoriteChip").setTranslationKey("KreknoriteChip");
 	public static final Item itemVanillaIceCream 		= new ItemFoodMeteorsMod(4, false)/*.setTexture("VanillaIceCream")*/.setMaxStackSize(64).setRegistryName("VanillaIceCream").setTranslationKey("VanillaIceCream");
@@ -76,9 +80,9 @@ public class MeteorItems {
 	public static final Item KreknoriteSword 			= new ItemKreknoSword(MeteoriteTool).setRegistryName("KreknoriteSword")/*.setTexture("KreknoriteSword")*/.setTranslationKey("KreknoriteSword");
 
 	// Begin industrialization! :D
-	public static final Item MeteoriteIngot				= new ItemMeteorsMod()/*.setTexture("MeteoriteIngot")*/.setRegistryName("MeteoriteIngot");
-	public static final Item FrozenIron					= new ItemMeteorsMod()/*.setTexture("FrozenIron")*/.setRegistryName("FrozenIron");
-	public static final Item KreknoriteIngot			= new ItemMeteorsMod()/*.setTexture("KreknoriteIngot")*/.setRegistryName("KreknoriteIngot");
+	public static final Item MeteoriteIngot				= new ItemMeteorsMod()/*.setTexture("MeteoriteIngot")*/.setRegistryName("MeteoriteIngot").setTranslationKey("MeteoriteIngot");
+	public static final Item FrozenIronIngot = new ItemMeteorsMod()/*.setTexture("FrozenIron")*/.setRegistryName("FrozenIronIngot").setTranslationKey("FrozenIronIngot");
+	public static final Item KreknoriteIngot			= new ItemMeteorsMod()/*.setTexture("KreknoriteIngot")*/.setRegistryName("KreknoriteIngot").setTranslationKey("KreknoriteIngot");
 	
 	public static void readyItems() {
 		MeteoriteAxe.setHarvestLevel("axe", 3);
@@ -101,7 +105,12 @@ public class MeteorItems {
 		event.getRegistry().register(itemMeteorCrashDetector);
 		event.getRegistry().register(itemMeteorProximityDetector);
 		event.getRegistry().register(itemMeteorTimeDetector);
-		event.getRegistry().register(itemMeteorSummoner);
+		event.getRegistry().register(itemMeteorSummonerRandom);
+		event.getRegistry().register(itemMeteorSummonerMeteorite);
+		event.getRegistry().register(itemMeteorSummonerFrezarite);
+		event.getRegistry().register(itemMeteorSummonerKreknorite);
+		event.getRegistry().register(itemMeteorSummonerUnknown);
+		event.getRegistry().register(itemMeteorSummonerKitty);
 		event.getRegistry().register(FrezariteHelmet);
 		event.getRegistry().register(FrezariteBody);
 		event.getRegistry().register(FrezariteLegs);
@@ -126,12 +135,12 @@ public class MeteorItems {
 		event.getRegistry().register(FrezariteAxe);
 		event.getRegistry().register(FrezariteHoe);
 		event.getRegistry().register(MeteoriteIngot);
-		event.getRegistry().register(FrozenIron);
+		event.getRegistry().register(FrozenIronIngot);
 		event.getRegistry().register(KreknoriteIngot);
 		
 		// Ore Dictionary
 		OreDictionary.registerOre("ingotMeteorite", MeteoriteIngot);
-		OreDictionary.registerOre("ingotFrozenIron", FrozenIron);
+		OreDictionary.registerOre("ingotFrozenIron", FrozenIronIngot);
 		OreDictionary.registerOre("ingotKreknorite", KreknoriteIngot);
 	}
 	

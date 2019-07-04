@@ -16,7 +16,11 @@ import net.meteor.common.block.RedMeteorGemBlock;
 import net.meteor.common.block.BlockSlippery;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.minecraft.block.Block;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Mod.EventBusSubscriber(modid = MeteorsMod.MOD_ID)
 public class MeteorBlocks {
 	
 	public static final Block METEOR = new MeteorBlock().setRegistryName("Meteor").setTranslationKey("Meteor");
@@ -37,18 +41,41 @@ public class MeteorBlocks {
 	public static final Block DECORATOR_KREKNORITE = new BlockDecoration("kreknorite_block").setTranslationKey("kreknorite_block");
 	public static final Block FREEZER = new FreezingMachineBlock().setRegistryName("freezingMachine").setHardness(3.5F).setTranslationKey("freezingMachine");
 	public static final Block blockSlippery				= new BlockSlippery(0.98F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyTwo			= new BlockSlippery(1.03F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyThree		= new BlockSlippery(1.07F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyFour			= new BlockSlippery(1.10F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairs		= new BlockSlipperyStairs(0.98F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairsTwo	= new BlockSlipperyStairs(1.03F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairsThree	= new BlockSlipperyStairs(1.07F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairsFour	= new BlockSlipperyStairs(1.10F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	
-	public static void registerBlocks() {
+	public static final Block blockSlipperyTwo			= new BlockSlippery(1.03F).setHardness(1.0F).setRegistryName("slipperyBlock2").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyThree		= new BlockSlippery(1.07F).setHardness(1.0F).setRegistryName("slipperyBlock3").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyFour			= new BlockSlippery(1.10F).setHardness(1.0F).setRegistryName("slipperyBlock4").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairs		= new BlockSlipperyStairs(0.98F).setHardness(1.0F).setRegistryName("slipperyBlock5").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairsTwo	= new BlockSlipperyStairs(1.03F).setHardness(1.0F).setRegistryName("slipperyBlock6").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairsThree	= new BlockSlipperyStairs(1.07F).setHardness(1.0F).setRegistryName("slipperyBlock7").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairsFour	= new BlockSlipperyStairs(1.10F).setHardness(1.0F).setRegistryName("slipperyBlock8").setTranslationKey("slipperyBlock");
 
-		
 
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		event.getRegistry().register(MeteorBlocks.METEOR_ORE);
+		event.getRegistry().register(MeteorBlocks.METEOR);
+		event.getRegistry().register(MeteorBlocks.HOT_METEOR);
+		event.getRegistry().register(MeteorBlocks.HOT_RARE_METEOR);
+		event.getRegistry().register(MeteorBlocks.RARE_METEOR);
+		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD);
+		event.getRegistry().register(MeteorBlocks.METEOR_SHIELD_TORCH);
+		event.getRegistry().register(MeteorBlocks.FREEZARITE);
+		event.getRegistry().register(MeteorBlocks.KRENKONITE);
+		event.getRegistry().register(MeteorBlocks.METEOR_TIMER);
+		event.getRegistry().register(MeteorBlocks.RED_METEOR_GEM);
+		event.getRegistry().register(MeteorBlocks.DECORATOR_FREEZARITE);
+		event.getRegistry().register(MeteorBlocks.DECORATOR_KREKNORITE);
+		event.getRegistry().register(MeteorBlocks.DECORATOR_METEORITE);
+		event.getRegistry().register(MeteorBlocks.FREEZER);
+		event.getRegistry().register(MeteorBlocks.blockSlippery);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyTwo);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyThree);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyFour);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairs);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsTwo);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsThree);
+		event.getRegistry().register(MeteorBlocks.blockSlipperyStairsFour);
+		event.getRegistry().register(MeteorBlocks.FREEZARITE_ORE);
 	}
 
 }

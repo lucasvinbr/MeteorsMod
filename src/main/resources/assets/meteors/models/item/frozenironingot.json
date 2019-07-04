@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "meteors:items/ingots/frozen_iron_ingot"
+  }
+}
