@@ -33,9 +33,9 @@ import net.minecraftforge.oredict.OreDictionary;
 @Mod.EventBusSubscriber(modid = MeteorsMod.MOD_ID)
 public class MeteorItems {
 	
-	public static final ArmorMaterial MeteoriteArmor = EnumHelper.addArmorMaterial("METEORITE", "METEORITE", 36, new int[] { 2, 7, 5, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
-	public static final ArmorMaterial FrezariteArmor = EnumHelper.addArmorMaterial("FREZARITE", "FREZARITE", 7, new int[] { 2, 5, 3, 1 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
-	public static final ArmorMaterial KreknoriteArmor = EnumHelper.addArmorMaterial("KREKNORITE", "KREKNORITE", 40, new int[] { 3, 8, 6, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
+	public static final ArmorMaterial MeteoriteArmor = EnumHelper.addArmorMaterial("METEORITE", "meteors:meteorite", 36, new int[] { 2, 7, 5, 2 }, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
+	public static final ArmorMaterial FrezariteArmor = EnumHelper.addArmorMaterial("FREZARITE", "meteors:frezarite", 7, new int[] { 2, 5, 3, 1 }, 20, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
+	public static final ArmorMaterial KreknoriteArmor = EnumHelper.addArmorMaterial("KREKNORITE", "meteors:kreknorite", 40, new int[] { 3, 8, 6, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0f);
 
 	public static final ToolMaterial MeteoriteTool = EnumHelper.addToolMaterial("METEORITE", 3, 900, 10.0F, 2, 15);
 	public static final ToolMaterial FrezariteTool = EnumHelper.addToolMaterial("FREZARITE", 2, 225, 7.0F, 2, 20);

@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.meteor.common.EnumMeteor;
 import net.meteor.common.crash.CrashComet;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -73,7 +74,7 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 		prevPosY = posY;
 		prevPosZ = posZ;
 		motionY -= 0.039999999105930328D;
-		setPosition(motionX, motionY, motionZ);
+		move(MoverType.SELF, motionX, motionY, motionZ);
 		motionY *= 0.98000001907348633D;
 		
 		if (onGround) {

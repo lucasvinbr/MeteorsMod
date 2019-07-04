@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class ArmorEffectController
 {
@@ -17,7 +18,7 @@ public class ArmorEffectController
 		if (player.isImmuneToFire() != flag) {
 			try {
 				if (fireImmunityField == null) {
-					fireImmunityField = Entity.class.getDeclaredField("field_70178_ae"); // note that in order to test this in deobfuscated environment, change to "isImmuneToFire"
+					fireImmunityField = ObfuscationReflectionHelper.findField(Entity.class,"field_70178_ae");//Entity.class.getDeclaredField("field_70178_ae"); // note that in order to test this in deobfuscated environment, change to "isImmuneToFire"
 					fireImmunityField.setAccessible(true);
 				}
 				fireImmunityField.setBoolean(player, flag);
