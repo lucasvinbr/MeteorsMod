@@ -24,10 +24,12 @@ public class CreativeTabMeteor extends CreativeTabs {
     public void displayAllRelevantItems(NonNullList<ItemStack> items) {
 		super.displayAllRelevantItems(items);
 
-		items.add(16, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairs));
-		items.add(17, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairsTwo));
-		items.add(18, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairsThree));
-		items.add(19, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairsFour));
+		//TODO 1.12.2
+		//items.add(16, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairs));
+		//items.add(17, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairsTwo));
+		//items.add(18, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairsThree));
+		//items.add(19, getSlipperyStairItemStack(MeteorBlocks.blockSlipperyStairsFour));
+		//TODO 1.12.2 doesn't seem that these produce usable stacks
 		items.add(ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(MeteorsMod.ColdTouch, MeteorsMod.ColdTouch.getMaxLevel())));
 		items.add(ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(MeteorsMod.Magnetization, MeteorsMod.Magnetization.getMaxLevel())));
 	}

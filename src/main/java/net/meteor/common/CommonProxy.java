@@ -7,6 +7,7 @@ import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.meteor.common.tileentity.TileEntityMeteorShield;
 import net.meteor.common.tileentity.TileEntityMeteorTimer;
 import net.meteor.common.tileentity.TileEntitySlippery;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy
@@ -14,10 +15,10 @@ public class CommonProxy
 	public HashMap<Integer, HandlerMeteor> metHandlers = new HashMap<>();
 
 	public void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityMeteorShield.class, "TileEntityMeteorShield");
-		GameRegistry.registerTileEntity(TileEntityMeteorTimer.class, "TileEntityMeteorTimer");
-		GameRegistry.registerTileEntity(TileEntityFreezingMachine.class, "TileEntityIceMaker");
-		GameRegistry.registerTileEntity(TileEntitySlippery.class, "TileEntitySlippery");
+		GameRegistry.registerTileEntity(TileEntityMeteorShield.class, new ResourceLocation(MeteorsMod.MOD_ID,"TileEntityMeteorShield"));
+		GameRegistry.registerTileEntity(TileEntityMeteorTimer.class, new ResourceLocation(MeteorsMod.MOD_ID,"TileEntityMeteorTimer"));
+		GameRegistry.registerTileEntity(TileEntityFreezingMachine.class, new ResourceLocation(MeteorsMod.MOD_ID,"TileEntityIceMaker"));
+		GameRegistry.registerTileEntity(TileEntitySlippery.class, new ResourceLocation(MeteorsMod.MOD_ID,"TileEntitySlippery"));
 	}
 
 	public void loadStuff() {}

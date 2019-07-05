@@ -52,12 +52,10 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerTileEntities()
 	{
-		TileEntityMeteorShieldRenderer tileRend = new TileEntityMeteorShieldRenderer();
-		ClientRegistry.registerTileEntity(TileEntityMeteorShield.class, "TileEntityMeteorShield", tileRend);
-		TileEntityMeteorTimerRenderer timerRend = new TileEntityMeteorTimerRenderer();
-		ClientRegistry.registerTileEntity(TileEntityMeteorTimer.class, "TileEntityMeteorTimer", timerRend);
-		GameRegistry.registerTileEntity(TileEntityFreezingMachine.class, "TileEntityIceMaker");
-		ClientRegistry.registerTileEntity(TileEntitySlippery.class, "TileEntitySlippery", new TileEntitySlipperyRenderer());
+		super.registerTileEntities();
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMeteorShield.class, new TileEntityMeteorShieldRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMeteorTimer.class, new TileEntityMeteorTimerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlippery.class, new TileEntitySlipperyRenderer());
 	}
 
 	@Override

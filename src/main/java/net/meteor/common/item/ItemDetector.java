@@ -69,13 +69,4 @@ public class ItemDetector extends ItemMeteorsMod {
 		
 	}
 
-	//TODO 1.12.2
-	//@SideOnly(Side.CLIENT)
-	//@Override
-    //public void registerIcons(IIconRegister par1IconRegister) {
-	//	TextureMap map = (TextureMap)par1IconRegister;
-	//	map.setTextureEntry(this.iconString, new TextureDetector(this.iconString, type));
-	//	this.itemIcon = map.getTextureExtry(this.iconString);
-	//}
-
 }
