@@ -33,12 +33,12 @@ public class MeteorBlocks {
 	public static final Block FREEZARITE_ORE = new MeteorOreBlock(MeteorItems.itemFrezaCrystal).setRegistryName("FrezariteOre").setTranslationKey("FrezariteOre");
 	public static final Block METEOR_SHIELD = new MeteorShieldBlock().setRegistryName("MeteorShield").setTranslationKey("MeteorShield");
 	public static final Block METEOR_SHIELD_TORCH = new MeteorShieldTorchBlock(true).setRegistryName("ProtectedLandTester").setCreativeTab(MeteorsMod.meteorTab).setTranslationKey("ProtectedLandTester");
-	public static final Block METEOR_SHIELD_TORCH_INACTIVE = new MeteorShieldTorchBlock(false).setRegistryName("ProtectedLandTester").setCreativeTab(MeteorsMod.meteorTab).setTranslationKey("ProtectedLandTester");
+	public static final Block METEOR_SHIELD_TORCH_INACTIVE = new MeteorShieldTorchBlock(false).setRegistryName("ProtectedLandTesterInactive").setCreativeTab(MeteorsMod.meteorTab).setTranslationKey("ProtectedLandTester");
 	public static final Block METEOR_TIMER = new MeteorTimerBlock().setRegistryName("MeteorTimer").setTranslationKey("MeteorTimer");
 	public static final Block RED_METEOR_GEM = new RedMeteorGemBlock().setRegistryName("blockRedGem").setTranslationKey("blockRedGem");
-	public static final Block DECORATOR_METEORITE = new BlockDecoration("meteorite_block").setTranslationKey("meteorite_block");
-	public static final Block DECORATOR_FREEZARITE = new BlockDecoration("frezarite_block").setTranslationKey("frezarite_block");
-	public static final Block DECORATOR_KREKNORITE = new BlockDecoration("kreknorite_block").setTranslationKey("kreknorite_block");
+	public static final Block DECORATOR_METEORITE = new BlockDecoration("decorator_meteorite_block").setTranslationKey("meteorite_block");
+	public static final Block DECORATOR_FREEZARITE = new BlockDecoration("decorator_frezarite_block").setTranslationKey("frezarite_block");
+	public static final Block DECORATOR_KREKNORITE = new BlockDecoration("decorator_kreknorite_block").setTranslationKey("kreknorite_block");
 	public static final Block FREEZER = new FreezingMachineBlock().setRegistryName("freezingMachine").setHardness(3.5F).setTranslationKey("freezingMachine");
 	public static final Block blockSlippery				= new BlockSlippery(0.98F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
 	public static final Block blockSlipperyTwo			= new BlockSlippery(1.03F).setHardness(1.0F).setRegistryName("slipperyBlock2").setTranslationKey("slipperyBlock");

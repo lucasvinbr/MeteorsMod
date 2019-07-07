@@ -17,17 +17,24 @@ import net.meteor.common.item.ItemKreknoSword;
 import net.meteor.common.item.ItemMeteorsMod;
 import net.meteor.common.item.ItemSummoner;
 import net.meteor.common.util.MeteorConstants;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemBlock;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 @Mod.EventBusSubscriber(modid = MeteorsMod.MOD_ID)
 public class MeteorItems {
@@ -137,6 +144,20 @@ public class MeteorItems {
 		event.getRegistry().register(MeteoriteIngot);
 		event.getRegistry().register(FrozenIronIngot);
 		event.getRegistry().register(KreknoriteIngot);
+
+		//event.getRegistry().register(new ItemBlock(MeteorBlocks.METEOR).setRegistryName(MeteorBlocks.METEOR.getRegistryName()));
+
+		Class<MeteorBlocks> meteorBlocksClass = MeteorBlocks.class;
+		Field[] fields = meteorBlocksClass.getDeclaredFields();
+		Arrays.stream(fields).forEach(field -> {
+			try {
+				Object o = field.get(null);
+				if (o instanceof Block)
+					event.getRegistry().register(new ItemBlock((Block)o).setRegistryName(((Block)o).getRegistryName()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		
 		// Ore Dictionary
 		OreDictionary.registerOre("ingotMeteorite", MeteoriteIngot);
