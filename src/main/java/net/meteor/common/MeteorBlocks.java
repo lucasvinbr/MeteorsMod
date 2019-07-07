@@ -25,8 +25,8 @@ public class MeteorBlocks {
 	
 	public static final Block METEOR = new MeteorBlock().setRegistryName("Meteor").setTranslationKey("Meteor");
 	public static final Block HOT_METEOR = new HotMeteorBlock().setRegistryName("HotMeteor").setTranslationKey("HotMeteor");
-	public static final Block RARE_METEOR = new RareFallenMeteorBlock().setRegistryName("MeteorRare").setCreativeTab(null).setTranslationKey("MeteorRare");
-	public static final Block HOT_RARE_METEOR = new RareFallenHotMeteorBlock().setRegistryName("HotRareMeteor").setCreativeTab(null).setTranslationKey("HotRareMeteor");
+	public static final Block RARE_METEOR = new RareFallenMeteorBlock().setRegistryName("MeteorRare")/*.setCreativeTab(null)*/.setTranslationKey("MeteorRare");
+	public static final Block HOT_RARE_METEOR = new RareFallenHotMeteorBlock().setRegistryName("HotRareMeteor")/*.setCreativeTab(null)*/.setTranslationKey("HotRareMeteor");
 	public static final Block FREEZARITE = new FreezariteBlock().setRegistryName("Frezarite").setTranslationKey("Frezarite");
 	public static final Block KRENKONITE = new KreknoriteBlock().setRegistryName("Kreknorite").setTranslationKey("Kreknorite");
 	public static final Block METEOR_ORE = new MeteorOreBlock(MeteorItems.itemMeteorChips).setRegistryName("MeteorOre").setTranslationKey("MeteorOre");

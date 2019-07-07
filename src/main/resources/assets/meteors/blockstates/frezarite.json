@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "normal": { "model": "meteors:frezarite" },
+    "frozen_level=0": { "model": "meteors:frezarite" },
+    "frozen_level=1": { "model": "meteors:frezarite" },
+    "frozen_level=2": { "model": "meteors:frezarite" },
+    "frozen_level=3": { "model": "meteors:frezarite" },
+    "frozen_level=4": { "model": "meteors:frezarite" },
+    "frozen_level=5": { "model": "meteors:frezarite" },
+    "frozen_level=6": { "model": "meteors:frezarite" }
+  }
+}

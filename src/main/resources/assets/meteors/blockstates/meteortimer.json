@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "normal": { "model": "meteors:meteortimer" },
+    "power=0": { "model": "meteors:meteortimer" },
+    "power=1": { "model": "meteors:meteortimer" },
+    "power=2": { "model": "meteors:meteortimer" },
+    "power=3": { "model": "meteors:meteortimer" },
+    "power=4": { "model": "meteors:meteortimer" },
+    "power=5": { "model": "meteors:meteortimer" },
+    "power=6": { "model": "meteors:meteortimer" },
+    "power=7": { "model": "meteors:meteortimer" },
+    "power=8": { "model": "meteors:meteortimer" },
+    "power=9": { "model": "meteors:meteortimer" },
+    "power=10": { "model": "meteors:meteortimer" },
+    "power=11": { "model": "meteors:meteortimer" },
+    "power=12": { "model": "meteors:meteortimer" },
+    "power=13": { "model": "meteors:meteortimer" },
+    "power=14": { "model": "meteors:meteortimer" },
+    "power=15": { "model": "meteors:meteortimer" }
+  }
+}
