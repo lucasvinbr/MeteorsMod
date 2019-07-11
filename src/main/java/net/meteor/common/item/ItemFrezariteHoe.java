@@ -103,9 +103,4 @@ public class ItemFrezariteHoe extends ItemHoe
 		return 0;
 	}
 
-	//TODO 1.12.2
-	//public Item setTexture(String s) {
-	//	return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	//}
-	
 }

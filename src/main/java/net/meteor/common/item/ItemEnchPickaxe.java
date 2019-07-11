@@ -34,11 +34,6 @@ public class ItemEnchPickaxe extends ItemPickaxe
 		}
 		return super.getDamage(stack);
 	}
-
-	//TODO 1.12.2
-	//public ItemEnchPickaxe setTexture(String s) {
-	//	return (ItemEnchPickaxe) this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	//}
 	
 	private boolean isRestricted(ItemStack item) {
 		if (item.hasTagCompound()) {

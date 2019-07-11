@@ -20,8 +20,12 @@ import net.meteor.common.crash.CrashUnknown;
 import net.meteor.common.packets.PacketLastCrash;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -42,12 +46,13 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 	private int originX;
 	private int originZ;
 
-	protected boolean summoned = false;
+	private boolean summoned = false;
 
 	public EntityMeteor(World world) {
 		super(world);
+		this.setSize(1f, 1f);
+
 		this.preventEntitySpawning = true;
-		this.setSize(0.98F, 0.98F);
 		//this.yOffset = (this.height / 2.0F);//TODO 1.12.2
 		this.meteorType = EnumMeteor.METEORITE;
 
@@ -57,21 +62,23 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 		this.rotationPitch = (float)(Math.random() * 360D);
 	}
 
-	public EntityMeteor(World world, int mSize, double x, double z, EnumMeteor metType, boolean summon) {
+	public EntityMeteor(World world, int mSize, double originX, double originZ, EnumMeteor metType, boolean summon) {
 		this(world);
+
 		this.size = mSize;
 		this.meteorType = metType;
 		this.summoned = summon;
-		this.originX = (int)x;
-		this.originZ = (int)z;
-		this.setPosition(x, 250.0D, z);
-		this.prevPosX = x;
+		this.originX = (int)originX;
+		this.originZ = (int)originZ;
+		this.setPosition(originX, 250.0D, originZ);
+		this.prevPosX = originX;
 		this.prevPosY = 250.0D;
-		this.prevPosZ = z;
+		this.prevPosZ = originZ;
 	}
 
 	@Override
-	protected void entityInit() {}
+	protected void entityInit() {
+	}
 
 	@Override
 	protected boolean canTriggerWalking() {
@@ -85,7 +92,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public void onUpdate()
+	public void onUpdate()//1.12.2 TODO figure out why the meteor doesn't land where it appears to land..
 	{
 		if (!this.summoned) {
 			if (!getEntityWorld().isRemote) {
@@ -159,6 +166,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					
 				}
 				CrashMeteorite worldGen = getWorldGen();
+
 				if (worldGen.generate(getEntityWorld(), rand, new BlockPos((int)posX, (int)posY, (int)posZ))) {
 					worldGen.afterCrashCompleted(getEntityWorld(), (int)posX, (int)posY, (int)posZ);
 				}
@@ -216,6 +224,9 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 		this.spawnPauseTicks = nbttagcompound.getInteger("pauseTicks");
 		this.originX = nbttagcompound.getInteger("originX");
 		this.originZ = nbttagcompound.getInteger("originZ");
+
+		this.setSize(this.size * 2f, this.size * 2f);
+
 	}
 
 //	@SideOnly(Side.CLIENT)

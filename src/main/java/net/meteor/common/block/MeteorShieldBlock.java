@@ -41,10 +41,10 @@ public class MeteorShieldBlock extends DirectionalContainerBlock {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntity shield = world.getTileEntity(pos);
 
-        if (world.isRemote && shield instanceof TileEntityMeteorShield) {
+        if (!world.isRemote && shield instanceof TileEntityMeteorShield) {
             // TODO - make this more functional
             MeteorsMod.proxy.metHandlers.get(world.provider.getDimension()).getShieldManager().meteorShields.remove(shield);
-            //MeteorsMod.log.info("METEOR SHIELD SHOULD BE REMOVED");
+            MeteorsMod.log.info("METEOR SHIELD SHOULD BE REMOVED");
 
             // TODO - finalize sound events
             final SoundEvent powerdown = new SoundEvent(new ResourceLocation("meteors:shield.powerdown"));

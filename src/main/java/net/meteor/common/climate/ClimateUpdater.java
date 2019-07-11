@@ -56,7 +56,7 @@ public class ClimateUpdater {
 									if (random.nextInt(100) < MeteorsMod.instance.kittyAttackChance) {
 										meteorHandler.readyNewMeteor(x, z, HandlerMeteor.getMeteorSize(), 90, EnumMeteor.KITTY);
 									} else {
-										meteorHandler.readyNewMeteor(x, z, HandlerMeteor.getMeteorSize(), random.nextInt(mod.RandTicksUntilMeteorCrashes + 1) + mod.MinTicksUntilMeteorCrashes, HandlerMeteor.getMeteorType());
+										meteorHandler.readyNewMeteor(x, z, HandlerMeteor.getMeteorSize(), random.nextInt(mod.RandTicksUntilMeteorCrashes + 1) + mod.MinTicksUntilMeteorCrashes, HandlerMeteor.getRandomMeteorType());
 									}
 								}
 							}

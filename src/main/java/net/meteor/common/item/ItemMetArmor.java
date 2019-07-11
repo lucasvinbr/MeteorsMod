@@ -23,22 +23,6 @@ public class ItemMetArmor extends ItemArmor
 		super(armorMaterial, renderIndexIn, slot);
 		this.setCreativeTab(MeteorsMod.meteorTab);
 	}
-
-	//TODO 1.12.2
-	//@Override
-	//public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
-	//{
-	//	if (slot == 2) {
-	//		return MeteorsMod.MOD_ID + ":textures/armor/" + this.armorTex + "Armor_2.png";
-	//	} else {
-	//		return MeteorsMod.MOD_ID + ":textures/armor/" + this.armorTex + "Armor_1.png";
-	//	}
-	//}
-
-	//TODO 1.12.2
-	//public ItemMetArmor setTexture(String s) {
-	//	return (ItemMetArmor)this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	//}
 	
 	@SideOnly(Side.CLIENT)
 	@Override

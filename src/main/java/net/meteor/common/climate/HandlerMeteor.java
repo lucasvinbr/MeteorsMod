@@ -6,7 +6,6 @@ import java.util.Random;
 
 import net.meteor.common.ClientHandler;
 import net.meteor.common.EnumMeteor;
-import net.meteor.common.HandlerAchievement;
 import net.meteor.common.IMeteorShield;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.entity.EntityMeteor;
@@ -228,7 +227,7 @@ public class HandlerMeteor
 		return minSize;
 	}
 
-	public static EnumMeteor getMeteorType() {
+	public static EnumMeteor getRandomMeteorType() {
 		int r = random.nextInt(63);
 		MeteorsMod mod = MeteorsMod.instance;
 		if ((r >= 60) && (mod.unknownEnabled)) {
@@ -244,7 +243,7 @@ public class HandlerMeteor
 	}
 	
 	public static EnumMeteor getCometType() {
-		EnumMeteor type = getMeteorType();
+		EnumMeteor type = getRandomMeteorType();
 		if (type == EnumMeteor.UNKNOWN) {
 			return EnumMeteor.getTypeFromID(random.nextInt(3));
 		}

@@ -35,11 +35,6 @@ public class ItemEnchHoe extends ItemHoe
 		return super.getDamage(stack);
 	}
 
-	//TODO 1.12.2
-	//public ItemEnchHoe setTexture(String s) {
-	//	return (ItemEnchHoe) this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	//}
-	
 	private boolean isRestricted(ItemStack item) {
 		if (item.hasTagCompound()) {
 			NBTTagCompound tag = item.getTagCompound();

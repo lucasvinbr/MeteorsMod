@@ -16,9 +16,4 @@ public class ItemFoodMeteorsMod extends ItemFood
         this(amount, 0.6F, isWolfFood);
     }
 
-    //TODO 1.12.2
-	//public Item setTexture(String s) {
-	//	return this.setTextureName(MeteorsMod.MOD_ID + ":" + s);
-	//}
-	
 }

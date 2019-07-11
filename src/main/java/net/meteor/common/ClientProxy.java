@@ -48,7 +48,7 @@ import java.util.Arrays;
 @Mod.EventBusSubscriber
 public class ClientProxy extends CommonProxy
 {
-	
+
 	@Override
 	public void registerTileEntities()
 	{
@@ -101,8 +101,9 @@ public class ClientProxy extends CommonProxy
 		Arrays.stream(fields).forEach(field -> {
 			try {
 				Object o = field.get(null);
-				if (o instanceof Block)
+				if (o instanceof Block) {
 					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock((Block) o), 0, new ModelResourceLocation(((Block) o).getRegistryName().toString()));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

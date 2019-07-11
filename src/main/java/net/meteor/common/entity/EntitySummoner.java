@@ -3,7 +3,6 @@ package net.meteor.common.entity;
 import io.netty.buffer.ByteBuf;
 import net.meteor.common.ClientHandler;
 import net.meteor.common.EnumMeteor;
-import net.meteor.common.HandlerAchievement;
 import net.meteor.common.IMeteorShield;
 import net.meteor.common.MeteorItems;
 import net.meteor.common.MeteorsMod;
@@ -32,7 +31,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 		{0.392156862745098F, 0.3725490196078431F, 0.3450980392156863F}, 
 		{0.0941176470588235F, 0.6470588235294118F, 0.0941176470588235F} };
 
-	public int mID;
+	public EnumMeteor meteorType;
 	public boolean isRandom;
 
 	private EntityLiving thrower;
@@ -48,10 +47,10 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 		super(world, entityliving);
 	}
 
-	public EntitySummoner(World world, EntityLivingBase entityliving, int meteorID, boolean r)
+	public EntitySummoner(World world, EntityLivingBase entityliving, EnumMeteor meteorID, boolean r)
 	{
 		this(world, entityliving);
-		this.mID = meteorID;
+		this.meteorType = meteorID;
 		this.isRandom = r;
 	}
 
@@ -65,7 +64,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 	{
 		super.onUpdate();
 		if (this.getEntityWorld().isRemote) {
-			int rgbIndex = mID;
+			int rgbIndex = meteorType.getID();
 			if (isRandom) {
 				rgbIndex = this.getEntityWorld().rand.nextInt(5);
 			}
@@ -91,7 +90,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 					} else {
 						//TODO 1.12.2
-						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
+						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.meteorType + 1));
 					}
 				}
 			}
@@ -112,7 +111,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 					} else {
 						//TODO 1.12.2
-						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
+						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.meteorType + 1));
 					}
 				}
 			} else if ((!MeteorsMod.instance.allowSummonedMeteorGrief) && (player != null)) {
@@ -125,7 +124,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 							player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 						} else {
 							//TODO 1.12.2
-							//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.mID + 1));
+							//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.meteorType + 1));
 						}
 					}
 				}
@@ -138,7 +137,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 					//TODO 1.12.2
 					//player.triggerAchievement(HandlerAchievement.summonMeteor);
 				}
-				EntityMeteor meteorToSpawn = new EntityMeteor(this.getEntityWorld(), HandlerMeteor.getMeteorSize(), this.posX, this.posZ, EnumMeteor.getTypeFromID(this.mID), true);
+				EntityMeteor meteorToSpawn = new EntityMeteor(this.getEntityWorld(), HandlerMeteor.getMeteorSize(), this.posX, this.posZ, this.meteorType, true);
 				this.getEntityWorld().spawnEntity(meteorToSpawn);
 			}
 		}
@@ -149,7 +148,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeEntityToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("metType", this.mID);
+		par1NBTTagCompound.setInteger("metType", this.meteorType.getID());
 		par1NBTTagCompound.setBoolean("isRandom", this.isRandom);
 	}
 
@@ -157,19 +156,19 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readEntityFromNBT(par1NBTTagCompound);
-		this.mID = par1NBTTagCompound.getInteger("metType");
+		this.meteorType = EnumMeteor.getTypeFromID(par1NBTTagCompound.getInteger("metType"));
 		this.isRandom = par1NBTTagCompound.getBoolean("isRandom");
 	}
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeInt(this.mID);
+		buffer.writeInt(this.meteorType.getID());
 		buffer.writeBoolean(this.isRandom);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
-		this.mID = additionalData.readInt();
+		this.meteorType = EnumMeteor.getTypeFromID(additionalData.readInt());
 		this.isRandom = additionalData.readBoolean();
 	}
 

@@ -28,7 +28,7 @@ public class CommandDebugShields extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {//TODO why would this ever run on the client 1.12.2
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			World world = sender.getEntityWorld();
 			HandlerMeteor metH = MeteorsMod.proxy.metHandlers.get(world.provider.getDimension());
 			if (metH != null) {

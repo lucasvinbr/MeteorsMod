@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class ShieldManager {
-	
+
 	private World theWorld;
 	private MeteorShieldSavedData shieldSavedData;
 	
@@ -39,7 +39,7 @@ public class ShieldManager {
 	
 	public void addShield(IMeteorShield shield) {
 		TileEntity tile = theWorld.getTileEntity(new BlockPos(shield.getX(), shield.getY(), shield.getZ()));
-		if (tile != null && tile instanceof TileEntityMeteorShield) {
+		if (tile instanceof TileEntityMeteorShield) {
 			for (int i = 0; i < meteorShields.size(); i++) {
 				IMeteorShield shield2 = meteorShields.get(i);
 				if (shield.equals(shield2)) {
@@ -155,7 +155,7 @@ public class ShieldManager {
 				case 4:
 					items.add(new ItemStack(Items.COOKED_FISH, random.nextInt(2 * gMeteor.size) + 1));
 					if (r < 5) {
-						items.add(new ItemStack(Items.SPAWN_EGG, 1, EntityList.getID(EntityCometKitty.class)));//TODO 1.12.2 verify
+						items.add(new ItemStack(Items.SPAWN_EGG, 1, EntityList.getID(EntityCometKitty.class)));
 					}
 					break;
 			}

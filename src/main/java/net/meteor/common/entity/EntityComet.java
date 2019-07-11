@@ -22,7 +22,6 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 		super(par1World);
 		this.preventEntitySpawning = true;
 		this.setSize(0.98F, 0.98F);
-		//this.yOffset = (this.height / 2.0F);//TODO 1.12.2
 		this.meteorType = EnumMeteor.METEORITE;
 		
 		this.motionX = (rand.nextDouble() - rand.nextDouble()) * 1.2D;
@@ -38,6 +37,11 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 		this.prevPosX = x;
 		this.prevPosY = 250.0D;
 		this.prevPosZ = z;
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return this.height / 2;
 	}
 
 	@Override
