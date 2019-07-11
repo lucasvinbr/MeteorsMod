@@ -21,6 +21,7 @@ import net.meteor.plugin.thaumcraft.Thaumcraft;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -43,6 +44,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
+@Mod.EventBusSubscriber
 @Mod(modid=MeteorsMod.MOD_ID, name=MeteorsMod.MOD_NAME, version=MeteorsMod.VERSION, dependencies="after:waila;after:baubles;after:thaumcraft")
 public class MeteorsMod implements IWorldGenerator
 {
@@ -158,6 +160,8 @@ public class MeteorsMod implements IWorldGenerator
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new HandlerGui());
 	}
+
+
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {}
@@ -165,8 +169,8 @@ public class MeteorsMod implements IWorldGenerator
 	private void loadStaticConfigurationValues() {
 		ModConfig config = ModConfig.instance;
 		// Enchantments 
-		Magnetization = new EnchantmentMagnetized(Enchantment.Rarity.RARE).setName("Magnetization");
-		ColdTouch 	  = new EnchantmentColdTouch(Enchantment.Rarity.RARE).setName("Cold Touch");
+		Magnetization = new EnchantmentMagnetized(Enchantment.Rarity.RARE).setRegistryName("magnetization").setName("Magnetization");
+		ColdTouch 	  = new EnchantmentColdTouch(Enchantment.Rarity.RARE).setRegistryName("cold_touch").setName("Cold Touch");
 		// General Configuration
 		meteorFallDistance		= config.get("Meteor Fall Radius", 350, "When determining where a meteor falls, it chooses within this radius (blocks) of a random player.");
 		kittyAttackChance		= config.get("Kitty Attack Chance", 1, "Ranges from 0 to 100");
@@ -238,6 +242,12 @@ public class MeteorsMod implements IWorldGenerator
 		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "cometkitty"), EntityCometKitty.class, "CometKitty", id++, this, 80, 3, true, 2239283, 884535);
 		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "meteorsummoner"), EntitySummoner.class, "MeteorSummoner", id++, this, 64, 8, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "fallingcomet"), EntityComet.class, "FallingComet", id++, this, 64, 8, true);
+	}
+
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Enchantment> event) {
+		event.getRegistry().register(Magnetization);
+		event.getRegistry().register(ColdTouch);
 	}
 	
 	private void loadPlugins() {//TODO 1.12.2
