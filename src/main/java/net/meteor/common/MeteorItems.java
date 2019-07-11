@@ -46,50 +46,49 @@ public class MeteorItems {
 	public static final ToolMaterial MeteoriteTool = EnumHelper.addToolMaterial("METEORITE", 3, 900, 10.0F, 2, 15);
 	public static final ToolMaterial FrezariteTool = EnumHelper.addToolMaterial("FREZARITE", 2, 225, 7.0F, 2, 20);
 
-	//TODO 1.12.2 change setTranslationKey to be registered in the event.
-	public static final Item itemMeteorChips 			= new ItemMeteorsMod()/*.setTexture("MeteorChips")*/.setMaxStackSize(64).setRegistryName("MeteorChips").setTranslationKey("MeteorChips");
-	public static final Item itemRedMeteorGem 			= new ItemMeteorsMod()/*.setTexture("RedMeteorGem")*/.setMaxStackSize(64).setRegistryName("RedMeteorGem").setTranslationKey("RedMeteorGem");
+	public static final Item itemMeteorChips 			= new ItemMeteorsMod().setMaxStackSize(64).setRegistryName("MeteorChips").setTranslationKey("MeteorChips");
+	public static final Item itemRedMeteorGem 			= new ItemMeteorsMod().setMaxStackSize(64).setRegistryName("RedMeteorGem").setTranslationKey("RedMeteorGem");
 	public static final Item itemMeteorSummonerRandom 		= new ItemSummoner().setRegistryName("MeteorSummonerRandom").setTranslationKey("MeteorSummonerRandom");
 	public static final Item itemMeteorSummonerMeteorite 		= new ItemSummoner().setRegistryName("MeteorSummonerMeteorite").setTranslationKey("MeteorSummonerMeteorite");
 	public static final Item itemMeteorSummonerFrezarite 		= new ItemSummoner().setRegistryName("MeteorSummonerFrezarite").setTranslationKey("MeteorSummonerFrezarite");
 	public static final Item itemMeteorSummonerKreknorite 		= new ItemSummoner().setRegistryName("MeteorSummonerKreknorite").setTranslationKey("MeteorSummonerKreknorite");
 	public static final Item itemMeteorSummonerUnknown 		= new ItemSummoner().setRegistryName("MeteorSummonerUnknown").setTranslationKey("MeteorSummonerUnknown");
 	public static final Item itemMeteorSummonerKitty 		= new ItemSummoner().setRegistryName("MeteorSummonerKitty").setTranslationKey("MeteorSummonerKitty");
-	public static final Item itemFrezaCrystal 			= new ItemMeteorsMod()/*.setTexture("FrezariteCrystal")*/.setMaxStackSize(64).setRegistryName("FrezariteCrystal").setTranslationKey("FrezariteCrystal");
-	public static final Item itemKreknoChip 			= new ItemMeteorsMod()/*.setTexture("KreknoriteChip")*/.setMaxStackSize(64).setRegistryName("KreknoriteChip").setTranslationKey("KreknoriteChip");
-	public static final Item itemVanillaIceCream 		= new ItemFoodMeteorsMod(4, false)/*.setTexture("VanillaIceCream")*/.setMaxStackSize(64).setRegistryName("VanillaIceCream").setTranslationKey("VanillaIceCream");
-	public static final Item itemChocolateIceCream 		= new ItemFoodMeteorsMod(6, false)/*.setTexture("ChocolateIceCream")*/.setMaxStackSize(64).setRegistryName("ChocolateIceCream").setTranslationKey("ChocolateIceCream");
-	public static final Item itemMeteorProximityDetector= new ItemDetector(0)/*.setTexture("MeteorDetectorProximity")*/.setRegistryName("MeteorDetectorProximity").setTranslationKey("MeteorDetectorProximity");
-	public static final Item itemMeteorTimeDetector 	= new ItemDetector(1)/*.setTexture("MeteorDetectorTime")*/.setRegistryName("MeteorDetectorTime").setTranslationKey("MeteorDetectorTime");
-	public static final Item itemMeteorCrashDetector 	= new ItemDetector(2)/*.setTexture("MeteorDetectorCrash")*/.setRegistryName("MeteorDetectorCrash").setTranslationKey("MeteorDetectorCrash");
-	public static final Item MeteoriteHelmet 			= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(MeteorsMod.Magnetization, 1)/*.setTexture("MeteoriteHelmet").setArmorTexture("Meteorite")*/.setRegistryName("MeteoriteHelmet").setTranslationKey("MeteoriteHelmet");
-	public static final Item MeteoriteBody 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(MeteorsMod.Magnetization, 1)/*.setTexture("MeteoriteChest").setArmorTexture("Meteorite")*/.setRegistryName("MeteoriteChest").setTranslationKey("MeteoriteChest");
-	public static final Item MeteoriteLegs 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(MeteorsMod.Magnetization, 1)/*.setTexture("MeteoriteLegs").setArmorTexture("Meteorite")*/.setRegistryName("MeteoriteLegs").setTranslationKey("MeteoriteLegs");
-	public static final Item MeteoriteBoots 			= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.FEET).setEnch(MeteorsMod.Magnetization, 1)/*.setTexture("MeteoriteBoots").setArmorTexture("Meteorite")*/.setRegistryName("MeteoriteBoots").setTranslationKey("MeteoriteBoots");
-	public static final Item MeteoriteAxe 				= new ItemEnchAxe(MeteoriteTool, MeteorConstants.MeteorTools.METEORITE_AXE_DAMAGE, MeteorConstants.MeteorTools.METEORITE_AXE_SPEED)/*.setTexture("MeteoriteAxe")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteAxe").setTranslationKey("MeteoriteAxe");
-	public static final Item MeteoriteSpade 			= new ItemEnchSpade(MeteoriteTool)./*setTexture("MeteoriteSpade").*/setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteSpade").setTranslationKey("MeteoriteSpade");
-	public static final Item MeteoriteSword 			= new ItemEnchSword(MeteoriteTool)/*.setTexture("MeteoriteSword")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteSword").setTranslationKey("MeteoriteSword");
-	public static final Item MeteoritePickaxe 			= new ItemEnchPickaxe(MeteoriteTool)/*.setTexture("MeteoritePickaxe")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoritePickaxe").setTranslationKey("MeteoritePickaxe");
-	public static final Item MeteoriteHoe 				= new ItemEnchHoe(MeteoriteTool)/*.setTexture("MeteoriteHoe")*/.setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteHoe").setTranslationKey("MeteoriteHoe");
-	public static final Item FrezariteHelmet 			= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(Enchantments.RESPIRATION, 3)/*.setTexture("FrezariteHelmet").setArmorTexture("Frezarite")*/.setRegistryName("FrezariteHelmet").setTranslationKey("FrezariteHelmet");
-	public static final Item FrezariteBody 				= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(Enchantments.AQUA_AFFINITY, 1)/*.setTexture("FrezariteChest").setArmorTexture("Frezarite")*/.setRegistryName("FrezariteChest").setTranslationKey("FrezariteChest");
-	public static final Item FrezariteLegs 				= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(MeteorsMod.ColdTouch, 1)/*.setTexture("FrezariteLegs").setArmorTexture("Frezarite")*/.setRegistryName("FrezariteLegs").setTranslationKey("FrezariteLegs");
-	public static final Item FrezariteBoots 			= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.FEET).setEnch(MeteorsMod.ColdTouch, 1)/*.setTexture("FrezariteBoots").setArmorTexture("Frezarite")*/.setRegistryName("FrezariteBoots").setTranslationKey("FrezariteBoots");
-	public static final Item FrezaritePickaxe 			= new ItemFrezaritePickaxe(FrezariteTool)/*.setTexture("FrezaritePickaxe")*/.setRegistryName("FrezaritePickaxe").setTranslationKey("FrezaritePickaxe");
-	public static final Item FrezariteSpade 			= new ItemFrezariteSpade(FrezariteTool)/*.setTexture("FrezariteSpade")*/.setRegistryName("FrezariteSpade").setTranslationKey("FrezariteSpade");
-	public static final Item FrezariteSword 			= new ItemFrezariteSword(FrezariteTool)/*.setTexture("FrezariteSword")*/.setRegistryName("FrezariteSword").setTranslationKey("FrezariteSword");
-	public static final Item FrezariteAxe 				= new ItemFrezariteAxe(FrezariteTool, MeteorConstants.MeteorTools.FREZARITE_AXE_DAMAGE, MeteorConstants.MeteorTools.FREZARITE_AXE_SPEED)/*.setTexture("FrezariteAxe")*/.setRegistryName("FrezariteAxe").setTranslationKey("FrezariteAxe");
-	public static final Item FrezariteHoe 				= new ItemFrezariteHoe(FrezariteTool)/*.setTexture("FrezariteHoe")*/.setRegistryName("FrezariteHoe").setTranslationKey("FrezariteHoe");
-	public static final Item KreknoriteHelmet 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(Enchantments.FIRE_PROTECTION, 4)/*.setTexture("KreknoriteHelmet").setArmorTexture("Kreknorite")*/.setRegistryName("KreknoriteHelmet").setTranslationKey("KreknoriteHelmet");
-	public static final Item KreknoriteBody 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(Enchantments.FIRE_PROTECTION, 4)/*.setTexture("KreknoriteChest").setArmorTexture("Kreknorite")*/.setRegistryName("KreknoriteChest").setTranslationKey("KreknoriteChest");
-	public static final Item KreknoriteLegs 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(Enchantments.FIRE_PROTECTION, 4)/*.setTexture("KreknoriteLegs").setArmorTexture("Kreknorite")*/.setRegistryName("KreknoriteLegs").setTranslationKey("KreknoriteLegs");
-	public static final Item KreknoriteBoots 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.FEET).setEnch(Enchantments.FIRE_PROTECTION, 4)/*.setTexture("KreknoriteBoots").setArmorTexture("Kreknorite")*/.setRegistryName("KreknoriteBoots").setTranslationKey("KreknoriteBoots");
-	public static final Item KreknoriteSword 			= new ItemKreknoSword(MeteoriteTool).setRegistryName("KreknoriteSword")/*.setTexture("KreknoriteSword")*/.setTranslationKey("KreknoriteSword");
+	public static final Item itemFrezaCrystal 			= new ItemMeteorsMod().setMaxStackSize(64).setRegistryName("FrezariteCrystal").setTranslationKey("FrezariteCrystal");
+	public static final Item itemKreknoChip 			= new ItemMeteorsMod().setMaxStackSize(64).setRegistryName("KreknoriteChip").setTranslationKey("KreknoriteChip");
+	public static final Item itemVanillaIceCream 		= new ItemFoodMeteorsMod(4, false).setMaxStackSize(64).setRegistryName("VanillaIceCream").setTranslationKey("VanillaIceCream");
+	public static final Item itemChocolateIceCream 		= new ItemFoodMeteorsMod(6, false).setMaxStackSize(64).setRegistryName("ChocolateIceCream").setTranslationKey("ChocolateIceCream");
+	public static final Item itemMeteorProximityDetector= new ItemDetector(0).setRegistryName("MeteorDetectorProximity").setTranslationKey("MeteorDetectorProximity");
+	public static final Item itemMeteorTimeDetector 	= new ItemDetector(1).setRegistryName("MeteorDetectorTime").setTranslationKey("MeteorDetectorTime");
+	public static final Item itemMeteorCrashDetector 	= new ItemDetector(2).setRegistryName("MeteorDetectorCrash").setTranslationKey("MeteorDetectorCrash");
+	public static final Item MeteoriteHelmet 			= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteHelmet").setTranslationKey("MeteoriteHelmet");
+	public static final Item MeteoriteBody 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteChest").setTranslationKey("MeteoriteChest");
+	public static final Item MeteoriteLegs 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteLegs").setTranslationKey("MeteoriteLegs");
+	public static final Item MeteoriteBoots 			= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.FEET).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteBoots").setTranslationKey("MeteoriteBoots");
+	public static final Item MeteoriteAxe 				= new ItemEnchAxe(MeteoriteTool, MeteorConstants.MeteorTools.METEORITE_AXE_DAMAGE, MeteorConstants.MeteorTools.METEORITE_AXE_SPEED).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteAxe").setTranslationKey("MeteoriteAxe");
+	public static final Item MeteoriteSpade 			= new ItemEnchSpade(MeteoriteTool).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteSpade").setTranslationKey("MeteoriteSpade");
+	public static final Item MeteoriteSword 			= new ItemEnchSword(MeteoriteTool).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteSword").setTranslationKey("MeteoriteSword");
+	public static final Item MeteoritePickaxe 			= new ItemEnchPickaxe(MeteoriteTool).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoritePickaxe").setTranslationKey("MeteoritePickaxe");
+	public static final Item MeteoriteHoe 				= new ItemEnchHoe(MeteoriteTool).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteHoe").setTranslationKey("MeteoriteHoe");
+	public static final Item FrezariteHelmet 			= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(Enchantments.RESPIRATION, 3).setRegistryName("FrezariteHelmet").setTranslationKey("FrezariteHelmet");
+	public static final Item FrezariteBody 				= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(Enchantments.AQUA_AFFINITY, 1).setRegistryName("FrezariteChest").setTranslationKey("FrezariteChest");
+	public static final Item FrezariteLegs 				= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(MeteorsMod.ColdTouch, 1).setRegistryName("FrezariteLegs").setTranslationKey("FrezariteLegs");
+	public static final Item FrezariteBoots 			= new ItemEnchArmor(FrezariteArmor, 3, EntityEquipmentSlot.FEET).setEnch(MeteorsMod.ColdTouch, 1).setRegistryName("FrezariteBoots").setTranslationKey("FrezariteBoots");
+	public static final Item FrezaritePickaxe 			= new ItemFrezaritePickaxe(FrezariteTool).setRegistryName("FrezaritePickaxe").setTranslationKey("FrezaritePickaxe");
+	public static final Item FrezariteSpade 			= new ItemFrezariteSpade(FrezariteTool).setRegistryName("FrezariteSpade").setTranslationKey("FrezariteSpade");
+	public static final Item FrezariteSword 			= new ItemFrezariteSword(FrezariteTool).setRegistryName("FrezariteSword").setTranslationKey("FrezariteSword");
+	public static final Item FrezariteAxe 				= new ItemFrezariteAxe(FrezariteTool, MeteorConstants.MeteorTools.FREZARITE_AXE_DAMAGE, MeteorConstants.MeteorTools.FREZARITE_AXE_SPEED).setRegistryName("FrezariteAxe").setTranslationKey("FrezariteAxe");
+	public static final Item FrezariteHoe 				= new ItemFrezariteHoe(FrezariteTool).setRegistryName("FrezariteHoe").setTranslationKey("FrezariteHoe");
+	public static final Item KreknoriteHelmet 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(Enchantments.FIRE_PROTECTION, 4).setRegistryName("KreknoriteHelmet").setTranslationKey("KreknoriteHelmet");
+	public static final Item KreknoriteBody 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(Enchantments.FIRE_PROTECTION, 4).setRegistryName("KreknoriteChest").setTranslationKey("KreknoriteChest");
+	public static final Item KreknoriteLegs 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(Enchantments.FIRE_PROTECTION, 4).setRegistryName("KreknoriteLegs").setTranslationKey("KreknoriteLegs");
+	public static final Item KreknoriteBoots 			= new ItemEnchArmor(KreknoriteArmor, 3, EntityEquipmentSlot.FEET).setEnch(Enchantments.FIRE_PROTECTION, 4).setRegistryName("KreknoriteBoots").setTranslationKey("KreknoriteBoots");
+	public static final Item KreknoriteSword 			= new ItemKreknoSword(MeteoriteTool).setRegistryName("KreknoriteSword").setTranslationKey("KreknoriteSword");
 
 	// Begin industrialization! :D
-	public static final Item MeteoriteIngot				= new ItemMeteorsMod()/*.setTexture("MeteoriteIngot")*/.setRegistryName("MeteoriteIngot").setTranslationKey("MeteoriteIngot");
-	public static final Item FrozenIronIngot = new ItemMeteorsMod()/*.setTexture("FrozenIron")*/.setRegistryName("FrozenIronIngot").setTranslationKey("FrozenIronIngot");
-	public static final Item KreknoriteIngot			= new ItemMeteorsMod()/*.setTexture("KreknoriteIngot")*/.setRegistryName("KreknoriteIngot").setTranslationKey("KreknoriteIngot");
+	public static final Item MeteoriteIngot				= new ItemMeteorsMod().setRegistryName("MeteoriteIngot").setTranslationKey("MeteoriteIngot");
+	public static final Item FrozenIronIngot = new ItemMeteorsMod().setRegistryName("FrozenIronIngot").setTranslationKey("FrozenIronIngot");
+	public static final Item KreknoriteIngot			= new ItemMeteorsMod().setRegistryName("KreknoriteIngot").setTranslationKey("KreknoriteIngot");
 	
 	public static void readyItems() {
 		MeteoriteAxe.setHarvestLevel("axe", 3);
@@ -144,8 +143,6 @@ public class MeteorItems {
 		event.getRegistry().register(MeteoriteIngot);
 		event.getRegistry().register(FrozenIronIngot);
 		event.getRegistry().register(KreknoriteIngot);
-
-		//event.getRegistry().register(new ItemBlock(MeteorBlocks.METEOR).setRegistryName(MeteorBlocks.METEOR.getRegistryName()));
 
 		Class<MeteorBlocks> meteorBlocksClass = MeteorBlocks.class;
 		Field[] fields = meteorBlocksClass.getDeclaredFields();

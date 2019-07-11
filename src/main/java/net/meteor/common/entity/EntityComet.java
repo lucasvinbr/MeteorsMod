@@ -105,12 +105,6 @@ public class EntityComet extends Entity implements IEntityAdditionalSpawnData {
 		nbttagcompound.setInteger("pauseTicks", this.spawnPauseTicks);
 	}
 	
-//	@SideOnly(Side.CLIENT)
-//	@Override//TODO 1.12.2
-//	public float getShadowSize() {
-//		return 0.0F;
-//	}
-	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		buffer.writeInt(this.meteorType.getID());
