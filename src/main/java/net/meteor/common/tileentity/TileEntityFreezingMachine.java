@@ -4,9 +4,9 @@ import net.meteor.common.FreezerRecipes;
 import net.meteor.common.FreezerRecipes.FreezerRecipe;
 import net.meteor.common.FreezerRecipes.RecipeType;
 import net.meteor.common.MeteorItems;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
@@ -18,6 +18,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -48,9 +49,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	private FluidTank tank = new FluidTank(1000 * 10);
 	private RecipeType acceptedRecipeType = RecipeType.either;
 
-	public int cookTime;
-	public int burnTime;
-	public int currentItemBurnTime;
+	private int burnTime;
+	private int currentItemBurnTime;
+	private int cookTime;
 
 	@Override
 	public int getSizeInventory() {
@@ -71,44 +72,20 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 
 	@Override
-	public void clear()
-	{
-		this.inv.clear();
-	}
-
-	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return inv.get(slot);
 	}
 
 	@Override
+	public void clear()
+	{
+		this.inv.clear();
+	}
+
+
+	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (this.inv.get(slot) != ItemStack.EMPTY)
-		{
-			ItemStack itemstack;
-
-			if (this.inv.get(slot).getCount() <= amount)
-			{
-				itemstack = this.inv.get(slot);
-				this.inv.set(slot, ItemStack.EMPTY);
-				return itemstack;
-			}
-			else
-			{
-				itemstack = this.inv.get(slot).splitStack(amount);
-
-				if (this.inv.get(slot).getCount() == 0)
-				{
-					this.inv.set(slot, ItemStack.EMPTY);
-				}
-
-				return itemstack;
-			}
-		}
-		else
-		{
-			return null;
-		}
+		return ItemStackHelper.getAndSplit(this.inv, slot, amount);
 	}
 
 	/**
@@ -130,7 +107,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			item.setCount(this.getInventoryStackLimit());
 		}
 
-		if (slot == 3) {
+		if (slot == FLUID_IN) {
 			checkFluidContainer();
 		}
 		
@@ -139,8 +116,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	private void checkFluidContainer() {
 		ItemStack item = inv.get(FLUID_IN);
 
-		if (item != ItemStack.EMPTY && item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-			if (!item.isEmpty()) {
+		if (!item.isEmpty() && item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+			if (FluidUtil.getFluidContained(item) != null) {
 				FluidStack fluid = FluidUtil.getFluidContained(item);
 				if (fluid != null && (fluid.isFluidEqual(tank.getFluid()) || tank.getFluidAmount() == 0)) {
 					if (tank.fill(fluid, false) == fluid.amount) {
@@ -151,20 +128,21 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 						fluidHandler.drain(fluid.copy(), true);
 						emptyContainer = fluidHandler.getContainer();
 
-						if (inv.get(FLUID_OUT) == ItemStack.EMPTY) {
+						if (inv.get(FLUID_OUT).isEmpty()) {
 							tank.fill(fluid, true);
 							inv.set(FLUID_OUT, emptyContainer);
 							decrStackSize(FLUID_IN, 1);
-							//TODO this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-							this.getWorld().setBlockState(this.getPos(), this.getBlockType().getDefaultState(), 3);
+							markDirty();
+							IBlockState state = getWorld().getBlockState(this.getPos());
+							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 
 						} else if (inv.get(FLUID_OUT).isItemEqual(emptyContainer) && inv.get(FLUID_OUT).getCount() + 1 <= inv.get(FLUID_OUT).getMaxStackSize()) {
 							tank.fill(fluid, true);
 							inv.get(FLUID_OUT).grow(1);
 							decrStackSize(FLUID_IN, 1);
 							markDirty();
-							this.getWorld().setBlockState(this.getPos(), this.getBlockType().getDefaultState(), 3);
-							//TODO this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							IBlockState state = getWorld().getBlockState(this.getPos());
+							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 						}
 
 					}
@@ -172,21 +150,23 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			} else {
 				FluidStack fluidInTank = tank.getFluid();
 				if (fluidInTank != null) {
-					FluidActionResult fluidActionResult = FluidUtil.tryFillContainer(item, tank, 1000, null, false);//TODO 1.12.2 should this be false? seems forge changed logic a lot
+					FluidActionResult fluidActionResult = FluidUtil.tryFillContainer(item, tank, 1000, null, false);
 					if (fluidActionResult.isSuccess()) {
 						ItemStack filledContainer = fluidActionResult.getResult();
 						if (inv.get(FLUID_OUT) == ItemStack.EMPTY) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv.set(FLUID_OUT, filledContainer);
 							decrStackSize(FLUID_IN, 1);
-							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							markDirty();
+							IBlockState state = getWorld().getBlockState(this.getPos());
+							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 						} else if (inv.get(FLUID_OUT).isItemEqual(filledContainer) && inv.get(FLUID_OUT).getCount() + 1 <= inv.get(FLUID_OUT).getMaxStackSize()) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
 							inv.get(FLUID_OUT).grow(1);
 							decrStackSize(FLUID_IN, 1);
-							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							markDirty();
+							IBlockState state = getWorld().getBlockState(this.getPos());
+							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 						}
 					}
 				}
@@ -253,11 +233,13 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		return nbt;
 	}
 
+
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		readFromNBT(pkt.getNbtCompound());
 	}
+
 
 	@Override
 	public NBTTagCompound getUpdateTag()
@@ -271,8 +253,16 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		return this.getWorld().getTileEntity(this.getPos()) == this && player.getDistanceSq((double) this.getPos().getX() + 0.5D, (double) this.getPos().getY() + 0.5D, (double) this.getPos().getZ() + 0.5D) <= 64.0D;
+	public boolean isUsableByPlayer(EntityPlayer player)
+	{
+		if (this.world.getTileEntity(this.pos) != this)
+		{
+			return false;
+		}
+		else
+		{
+			return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+		}
 	}
 
 	@Override
@@ -300,11 +290,18 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		switch (id)
 		{
 			case 0:
-				return this.cookTime;
-			case 1:
 				return this.burnTime;
-			case 2:
+			case 1:
 				return this.currentItemBurnTime;
+			case 2:
+				return this.cookTime;
+			case 3:
+				if(tank != null && tank.getFluid() != null) {
+					return tank.getFluid().amount;
+				}
+				return 0;
+			case 4:
+				return this.getRecipeMode().getID();
 			default:
 				return 0;
 		}
@@ -316,13 +313,21 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		switch (id)
 		{
 			case 0:
-				this.cookTime = value;
-				break;
-			case 1:
 				this.burnTime = value;
 				break;
-			case 2:
+			case 1:
 				this.currentItemBurnTime = value;
+				break;
+			case 2:
+				this.cookTime = value;
+				break;
+			case 3:
+				if (tank != null && tank.getFluid() != null) {
+					tank.getFluid().amount = value;
+				}
+				break;
+			case 4:
+				this.setRecipeMode(RecipeType.values()[value]);
 				break;
 		}
 	}
@@ -330,7 +335,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	@Override
 	public int getFieldCount() {
-		return 3;
+		return 5;
 	}
 
 	@Override
@@ -380,10 +385,10 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	@Override
 	public void update() {
-		boolean flag = this.burnTime > 0;
+		boolean flag = isFreezing();
 		boolean flag1 = false;
 
-		if (this.burnTime > 0)
+		if (this.isFreezing())
 		{
 			--this.burnTime;
 		}
@@ -394,18 +399,18 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			if (!inv.get(FLUID_IN).isEmpty()) {
 				checkFluidContainer();
 			}
-			
-			if (this.burnTime != 0 || !this.inv.get(FREEZE_ITEM_FUEL).isEmpty())
+
+			if (this.isFreezing() || !this.inv.get(FREEZE_ITEM_FUEL).isEmpty())
 			{
-				if (this.burnTime == 0 && this.canFreeze())
+				if (!this.isFreezing() && this.canFreeze())
 				{
 					this.currentItemBurnTime = this.burnTime = getItemFreezeTime(this.inv.get(FREEZE_ITEM_FUEL));
 
-					if (this.burnTime > 0)
+					if (this.isFreezing())
 					{
 						flag1 = true;
 
-						if (this.inv.get(FREEZE_ITEM_FUEL) != ItemStack.EMPTY)
+						if (!this.inv.get(FREEZE_ITEM_FUEL).isEmpty())
 						{
 							this.inv.get(FREEZE_ITEM_FUEL).shrink(1);
 
@@ -419,8 +424,6 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 				if (this.isFreezing() && this.canFreeze())
 				{
-					
-					
 					++this.cookTime;
 
 					if (this.cookTime == 200)
@@ -438,22 +441,22 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				this.cookTime = 0;
 			}
 
-			if (flag != this.burnTime > 0)
+			if (flag != this.isFreezing())
 			{
 				flag1 = true;
-				//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-				//int meta = getWorld().getBlockMetadata(xCoord, yCoord, zCoord);
-				//this.getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, burnTime > 0 ? meta + 4 : meta - 4, 2);
+				//FreezingMachineBlock.setState TODO 1.12.2
 			}
 		}
 
 		if (flag1)
 		{
 			this.markDirty();
-			//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			IBlockState state = getWorld().getBlockState(this.getPos());
+			getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 		}
 	}
+
+
 
 	public static int getItemFreezeTime(ItemStack itemStack) {
 		if (itemStack != null) {
@@ -486,8 +489,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				this.cookTime = 0;
 				this.lastKnownItem = result;
 				this.markDirty();
-				//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-				//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+				IBlockState state = getWorld().getBlockState(this.getPos());
+				getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 			}
 			return true;
 		}
@@ -500,8 +503,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				this.cookTime = 0;
 				this.lastKnownItem = result;
 				this.markDirty();
-				//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-				//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+				IBlockState state = getWorld().getBlockState(this.getPos());
+				getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 			}
 			return true;
 		}
@@ -535,8 +538,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 				tank.drain(recipe.getFluidAmount(), true);
 
 				if (tank.getFluidAmount() == 0) {
-					//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-					//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+					IBlockState state = getWorld().getBlockState(this.getPos());
+					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 					}
 			}
 
@@ -548,10 +551,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	public int fill(FluidStack resource, boolean doFill)
 	{
 		if (tank.getFluidAmount() == 0) {
-			//TODO 1.12.2 don't think this is needed anymore
-			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-			//this.getWorld().update(this.getPos(), this.getBlockType().getDefaultState());
-
+			IBlockState state = getWorld().getBlockState(this.getPos());
+			getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 		}
 		return tank.fill(resource, doFill);
 	}
@@ -561,8 +562,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	{
 		if (resource == null || !resource.isFluidEqual(tank.getFluid()))
 		{
-			//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-			// getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			IBlockState state = getWorld().getBlockState(this.getPos());
+			getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 			return null;
 		}
 		return tank.drain(resource.amount, doDrain);
@@ -572,8 +573,8 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	public FluidStack drain(int maxDrain, boolean doDrain)
 	{
 		if (doDrain && tank.getFluidAmount() - maxDrain <= 0) {
-			//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+			IBlockState state = getWorld().getBlockState(this.getPos());
+			getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 		}
 		return tank.drain(maxDrain, doDrain);
 	}

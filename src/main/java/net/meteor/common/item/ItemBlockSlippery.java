@@ -5,6 +5,7 @@ import java.util.List;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -63,71 +64,27 @@ public class ItemBlockSlippery extends ItemBlock {
 	@Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if(this.getBlock() instanceof BlockSlipperyStairs)
-            return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);//TODO 1.12.2 see if this entire method can be neatened up
+        IBlockState iblockstate = world.getBlockState(pos);
+        Block block = iblockstate.getBlock();
 
-        Block block = world.getBlockState(pos).getBlock();
-        ItemStack itemStack = player.getHeldItem(hand);
-        Block storedBlock = getStoredBlock(itemStack);
-        BlockPos newPos = new BlockPos(pos);
-
-        if (block == Blocks.SNOW_LAYER/* && (world.getBlockMetadata(x, y, z) & 7) < 1*/)//TODO 1.12.2 what is this checking?
+        if (!block.isReplaceable(world, pos))
         {
-            facing = EnumFacing.UP;
-        }
-        else if (block != Blocks.VINE && block != Blocks.TALLGRASS && block != Blocks.DEADBUSH && !block.isReplaceable(world, pos))
-        {
-            if (facing == EnumFacing.DOWN)
-            {
-                newPos = newPos.down();
-            }
-
-            if (facing == EnumFacing.UP)
-            {
-                newPos = newPos.up();
-            }
-
-            if (facing == EnumFacing.NORTH)
-            {
-                newPos = newPos.north();
-            }
-
-            if (facing == EnumFacing.SOUTH)
-            {
-                newPos = newPos.south();
-            }
-
-            if (facing == EnumFacing.WEST)
-            {
-                newPos = newPos.west();
-            }
-
-            if (facing == EnumFacing.EAST)
-            {
-                newPos = newPos.east();
-            }
+            pos = pos.offset(facing);
         }
 
-        if (itemStack.getCount() == 0)
-        {
-            return EnumActionResult.FAIL;
-        }
-        else if (!player.canPlayerEdit(newPos, facing, itemStack))
-        {
-            return EnumActionResult.FAIL;
-        }
-        else if (pos.getY() == 255 && storedBlock.getMaterial(storedBlock.getDefaultState()).isSolid())
-        {
-            return EnumActionResult.FAIL;
-        }
-        else if (world.mayPlace(storedBlock, newPos, false, facing, player))
-        {
-            IBlockState newState = storedBlock.getDefaultState();//TODO 1.12.2 verify, guessing we should save the block state too ?
+        ItemStack itemstack = player.getHeldItem(hand);
 
-            if (placeBlockAt(itemStack, player, world, newPos, facing, hitX, hitY, hitZ, newState))
+        if (!itemstack.isEmpty() && player.canPlayerEdit(pos, facing, itemstack) && world.mayPlace(this.block, pos, false, facing, player))
+        {
+            int i = this.getMetadata(itemstack.getMetadata());
+            IBlockState iblockstate1 = this.block.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, i, player, hand);
+
+            if (placeBlockAt(itemstack, player, world, pos, facing, hitX, hitY, hitZ, iblockstate1))
             {
-                world.playSound((double)((float)newPos.getX() + 0.5F), (double)((float)newPos.getY() + 0.5F), (double)((float)newPos.getZ() + 0.5F), storedBlock.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (storedBlock.getSoundType().getVolume() + 1.0F) / 2.0F, storedBlock.getSoundType().getPitch() * 0.8F, true);
-                itemStack.shrink(1);
+                iblockstate1 = world.getBlockState(pos);
+                SoundType soundtype = iblockstate1.getBlock().getSoundType(iblockstate1, world, pos, player);
+                world.playSound(player, pos, getStoredBlock(itemstack).getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                itemstack.shrink(1);
             }
 
             return EnumActionResult.SUCCESS;

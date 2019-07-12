@@ -17,10 +17,13 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class GuiFreezingMachine extends GuiContainer {
 	
 	static final ResourceLocation freezingMachineTextures = new ResourceLocation(MeteorsMod.MOD_ID, "textures/gui/container/freezing_machine.png");
@@ -39,7 +42,18 @@ public class GuiFreezingMachine extends GuiContainer {
 		super.initGui();
 		this.buttonList.add(new GuiButtonFreezerRecipeMode(0, guiLeft + 149, guiTop + 60, 20, 20, freezer, this));
 	}
-	
+
+	/**
+	 * Draws the screen and all the components in it.
+	 */
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

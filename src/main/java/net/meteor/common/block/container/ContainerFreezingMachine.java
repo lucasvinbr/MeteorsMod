@@ -56,16 +56,20 @@ public class ContainerFreezingMachine extends Container {
 	public void addListener(IContainerListener craft)
 	{
 		super.addListener(craft);
-		craft.sendWindowProperty(this, 0, this.iceMaker.cookTime);
-		craft.sendWindowProperty(this, 1, this.iceMaker.burnTime);
-		craft.sendWindowProperty(this, 2, this.iceMaker.currentItemBurnTime);
+		/*
+		craft.sendWindowProperty(this, 2, this.iceMaker.getField(2));
+		craft.sendWindowProperty(this, 0, this.iceMaker.getField(0));
+		craft.sendWindowProperty(this, 1, this.iceMaker.getField(1));
+		craft.sendWindowProperty(this, 3, this.iceMaker.getField(3));
 		FluidTankInfo tankInfo = this.iceMaker.getTankInfo();
 		if (tankInfo != null && tankInfo.fluid != null) {
-			craft.sendWindowProperty(this, 3, tankInfo.fluid.amount);
+			craft.sendWindowProperty(this, 4, tankInfo.fluid.amount);
 		} else {
-			craft.sendWindowProperty(this, 3, 0);
+			craft.sendWindowProperty(this, 4, 0);
 		}
-		craft.sendWindowProperty(this, 4, this.iceMaker.getRecipeMode().getID());
+		craft.sendWindowProperty(this, 5, this.iceMaker.getRecipeMode().getID());
+		 */
+		craft.sendAllWindowProperties(this, this.iceMaker);
 	}
 
 	/**
@@ -82,19 +86,19 @@ public class ContainerFreezingMachine extends Container {
 		 {
 			 IContainerListener icrafting = this.listeners.get(i);
 
-			 if (this.lastCookTime != this.iceMaker.cookTime)
+			 if (this.lastCookTime != this.iceMaker.getField(2))
 			 {
-				 icrafting.sendWindowProperty(this, 0, this.iceMaker.cookTime);
+				 icrafting.sendWindowProperty(this, 2, this.iceMaker.getField(2));
 			 }
 
-			 if (this.lastBurnTime != this.iceMaker.burnTime)
+			 if (this.lastBurnTime != this.iceMaker.getField(0))
 			 {
-				 icrafting.sendWindowProperty(this, 1, this.iceMaker.burnTime);
+				 icrafting.sendWindowProperty(this, 0, this.iceMaker.getField(0));
 			 }
 
-			 if (this.lastItemBurnTime != this.iceMaker.currentItemBurnTime)
+			 if (this.lastItemBurnTime != this.iceMaker.getField(1))
 			 {
-				 icrafting.sendWindowProperty(this, 2, this.iceMaker.currentItemBurnTime);
+				 icrafting.sendWindowProperty(this, 1, this.iceMaker.getField(1));
 			 }
 
 			 if (tankInfo != null && tankInfo.fluid != null) {
@@ -116,26 +120,17 @@ public class ContainerFreezingMachine extends Container {
 
 		 }
 
-		 this.lastCookTime = this.iceMaker.cookTime;
-		 this.lastBurnTime = this.iceMaker.burnTime;
-		 this.lastItemBurnTime = this.iceMaker.currentItemBurnTime;
+		 this.lastCookTime = this.iceMaker.getField(2);
+		 this.lastBurnTime = this.iceMaker.getField(0);
+		 this.lastItemBurnTime = this.iceMaker.getField(1);
 		 this.lastRecipeModeID = this.iceMaker.getRecipeMode().getID();
 	}
 
 	 @Override
 	 @SideOnly(Side.CLIENT)
 	 public void updateProgressBar(int id, int value) {
-		 if (id == 0)
-		 {
-			 this.iceMaker.cookTime = value;
-		 }
-		 else if (id == 1)
-		 {
-			 this.iceMaker.burnTime = value;
-		 }
-		 else if (id == 2)
-		 {
-			 this.iceMaker.currentItemBurnTime = value;
+		 if(id >= 0 && id <= 2) {
+			 this.iceMaker.setField(id, value);
 		 }
 		 else if (id == 3 && iceMaker.getTankInfo() != null && iceMaker.getTankInfo().fluid != null) {
 			 this.iceMaker.getTankInfo().fluid.amount = value;
