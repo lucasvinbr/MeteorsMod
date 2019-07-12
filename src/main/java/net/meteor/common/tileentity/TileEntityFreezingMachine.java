@@ -4,6 +4,8 @@ import net.meteor.common.FreezerRecipes;
 import net.meteor.common.FreezerRecipes.FreezerRecipe;
 import net.meteor.common.FreezerRecipes.RecipeType;
 import net.meteor.common.MeteorItems;
+import net.meteor.common.block.FreezingMachineBlock;
+import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -449,7 +451,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			if (flag != this.isFreezing())
 			{
 				flag1 = true;
-				//FreezingMachineBlock.setState TODO 1.12.2
+				FreezingMachineBlock.setState(this.isFreezing(), this.world, this.pos);
 			}
 		}
 

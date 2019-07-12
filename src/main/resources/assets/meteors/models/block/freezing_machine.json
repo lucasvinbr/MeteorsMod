@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "meteors:blocks/freezer_side",
+    "front": "meteors:blocks/freezer_front_empty",
+    "side": "meteors:blocks/freezer_side"
+  }
+}
