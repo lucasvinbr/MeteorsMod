@@ -33,7 +33,7 @@ public class ItemBlockSlippery extends ItemBlock {
 	public ItemBlockSlippery(Block block) {
 		super(block);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -49,7 +49,7 @@ public class ItemBlockSlippery extends ItemBlock {
 		String facadeName = new ItemStack(Item.getItemFromBlock(storedBlock), 1, itemStack.getItemDamage()).getDisplayName();
 		return I18n.translateToLocalFormatted(this.getRegistryName() + ".name", facadeName);
     }
-	
+
 	@Override
 	public void onUpdate(ItemStack itemStack, World p_77663_2_, Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
 		checkNBT(itemStack);

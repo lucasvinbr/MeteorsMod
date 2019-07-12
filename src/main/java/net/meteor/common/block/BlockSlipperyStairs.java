@@ -1,13 +1,16 @@
 package net.meteor.common.block;
 
-import java.util.Random;
+import java.util.*;
 
+import net.meteor.common.block.propertys.UnlistedPropertyCopiedBlock;
 import net.meteor.common.item.ItemBlockSlippery;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,10 +20,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvider {
 
@@ -43,7 +52,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
     {
         super.eventReceived(state, worldIn, pos, id, param);
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity != null ? tileentity.receiveClientEvent(id, param) : false;
+        return tileentity != null && tileentity.receiveClientEvent(id, param);
     }
 
 	@Override
@@ -65,7 +74,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
      */
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return EnumBlockRenderType.MODEL;
     }
     
     /**
@@ -107,7 +116,8 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 	public int quantityDropped(IBlockState state, int fortune, Random random) {
 		return 0;
 	}
-	
+
+	/*
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		Item item = getItem(world, pos, state).getItem();
@@ -118,7 +128,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
         }
 
         //TODO 1.12.2, kill meta
-		/*
+
         BlockSlipperyStairs block = (BlockSlipperyStairs)world.getBlock(x, y, z);
         ItemStack stack = new ItemStack(item, 1, block.getDamageValue(world, x, y, z));
         NBTTagCompound nbt = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
@@ -126,8 +136,11 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 		nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, tileEntity.getFacadeBlockName());
 		stack.setTagCompound(nbt);
 		return stack;
-	*/
+
 		return null;
 	}
-	
+	*/
+
+
+
 }

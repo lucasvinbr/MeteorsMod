@@ -25,8 +25,8 @@ public class MeteorBlocks {
 	
 	public static final Block METEOR = new MeteorBlock().setRegistryName("Meteor").setTranslationKey("Meteor");
 	public static final Block HOT_METEOR = new HotMeteorBlock().setRegistryName("HotMeteor").setTranslationKey("HotMeteor");
-	public static final Block RARE_METEOR = new RareFallenMeteorBlock().setRegistryName("MeteorRare")/*.setCreativeTab(null)*/.setTranslationKey("MeteorRare");
-	public static final Block HOT_RARE_METEOR = new RareFallenHotMeteorBlock().setRegistryName("HotRareMeteor")/*.setCreativeTab(null)*/.setTranslationKey("HotRareMeteor");
+	public static final Block RARE_METEOR = new RareFallenMeteorBlock().setRegistryName("MeteorRare").setTranslationKey("MeteorRare");
+	public static final Block HOT_RARE_METEOR = new RareFallenHotMeteorBlock().setRegistryName("HotRareMeteor").setTranslationKey("HotRareMeteor");
 	public static final Block FREEZARITE = new FreezariteBlock().setRegistryName("Frezarite").setTranslationKey("Frezarite");
 	public static final Block KRENKONITE = new KreknoriteBlock().setRegistryName("Kreknorite").setTranslationKey("Kreknorite");
 	public static final Block METEOR_ORE = new MeteorOreBlock(MeteorItems.itemMeteorChips).setRegistryName("MeteorOre").setTranslationKey("MeteorOre");
@@ -40,14 +40,14 @@ public class MeteorBlocks {
 	public static final Block DECORATOR_FREEZARITE = new BlockDecoration("decorator_frezarite_block").setTranslationKey("frezarite_block");
 	public static final Block DECORATOR_KREKNORITE = new BlockDecoration("decorator_kreknorite_block").setTranslationKey("kreknorite_block");
 	public static final Block FREEZER = new FreezingMachineBlock().setRegistryName("freezingMachine").setHardness(3.5F).setTranslationKey("freezingMachine");
-	public static final Block blockSlippery				= new BlockSlippery(0.98F).setHardness(1.0F).setRegistryName("slipperyBlock").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyTwo			= new BlockSlippery(1.03F).setHardness(1.0F).setRegistryName("slipperyBlock2").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyThree		= new BlockSlippery(1.07F).setHardness(1.0F).setRegistryName("slipperyBlock3").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyFour			= new BlockSlippery(1.10F).setHardness(1.0F).setRegistryName("slipperyBlock4").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairs		= new BlockSlipperyStairs(0.98F).setHardness(1.0F).setRegistryName("slipperyBlock5").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairsTwo	= new BlockSlipperyStairs(1.03F).setHardness(1.0F).setRegistryName("slipperyBlock6").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairsThree	= new BlockSlipperyStairs(1.07F).setHardness(1.0F).setRegistryName("slipperyBlock7").setTranslationKey("slipperyBlock");
-	public static final Block blockSlipperyStairsFour	= new BlockSlipperyStairs(1.10F).setHardness(1.0F).setRegistryName("slipperyBlock8").setTranslationKey("slipperyBlock");
+	public static final Block blockSlippery				= new BlockSlippery(0.98F, 1).setHardness(1.0F).setRegistryName("slippery_block1").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyTwo			= new BlockSlippery(1.03F, 2).setHardness(1.0F).setRegistryName("slippery_block2").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyThree		= new BlockSlippery(1.07F, 3).setHardness(1.0F).setRegistryName("slippery_block3").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyFour			= new BlockSlippery(1.10F, 4).setHardness(1.0F).setRegistryName("slippery_block4").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairs		= new BlockSlipperyStairs(0.98F).setHardness(1.0F).setRegistryName("slippery_stairs1").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairsTwo	= new BlockSlipperyStairs(1.03F).setHardness(1.0F).setRegistryName("slippery_stairs2").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairsThree	= new BlockSlipperyStairs(1.07F).setHardness(1.0F).setRegistryName("slippery_stairs3").setTranslationKey("slipperyBlock");
+	public static final Block blockSlipperyStairsFour	= new BlockSlipperyStairs(1.10F).setHardness(1.0F).setRegistryName("slippery_stairs4").setTranslationKey("slipperyBlock");
 
 
 	@SubscribeEvent

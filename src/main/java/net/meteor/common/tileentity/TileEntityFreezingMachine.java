@@ -36,6 +36,12 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	//slot 2 = freeze output
 	//Slot 3 = liquid in
 	//Slot 4 = liquid out
+	public static final int FREEZE_ITEM_IN = 0;
+	public static final int FREEZE_ITEM_FUEL = 1;
+	public static final int FREEZE_ITEM_OUT = 2;
+	public static final int FLUID_IN = 3;
+	public static final int FLUID_OUT = 4;
+
 
 	private NonNullList<ItemStack> inv = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
 	private ItemStack lastKnownItem = null;
@@ -131,12 +137,12 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	}
 	
 	private void checkFluidContainer() {
-		ItemStack item = inv.get(3);
+		ItemStack item = inv.get(FLUID_IN);
 
 		if (item != ItemStack.EMPTY && item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 			if (!item.isEmpty()) {
 				FluidStack fluid = FluidUtil.getFluidContained(item);
-				if (fluid != null && (fluid.isFluidEqual(tank.getFluid())) || tank.getFluidAmount() == 0) {
+				if (fluid != null && (fluid.isFluidEqual(tank.getFluid()) || tank.getFluidAmount() == 0)) {
 					if (tank.fill(fluid, false) == fluid.amount) {
 
 						// Try to insert it into the bottom slot
@@ -145,17 +151,17 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 						fluidHandler.drain(fluid.copy(), true);
 						emptyContainer = fluidHandler.getContainer();
 
-						if (inv.get(4) == ItemStack.EMPTY) {
+						if (inv.get(FLUID_OUT) == ItemStack.EMPTY) {
 							tank.fill(fluid, true);
-							inv.set(4, emptyContainer);
-							decrStackSize(3, 1);
+							inv.set(FLUID_OUT, emptyContainer);
+							decrStackSize(FLUID_IN, 1);
 							//TODO this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 							this.getWorld().setBlockState(this.getPos(), this.getBlockType().getDefaultState(), 3);
 
-						} else if (inv.get(4).isItemEqual(emptyContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
+						} else if (inv.get(FLUID_OUT).isItemEqual(emptyContainer) && inv.get(FLUID_OUT).getCount() + 1 <= inv.get(FLUID_OUT).getMaxStackSize()) {
 							tank.fill(fluid, true);
-							inv.get(4).grow(1);
-							decrStackSize(3, 1);
+							inv.get(FLUID_OUT).grow(1);
+							decrStackSize(FLUID_IN, 1);
 							markDirty();
 							this.getWorld().setBlockState(this.getPos(), this.getBlockType().getDefaultState(), 3);
 							//TODO this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -169,16 +175,16 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 					FluidActionResult fluidActionResult = FluidUtil.tryFillContainer(item, tank, 1000, null, false);//TODO 1.12.2 should this be false? seems forge changed logic a lot
 					if (fluidActionResult.isSuccess()) {
 						ItemStack filledContainer = fluidActionResult.getResult();
-						if (inv.get(4) == ItemStack.EMPTY) {
+						if (inv.get(FLUID_OUT) == ItemStack.EMPTY) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
-							inv.set(4, filledContainer);
-							decrStackSize(3, 1);
+							inv.set(FLUID_OUT, filledContainer);
+							decrStackSize(FLUID_IN, 1);
 							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
 							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-						} else if (inv.get(4).isItemEqual(filledContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
+						} else if (inv.get(FLUID_OUT).isItemEqual(filledContainer) && inv.get(FLUID_OUT).getCount() + 1 <= inv.get(FLUID_OUT).getMaxStackSize()) {
 							tank.drain(FluidUtil.getFluidContained(filledContainer).amount, true);
-							inv.get(4).grow(1);
-							decrStackSize(3, 1);
+							inv.get(FLUID_OUT).grow(1);
+							decrStackSize(FLUID_IN, 1);
 							//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
 							//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 						}
@@ -266,7 +272,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		return this.getWorld().getTileEntity(this.getPos()) != this ? false : player.getDistanceSq((double)this.getPos().getX() + 0.5D, (double)this.getPos().getY() + 0.5D, (double)this.getPos().getZ() + 0.5D) <= 64.0D;
+		return this.getWorld().getTileEntity(this.getPos()) == this && player.getDistanceSq((double) this.getPos().getX() + 0.5D, (double) this.getPos().getY() + 0.5D, (double) this.getPos().getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -277,8 +283,16 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack item) {
-		if (slot == 3) return item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-		return slot == 2 ? false : (slot == 1 ? getItemFreezeTime(item) > 0 : true);
+		if (slot == FLUID_IN) {
+			return item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+		}
+		if (slot == FREEZE_ITEM_OUT) {
+			return false;
+		}
+		if (slot == FREEZE_ITEM_FUEL) {
+			return getItemFreezeTime(item) <= 0;
+		}
+		return true;
 	}
 
 	@Override
@@ -327,12 +341,12 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack item, EnumFacing direction) {
 
-		return item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) ? slot == 3 : slot == 1;
+		return item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) ? slot == FLUID_IN : slot == FREEZE_ITEM_FUEL;
 	}
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack item, EnumFacing side) {
-		return slot == 2 || slot == 4;
+		return slot == FREEZE_ITEM_OUT || slot == FLUID_OUT;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -377,27 +391,27 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		if (!this.getWorld().isRemote)
 		{
 			
-			if (inv.get(3) != ItemStack.EMPTY && inv.get(3).getItem() != Items.AIR) {//TODO why is this air..
+			if (!inv.get(FLUID_IN).isEmpty()) {
 				checkFluidContainer();
 			}
 			
-			if (this.burnTime != 0 || this.inv.get(1) != ItemStack.EMPTY)
+			if (this.burnTime != 0 || !this.inv.get(FREEZE_ITEM_FUEL).isEmpty())
 			{
 				if (this.burnTime == 0 && this.canFreeze())
 				{
-					this.currentItemBurnTime = this.burnTime = getItemFreezeTime(this.inv.get(1));
+					this.currentItemBurnTime = this.burnTime = getItemFreezeTime(this.inv.get(FREEZE_ITEM_FUEL));
 
 					if (this.burnTime > 0)
 					{
 						flag1 = true;
 
-						if (this.inv.get(1) != ItemStack.EMPTY)
+						if (this.inv.get(FREEZE_ITEM_FUEL) != ItemStack.EMPTY)
 						{
-							this.inv.get(1).shrink(1);
+							this.inv.get(FREEZE_ITEM_FUEL).shrink(1);
 
-							if (this.inv.get(1).getCount() == 0)
+							if (this.inv.get(FREEZE_ITEM_FUEL).getCount() == 0)
 							{
-								this.inv.set(1, inv.get(1).getItem().getContainerItem(inv.get(1)));
+								this.inv.set(FREEZE_ITEM_FUEL, inv.get(FREEZE_ITEM_FUEL).getItem().getContainerItem(inv.get(FREEZE_ITEM_FUEL)));
 							}
 						}
 					}
@@ -457,11 +471,15 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		return 0;
 	}
 
+	//TODO 1.12.2 crash on shift clicking water buckets
+
 	private boolean canFreeze() {
-		FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv.get(0), tank.getFluid(), this.acceptedRecipeType);
-		if (recipe == null) return false;
-		ItemStack result = recipe.getResult(inv.get(0));
-		if (this.inv.get(2) == ItemStack.EMPTY) {
+		FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv.get(FREEZE_ITEM_IN), tank.getFluid(), this.acceptedRecipeType);
+		if (recipe == null)
+			return false;
+
+		ItemStack result = recipe.getResult(inv.get(FREEZE_ITEM_IN));
+		if (this.inv.get(FREEZE_ITEM_OUT).isEmpty()) {
 			if (this.lastKnownItem == null) {
 				this.lastKnownItem = result;
 			} else if (!result.isItemEqual(this.lastKnownItem)) {
@@ -473,9 +491,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 			}
 			return true;
 		}
-		if (!this.inv.get(2).isItemEqual(result)) return false;
-		int resultSize = inv.get(2).getCount() + result.getCount();
-		if (resultSize <= getInventoryStackLimit() && resultSize <= this.inv.get(2).getMaxStackSize()) {
+		if (!this.inv.get(FREEZE_ITEM_OUT).isItemEqual(result)) return false;
+		int resultSize = inv.get(FREEZE_ITEM_OUT).getCount() + result.getCount();
+		if (resultSize <= getInventoryStackLimit() && resultSize <= this.inv.get(FREEZE_ITEM_OUT).getMaxStackSize()) {
 			if (this.lastKnownItem == null) {
 				this.lastKnownItem = result;
 			} else if (!result.isItemEqual(this.lastKnownItem)) {
@@ -493,23 +511,23 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	public void freezeItem() {
 		if (this.canFreeze())
 		{
-			FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv.get(0), tank.getFluid(), this.acceptedRecipeType);
+			FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv.get(FREEZE_ITEM_IN), tank.getFluid(), this.acceptedRecipeType);
 
-			if (this.inv.get(2) == ItemStack.EMPTY)
+			if (this.inv.get(FREEZE_ITEM_OUT) == ItemStack.EMPTY)
 			{
-				this.inv.set(2, recipe.getResult(inv.get(0)).copy());
+				this.inv.set(FREEZE_ITEM_OUT, recipe.getResult(inv.get(FREEZE_ITEM_IN)).copy());
 			}
-			else if (this.inv.get(2).getItem() == recipe.getResult(inv.get(0)).getItem())
+			else if (this.inv.get(FREEZE_ITEM_OUT).getItem() == recipe.getResult(inv.get(FREEZE_ITEM_IN)).getItem())
 			{
-				this.inv.get(2).grow(recipe.getResult(inv.get(0)).getCount());
+				this.inv.get(FREEZE_ITEM_OUT).grow(recipe.getResult(inv.get(FREEZE_ITEM_IN)).getCount());
 			}
 
 			if (recipe.requiresItem()) {
-				this.inv.get(0).shrink(1);
+				this.inv.get(FREEZE_ITEM_IN).shrink(1);
 
-				if (this.inv.get(0).getCount() <= 0)
+				if (this.inv.get(FREEZE_ITEM_IN).getCount() <= 0)
 				{
-					this.inv.set(0, ItemStack.EMPTY);
+					this.inv.set(FREEZE_ITEM_IN, ItemStack.EMPTY);
 				}
 			}
 

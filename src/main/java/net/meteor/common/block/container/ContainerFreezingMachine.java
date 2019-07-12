@@ -151,19 +151,23 @@ public class ContainerFreezingMachine extends Container {
 	 @Override
 	 public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	 {
-		 ItemStack itemstack = null;
+		 ItemStack itemstack = ItemStack.EMPTY;
 		 Slot slot = this.inventorySlots.get(slotID);
+
+		 final int start_of_player_inv_slots = 5;
+		 final int end_of_player_inv_slots = 32;
+		 final int end_of_player_hotbar = 41;
 
 		 if (slot != null && slot.getHasStack())
 		 {
 			 ItemStack itemstack1 = slot.getStack();
 			 itemstack = itemstack1.copy();
 
-			 if (slotID == 2)
+			 if (slotID == TileEntityFreezingMachine.FREEZE_ITEM_OUT)
 			 {
-				 if (!this.mergeItemStack(itemstack1, 5, 41, true))
+				 if (!this.mergeItemStack(itemstack1, start_of_player_inv_slots, end_of_player_hotbar, true))
 				 {
-					 return null;
+					 return ItemStack.EMPTY;
 				 }
 
 				 slot.onSlotChange(itemstack1, itemstack);
@@ -174,38 +178,38 @@ public class ContainerFreezingMachine extends Container {
 				 {
 					 if (!this.mergeItemStack(itemstack1, 0, 1, false))
 					 {
-						 return null;
+						 return ItemStack.EMPTY;
 					 }
 				 }
 				 else if (itemstack1.getItem() == MeteorItems.itemFrezaCrystal)
 				 {
 					 if (!this.mergeItemStack(itemstack1, 1, 2, false))
 					 {
-						 return null;
+						 return ItemStack.EMPTY;
 					 }
 				 }
 				 else if (itemstack1.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
 				 {
 					 if (!this.mergeItemStack(itemstack1, 3, 4, false))
 					 {
-						 return null;
+						 return ItemStack.EMPTY;
 					 }
 				 }
-				 else if (slotID >= 5 && slotID < 32)
+				 else if (slotID >= start_of_player_inv_slots && slotID < end_of_player_inv_slots)
 				 {
-					 if (!this.mergeItemStack(itemstack1, 32, 41, false))
+					 if (!this.mergeItemStack(itemstack1, end_of_player_inv_slots, end_of_player_hotbar, false))
 					 {
-						 return null;
+						 return ItemStack.EMPTY;
 					 }
 				 }
-				 else if (slotID >= 32 && slotID < 41 && !this.mergeItemStack(itemstack1, 5, 32, false))
+				 else if (slotID >= 32 && slotID < 41 && !this.mergeItemStack(itemstack1, 5, end_of_player_inv_slots, false))
 				 {
-					 return null;
+					 return ItemStack.EMPTY;
 				 }
 			 }
-			 else if (!this.mergeItemStack(itemstack1, 5, 41, false))
+			 else if (!this.mergeItemStack(itemstack1, start_of_player_inv_slots, end_of_player_hotbar, false))
 			 {
-				 return null;
+				 return ItemStack.EMPTY;
 			 }
 
 			 if (itemstack1.getCount() == 0)
@@ -219,7 +223,7 @@ public class ContainerFreezingMachine extends Container {
 
 			 if (itemstack1.getCount() == itemstack.getCount())
 			 {
-				 return null;
+				 return ItemStack.EMPTY;
 			 }
 
 			 slot.onTake(player, itemstack1);

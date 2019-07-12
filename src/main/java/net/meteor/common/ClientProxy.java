@@ -1,38 +1,28 @@
 package net.meteor.common;
 
-import net.meteor.client.block.ShieldItemRenderer;
-import net.meteor.client.block.SlipperyItemRenderer;
-import net.meteor.client.block.TimerItemRenderer;
+import net.meteor.client.block.models.SlipperyBlockBakedModel;
 import net.meteor.client.effect.ParticleFrezaDust;
-import net.meteor.client.effect.ParticleMeteorShield;
 import net.meteor.client.effect.ParticleMeteorDust;
-import net.meteor.client.render.RenderAlienCreeper;
-import net.meteor.client.render.RenderComet;
-import net.meteor.client.render.RenderCometKitty;
-import net.meteor.client.render.RenderMeteor;
-import net.meteor.client.render.RenderSummoner;
+import net.meteor.client.effect.ParticleMeteorShield;
+import net.meteor.client.render.*;
 import net.meteor.client.tileentity.TileEntityMeteorShieldRenderer;
 import net.meteor.client.tileentity.TileEntityMeteorTimerRenderer;
-import net.meteor.client.tileentity.TileEntitySlipperyRenderer;
-import net.meteor.common.entity.EntityAlienCreeper;
-import net.meteor.common.entity.EntityComet;
-import net.meteor.common.entity.EntityCometKitty;
-import net.meteor.common.entity.EntityMeteor;
-import net.meteor.common.entity.EntitySummoner;
-import net.meteor.common.tileentity.TileEntityFreezingMachine;
+import net.meteor.common.entity.*;
 import net.meteor.common.tileentity.TileEntityMeteorShield;
 import net.meteor.common.tileentity.TileEntityMeteorTimer;
-import net.meteor.common.tileentity.TileEntitySlippery;
 import net.meteor.plugin.baubles.Baubles;
 import net.meteor.plugin.baubles.MagnetizationOverlay;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,7 +30,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -55,29 +44,83 @@ public class ClientProxy extends CommonProxy
 		super.registerTileEntities();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMeteorShield.class, new TileEntityMeteorShieldRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMeteorTimer.class, new TileEntityMeteorTimerRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlippery.class, new TileEntitySlipperyRenderer());
 	}
 
 	@Override
 	public void loadStuff()
 	{
+//		registerSlipperyBlockModels();
 
 		//TODO 1.12.2
 		/*
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD), new ShieldItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.METEOR_TIMER), new TimerItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlippery), new SlipperyItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyTwo), new SlipperyItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyThree), new SlipperyItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyFour), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairs), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsTwo), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsThree), new SlipperyItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsFour), new SlipperyItemRenderer());
 		 */
-		
+
 		if (Baubles.isBaublesLoaded()) {
 			MinecraftForge.EVENT_BUS.register(new MagnetizationOverlay());
+		}
+	}
+
+	public static void registerSlipperyBlockModels() {
+
+		ModelResourceLocation slipperyBlock1Loc = new ModelResourceLocation("meteors:slippery_block1", "normal");
+		ModelResourceLocation slipperyBlock2Loc = new ModelResourceLocation("meteors:slippery_block2", "normal");
+		ModelResourceLocation slipperyBlock3Loc = new ModelResourceLocation("meteors:slippery_block3", "normal");
+		ModelResourceLocation slipperyBlock4Loc = new ModelResourceLocation("meteors:slippery_block4", "normal");
+
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlippery, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyBlock1Loc;
+			}
+		});
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlipperyTwo, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyBlock2Loc;
+			}
+		});
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlipperyThree, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyBlock3Loc;
+			}
+		});
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlipperyFour, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyBlock4Loc;
+			}
+		});
+
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlippery), 0, slipperyBlock1Loc);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyTwo), 0, slipperyBlock2Loc);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyThree), 0, slipperyBlock3Loc);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyFour), 0, slipperyBlock4Loc);
+
+	}
+
+
+	@SubscribeEvent
+	public static void onModelBakeEvent(ModelBakeEvent event)
+	{
+		// Find the existing mapping for CamouflageBakedModel - it will have been added automatically because
+		//  we registered a custom BlockStateMapper for it (using ModelLoader.setCustomStateMapper)
+		// Replace the mapping with our CamouflageBakedModel.
+
+		for(int i = 0; i <= 4; i++) {
+			ModelResourceLocation loc = new ModelResourceLocation("meteors:slippery_block"+i, "normal");
+			Object object = event.getModelRegistry().getObject(loc);
+			if (object instanceof IBakedModel) {
+				IBakedModel existingModel = (IBakedModel) object;
+				SlipperyBlockBakedModel customModel = new SlipperyBlockBakedModel(existingModel);
+				event.getModelRegistry().putObject(loc, customModel);
+			}
 		}
 	}
 
@@ -108,6 +151,9 @@ public class ClientProxy extends CommonProxy
 				e.printStackTrace();
 			}
 		});
+
+		registerSlipperyBlockModels();
+
 	}
 
 	@Override

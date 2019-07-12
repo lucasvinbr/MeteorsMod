@@ -32,14 +32,6 @@ public class CreativeTabMeteor extends CreativeTabs {
 		items.add(ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(MeteorsMod.ColdTouch, MeteorsMod.ColdTouch.getMaxLevel())));
 		items.add(ItemEnchantedBook.getEnchantedItemStack(new EnchantmentData(MeteorsMod.Magnetization, MeteorsMod.Magnetization.getMaxLevel())));
 	}
-	
-	private ItemStack getSlipperyStairItemStack(Block block) {
-		ItemStack stack = new ItemStack(block, 1);
-		NBTTagCompound nbt = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-		nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(Blocks.OAK_STAIRS).toString());
-		stack.setTagCompound(nbt);
-		return stack;
-	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
