@@ -6,6 +6,8 @@ import net.meteor.common.MeteorItems;
 import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -32,21 +34,22 @@ public class GuiButtonFreezerRecipeMode extends GuiButton {
 		if (this.visible)
 		{
 			mc.getTextureManager().bindTexture(GuiFreezingMachine.freezingMachineTextures);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			int k = this.getHoverState(this.hovered) - 1;
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			this.drawTexturedModalRect(this.x, this.y, k * 20, 166, this.width, this.height);
 			this.mouseDragged(mc, mouseX, mouseY);
 
 			RenderItem renderitem = mc.getRenderItem();
-			ArrayList<String> info = new ArrayList<>();
 			mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			int state = freezer.getRecipeMode().getID();
 
 			TextureAtlasSprite waterTexture = mc.getTextureMapBlocks().getTextureExtry(FluidRegistry.WATER.getStill().toString());
 			TextureAtlasSprite itemIcon = renderitem.getItemModelMesher().getParticleIcon(MeteorItems.FrozenIronIngot);
+			//Nice shading ;)
+			RenderHelper.enableGUIStandardItemLighting();
 
 			if (state == 0) {	// Item Only - Frozen Iron
 				

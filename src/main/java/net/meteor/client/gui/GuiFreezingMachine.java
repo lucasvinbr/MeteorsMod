@@ -1,8 +1,5 @@
 package net.meteor.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.meteor.common.FreezerRecipes.RecipeType;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.block.container.ContainerFreezingMachine;
@@ -10,6 +7,7 @@ import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.meteor.common.util.Util;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,11 +18,12 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import org.lwjgl.opengl.GL11;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiFreezingMachine extends GuiContainer {
 	
-	public static final ResourceLocation freezingMachineTextures = new ResourceLocation(MeteorsMod.MOD_ID, "textures/gui/container/freezing_machine.png");
+	static final ResourceLocation freezingMachineTextures = new ResourceLocation(MeteorsMod.MOD_ID, "textures/gui/container/freezing_machine.png");
 	
 	private TileEntityFreezingMachine freezer;
 	private int fluidAmount = 0;
@@ -43,7 +42,7 @@ public class GuiFreezingMachine extends GuiContainer {
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(freezingMachineTextures);
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
@@ -62,27 +61,20 @@ public class GuiFreezingMachine extends GuiContainer {
         		
         		fluidName = fluid.getLocalizedName(fluidStack);
 				TextureAtlasSprite fluidTexture = mc.getTextureMapBlocks().getTextureExtry(fluid.getStill().toString());
-        		int height = (int) (((double)fluidAmount / (double)tankInfo.capacity) * 69);
-        		int drawnHeight = 0;
+				int height = (int) (((double)fluidAmount / (double)tankInfo.capacity) * 69);//69?
         		this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        		
-        		for (int i = height / 16; i >= 0; i--) {
-        			if (i > 0) {
-        				this.drawTexturedModalRect(k + 13, l + 76 - 16 - drawnHeight, fluidTexture, 20, 16);
-        				drawnHeight += 16;
-        			} else {
-						this.drawTexturedModalRect(k + 13, l + 76 - drawnHeight, fluidTexture, 20, height);
-        			}
-        			height -= 16;
-        		}
-        		
+				int tankFluidHeight = l + 76 - height;
+				//noinspection ConstantConditions - If this happens we have bigger issues
+				this.drawTexturedModalRect(k + 13, tankFluidHeight, fluidTexture, 20, height);
         	}
         } else if (fluidAmount > 0) {
         	fluidAmount = 0;
         	fluidName = "";
         }
-        
+
+
         this.mc.getTextureManager().bindTexture(freezingMachineTextures);
+        //Draw tank lines
         this.drawTexturedModalRect(k + 13, l + 7, 176, 31, 20, 69);
         
         if (this.freezer.isFreezing()) {
@@ -105,7 +97,7 @@ public class GuiFreezingMachine extends GuiContainer {
 		}
 		
 		if (isPointInRegion(149, 60, 20, 20, mouseX, mouseY)) {
-			List info = new ArrayList();
+			List<String> info = new ArrayList<>();
 			RecipeType type = freezer.getRecipeMode();
 			if (type == RecipeType.item) {
 				info.add(TextFormatting.AQUA + I18n.translateToLocal("info.freezer.itemMode"));

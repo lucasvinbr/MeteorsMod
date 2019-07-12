@@ -6,6 +6,7 @@ import net.meteor.common.FreezerRecipes.RecipeType;
 import net.meteor.common.MeteorItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
@@ -20,6 +21,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,10 +31,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityFreezingMachine extends TileEntityNetworkBase implements ISidedInventory, IFluidHandler, ITickable {
 
 	private static int[] acccessibleSlots = {0, 1, 2, 3, 4};
+	//slot 0 = freeze item in
+	//slot 1 = freeze item fuel
+	//slot 2 = freeze output
+	//Slot 3 = liquid in
+	//Slot 4 = liquid out
 
 	private NonNullList<ItemStack> inv = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
 	private ItemStack lastKnownItem = null;
-	private FluidTank tank = new FluidTank(1000 * 10);//TODO 1.12.2
+	private FluidTank tank = new FluidTank(1000 * 10);
 	private RecipeType acceptedRecipeType = RecipeType.either;
 
 	public int cookTime;
@@ -112,7 +119,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		
 		this.inv.set(slot, item);
 		
-		if (item != null && item.getCount() > this.getInventoryStackLimit())
+		if (item.getCount() > this.getInventoryStackLimit())
 		{
 			item.setCount(this.getInventoryStackLimit());
 		}
@@ -133,29 +140,25 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 					if (tank.fill(fluid, false) == fluid.amount) {
 
 						// Try to insert it into the bottom slot
-						ItemStack emptyContainer = null;
-						//TODO 1.12.2
-						//FluidContainerData[] containerData = FluidContainerRegistry.getRegisteredFluidContainerData();
-						//for (FluidContainerData containerDatum : containerData) {
-						//	if (containerDatum.filledContainer.isItemEqual(item)) {
-						//		emptyContainer = containerDatum.emptyContainer.copy();
-						//	}
-						//}
+						ItemStack emptyContainer;
+						IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(item.copy());
+						fluidHandler.drain(fluid.copy(), true);
+						emptyContainer = fluidHandler.getContainer();
 
-						if (emptyContainer != null) {
-							if (inv.get(4) == ItemStack.EMPTY) {
-								tank.fill(fluid, true);
-								inv.set(4, emptyContainer);
-								decrStackSize(3, 1);
-								//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-								//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-							} else if (inv.get(4).isItemEqual(emptyContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
-								tank.fill(fluid, true);
-								inv.get(4).grow(1);
-								decrStackSize(3, 1);
-								//TODO 1.12.2 world.notifyBlockUpdate(state, state, 3) ?
-								//this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-							}
+						if (inv.get(4) == ItemStack.EMPTY) {
+							tank.fill(fluid, true);
+							inv.set(4, emptyContainer);
+							decrStackSize(3, 1);
+							//TODO this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+							this.getWorld().setBlockState(this.getPos(), this.getBlockType().getDefaultState(), 3);
+
+						} else if (inv.get(4).isItemEqual(emptyContainer) && inv.get(4).getCount() + 1 <= inv.get(4).getMaxStackSize()) {
+							tank.fill(fluid, true);
+							inv.get(4).grow(1);
+							decrStackSize(3, 1);
+							markDirty();
+							this.getWorld().setBlockState(this.getPos(), this.getBlockType().getDefaultState(), 3);
+							//TODO this.getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 						}
 
 					}
@@ -374,7 +377,7 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		if (!this.getWorld().isRemote)
 		{
 			
-			if (inv.get(3) != ItemStack.EMPTY) {
+			if (inv.get(3) != ItemStack.EMPTY && inv.get(3).getItem() != Items.AIR) {//TODO why is this air..
 				checkFluidContainer();
 			}
 			
@@ -529,7 +532,9 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		if (tank.getFluidAmount() == 0) {
 			//TODO 1.12.2 don't think this is needed anymore
 			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
-			}
+			//this.getWorld().update(this.getPos(), this.getBlockType().getDefaultState());
+
+		}
 		return tank.fill(resource, doFill);
 	}
 

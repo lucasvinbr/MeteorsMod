@@ -8,7 +8,6 @@ import net.meteor.common.MeteorItems;
 import net.meteor.common.MeteorsMod;
 import net.meteor.common.climate.HandlerMeteor;
 import net.meteor.common.climate.HandlerWorld;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -24,39 +23,40 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntitySummoner extends EntityThrowable implements IEntityAdditionalSpawnData
 {
-	private static final float[][] spellRGB = { 
-		{0.4352941176470588F, 0.0784313725490196F, 0.6588235294117647F}, 
-		{0.0588235294117647F, 0.6784313725490196F, 0.6784313725490196F}, 
-		{0.6941176470588235F, 0.0470588235294118F, 0.0470588235294118F}, 
-		{0.392156862745098F, 0.3725490196078431F, 0.3450980392156863F}, 
-		{0.0941176470588235F, 0.6470588235294118F, 0.0941176470588235F} };
+	private static final float[][] spellRGB = {
+		{0.4352941176470588F, 0.0784313725490196F, 0.6588235294117647F}, //Meteorite
+		{0.0588235294117647F, 0.6784313725490196F, 0.6784313725490196F}, //Frezarite
+		{0.6941176470588235F, 0.0470588235294118F, 0.0470588235294118F}, //Kreknorite
+		{0.392156862745098F, 0.3725490196078431F, 0.3450980392156863F}, //Unknown
+		{0.0941176470588235F, 0.6470588235294118F, 0.0941176470588235F} //Kitty
+	};
 
-	public EnumMeteor meteorType;
+	//TODO doesn't seem to make a big hole like it does on 1.7.10
+	private EnumMeteor meteorType;
 	public boolean isRandom;
 
-	private EntityLiving thrower;
-	private String throwerName = null;
-
+	@SuppressWarnings("unused")
 	public EntitySummoner(World world)
 	{
 		super(world);
 	}
 
-	public EntitySummoner(World world, EntityLivingBase entityliving)
+	public EntitySummoner(World world, EntityLivingBase thrower)
 	{
-		super(world, entityliving);
+		super(world, thrower);
 	}
 
-	public EntitySummoner(World world, EntityLivingBase entityliving, EnumMeteor meteorID, boolean r)
+	public EntitySummoner(World world, EntityLivingBase thrower, EnumMeteor meteorID, boolean r)
 	{
-		this(world, entityliving);
+		this(world, thrower);
 		this.meteorType = meteorID;
 		this.isRandom = r;
 	}
 
-	public EntitySummoner(World world, double d, double d1, double d2)
+	@SuppressWarnings("unused")
+	public EntitySummoner(World world, double x, double y, double z)
 	{
-		super(world, d, d1, d2);
+		super(world, x, y, z);
 	}
 
 	@Override
@@ -68,13 +68,17 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 			if (isRandom) {
 				rgbIndex = this.getEntityWorld().rand.nextInt(5);
 			}
-			getEntityWorld().spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX, this.posY, this.posZ, spellRGB[rgbIndex][0], spellRGB[rgbIndex][1], spellRGB[rgbIndex][2]);
+			this.world.spawnAlwaysVisibleParticle(EnumParticleTypes.SPELL_MOB.getParticleID(), this.posX, this.posY, this.posZ, (double)(spellRGB[rgbIndex][0]), (double)(spellRGB[rgbIndex][1]), (double)(spellRGB[rgbIndex][2]));
 		}
 	}
 
 	@Override
 	protected void onImpact(RayTraceResult rayTraceResult)
 	{
+		//Vanilla stupidness fix, prevents the summoner from impacting on our face.
+		if(rayTraceResult.typeOfHit == RayTraceResult.Type.ENTITY)
+			return;
+
 		for (int i = 0; i < 8; i++)
 		{
 			this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOWBALL, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
@@ -89,8 +93,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 					if (this.isRandom) {
 						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 					} else {
-						//TODO 1.12.2
-						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.meteorType + 1));
+						player.inventory.addItemStackToInventory(new ItemStack(EnumMeteor.getItemSummonerForMeteorType(this.meteorType), 1));
 					}
 				}
 			}
@@ -110,8 +113,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 					if (this.isRandom) {
 						player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 					} else {
-						//TODO 1.12.2
-						//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.meteorType + 1));
+						player.inventory.addItemStackToInventory(new ItemStack(EnumMeteor.getItemSummonerForMeteorType(this.meteorType), 1));
 					}
 				}
 			} else if ((!MeteorsMod.instance.allowSummonedMeteorGrief) && (player != null)) {
@@ -123,8 +125,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 						if (this.isRandom) {
 							player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummonerRandom, 1));
 						} else {
-							//TODO 1.12.2
-							//player.inventory.addItemStackToInventory(new ItemStack(MeteorItems.itemMeteorSummoner, 1, this.meteorType + 1));
+							player.inventory.addItemStackToInventory(new ItemStack(EnumMeteor.getItemSummonerForMeteorType(this.meteorType), 1));
 						}
 					}
 				}
@@ -172,4 +173,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 		this.isRandom = additionalData.readBoolean();
 	}
 
+	public EnumMeteor getMeteorType() {
+		return meteorType;
+	}
 }

@@ -2,12 +2,15 @@ package net.meteor.common;
 
 import java.io.Serializable;
 
+import net.meteor.common.item.ItemSummoner;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
+
+import javax.annotation.Nullable;
 
 public enum EnumMeteor
 implements Serializable
@@ -87,6 +90,48 @@ implements Serializable
 	public static String getLocalName(EnumMeteor type) {
 		String name = "meteor." + type.toString().toLowerCase() + ".name";
 		return I18n.translateToLocal(name);
+	}
+
+	@Nullable
+	public static EnumMeteor getMeteorForItem(ItemSummoner itemSummoner) {
+		if(itemSummoner == MeteorItems.itemMeteorSummonerMeteorite) {
+			return EnumMeteor.METEORITE;
+		}
+		if(itemSummoner == MeteorItems.itemMeteorSummonerFrezarite) {
+			return EnumMeteor.FREZARITE;
+		}
+		if(itemSummoner == MeteorItems.itemMeteorSummonerKreknorite) {
+			return EnumMeteor.KREKNORITE;
+		}
+		if(itemSummoner == MeteorItems.itemMeteorSummonerUnknown) {
+			return EnumMeteor.UNKNOWN;
+		}
+		if(itemSummoner == MeteorItems.itemMeteorSummonerKitty) {
+			return EnumMeteor.KITTY;
+		}
+
+		return null;
+	}
+
+	public static ItemSummoner getItemSummonerForMeteorType(EnumMeteor meteorType) {
+		if(meteorType == EnumMeteor.METEORITE) {
+			return (ItemSummoner) MeteorItems.itemMeteorSummonerMeteorite;
+		}
+		if(meteorType == EnumMeteor.FREZARITE) {
+			return (ItemSummoner) MeteorItems.itemMeteorSummonerFrezarite;
+		}
+		if(meteorType == EnumMeteor.KREKNORITE) {
+			return (ItemSummoner) MeteorItems.itemMeteorSummonerKreknorite;
+		}
+		if(meteorType == EnumMeteor.UNKNOWN) {
+			return (ItemSummoner) MeteorItems.itemMeteorSummonerUnknown;
+		}
+		if(meteorType == EnumMeteor.KITTY) {
+			return (ItemSummoner) MeteorItems.itemMeteorSummonerKitty;
+		}
+
+		System.out.println("Missing ItemSummoner for EnumMeteor: "+meteorType);
+		return (ItemSummoner) MeteorItems.itemMeteorSummonerMeteorite;
 	}
 	
 }

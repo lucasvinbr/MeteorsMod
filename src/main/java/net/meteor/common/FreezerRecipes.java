@@ -10,6 +10,7 @@ import net.meteor.common.block.BlockSlipperyStairs;
 import net.meteor.common.item.ItemBlockSlippery;
 import net.meteor.common.tileentity.TileEntitySlippery;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -135,11 +136,9 @@ public class FreezerRecipes {
 				res.setTagCompound(nbt);
 				return res;
 				
-			} /*else if (block.getRenderType() == 10) {//TODO 1.12.2
-				
+			} else if (block instanceof BlockStairs) {//TODO 1.12.2
 				res = new ItemStack(MeteorBlocks.blockSlipperyStairs, 1, neededItem.getItemDamage());
-				
-			}*/
+			}
 			
 			NBTTagCompound nbt = res.hasTagCompound() ? res.getTagCompound() : new NBTTagCompound();
 			nbt.setString(ItemBlockSlippery.FACADE_BLOCK_KEY, TileEntitySlippery.getNameFromBlock(block).toString());
