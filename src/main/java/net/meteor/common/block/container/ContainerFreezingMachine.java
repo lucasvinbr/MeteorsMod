@@ -1,5 +1,7 @@
 package net.meteor.common.block.container;
 
+import net.meteor.client.gui.slots.SlotFreezeFuel;
+import net.meteor.client.gui.slots.SlotLiquidStorage;
 import net.meteor.common.FreezerRecipes;
 import net.meteor.common.FreezerRecipes.RecipeType;
 import net.meteor.common.MeteorItems;
@@ -26,11 +28,11 @@ public class ContainerFreezingMachine extends Container {
 
 	public ContainerFreezingMachine(InventoryPlayer inventoryPlayer, TileEntityFreezingMachine iceMaker) {
 		this.iceMaker = iceMaker;
-		this.addSlotToContainer(new Slot(iceMaker, 0, 73, 17));
-		this.addSlotToContainer(new Slot(iceMaker, 1, 73, 53));
-		this.addSlotToContainer(new SlotTakeOnly(iceMaker, 2, 133, 35, inventoryPlayer.player));
-		this.addSlotToContainer(new Slot(iceMaker, 3, 38, 7));
-		this.addSlotToContainer(new SlotTakeOnly(iceMaker, 4, 38, 60));
+		this.addSlotToContainer(new Slot(iceMaker, 0, 73, 17));//Freeze item in
+		this.addSlotToContainer(new SlotFreezeFuel(iceMaker, 1, 73, 53));//freeze item fuel
+		this.addSlotToContainer(new SlotTakeOnly(iceMaker, 2, 133, 35, inventoryPlayer.player));//freeze item out
+		this.addSlotToContainer(new SlotLiquidStorage(iceMaker, 3, 38, 7));//liquid in
+		this.addSlotToContainer(new SlotTakeOnly(iceMaker, 4, 38, 60));//liquid out
 		int i;
 
 		for (i = 0; i < 3; ++i)

@@ -346,7 +346,12 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack item, EnumFacing direction) {
 
-		return item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) ? slot == FLUID_IN : slot == FREEZE_ITEM_FUEL;
+		if (item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+			return slot == FLUID_IN;
+		}
+		else {
+			return slot == FREEZE_ITEM_FUEL;
+		}
 	}
 
 	@Override
