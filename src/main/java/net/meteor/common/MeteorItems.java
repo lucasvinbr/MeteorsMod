@@ -1,21 +1,9 @@
 package net.meteor.common;
 
-import net.meteor.common.item.ItemDetector;
-import net.meteor.common.item.ItemEnchArmor;
-import net.meteor.common.item.ItemEnchAxe;
-import net.meteor.common.item.ItemEnchHoe;
-import net.meteor.common.item.ItemEnchPickaxe;
-import net.meteor.common.item.ItemEnchSpade;
-import net.meteor.common.item.ItemEnchSword;
-import net.meteor.common.item.ItemFoodMeteorsMod;
-import net.meteor.common.item.ItemFrezariteAxe;
-import net.meteor.common.item.ItemFrezariteHoe;
-import net.meteor.common.item.ItemFrezaritePickaxe;
-import net.meteor.common.item.ItemFrezariteSpade;
-import net.meteor.common.item.ItemFrezariteSword;
-import net.meteor.common.item.ItemKreknoSword;
-import net.meteor.common.item.ItemMeteorsMod;
-import net.meteor.common.item.ItemSummoner;
+import net.meteor.common.block.BlockSlippery;
+import net.meteor.common.block.BlockSlipperyStairs;
+import net.meteor.common.block.MeteorBlock;
+import net.meteor.common.item.*;
 import net.meteor.common.util.MeteorConstants;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -46,6 +34,7 @@ public class MeteorItems {
 	public static final ToolMaterial MeteoriteTool = EnumHelper.addToolMaterial("METEORITE", 3, 900, 10.0F, 2, 15);
 	public static final ToolMaterial FrezariteTool = EnumHelper.addToolMaterial("FREZARITE", 2, 225, 7.0F, 2, 20);
 
+	//TODO doesn't seem that the enchants are applying 1.12.2
 	public static final Item itemMeteorChips 			= new ItemMeteorsMod().setMaxStackSize(64).setRegistryName("MeteorChips").setTranslationKey("MeteorChips");
 	public static final Item itemRedMeteorGem 			= new ItemMeteorsMod().setMaxStackSize(64).setRegistryName("RedMeteorGem").setTranslationKey("RedMeteorGem");
 	public static final Item itemMeteorSummonerRandom 		= new ItemSummoner().setRegistryName("MeteorSummonerRandom").setTranslationKey("MeteorSummonerRandom");
@@ -149,13 +138,24 @@ public class MeteorItems {
 		Arrays.stream(fields).forEach(field -> {
 			try {
 				Object o = field.get(null);
-				if (o instanceof Block)
-					event.getRegistry().register(new ItemBlock((Block)o).setRegistryName(((Block)o).getRegistryName()));
+				if (o instanceof Block) {
+					if(!(o instanceof BlockSlippery) && !(o instanceof BlockSlipperyStairs))
+						event.getRegistry().register(new ItemBlock((Block) o).setRegistryName(((Block) o).getRegistryName()));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
-		
+
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlippery).setRegistryName(MeteorBlocks.blockSlippery.getRegistryName()));
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlipperyTwo).setRegistryName(MeteorBlocks.blockSlipperyTwo.getRegistryName()));
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlipperyThree).setRegistryName(MeteorBlocks.blockSlipperyThree.getRegistryName()));
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlipperyFour).setRegistryName(MeteorBlocks.blockSlipperyFour.getRegistryName()));
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlipperyStairs).setRegistryName(MeteorBlocks.blockSlipperyStairs.getRegistryName()));
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlipperyStairsTwo).setRegistryName(MeteorBlocks.blockSlipperyStairsTwo.getRegistryName()));
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlipperyStairsThree).setRegistryName(MeteorBlocks.blockSlipperyStairsThree.getRegistryName()));
+		event.getRegistry().register(new ItemBlockSlippery(MeteorBlocks.blockSlipperyStairsFour).setRegistryName(MeteorBlocks.blockSlipperyStairsFour.getRegistryName()));
+
 		// Ore Dictionary
 		OreDictionary.registerOre("ingotMeteorite", MeteoriteIngot);
 		OreDictionary.registerOre("ingotFrozenIron", FrozenIronIngot);

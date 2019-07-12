@@ -5,6 +5,7 @@ import net.meteor.common.block.BlockSlippery;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.meteor.common.item.ItemBlockSlippery;
 import net.meteor.common.tileentity.TileEntitySlippery;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
@@ -55,6 +56,12 @@ public class SlipperyBlockBakedModel implements IBakedModel {
         if (iBlockState instanceof IExtendedBlockState) {
             IExtendedBlockState iExtendedBlockState = (IExtendedBlockState) iBlockState;
             IBlockState copiedBlockIBlockState = iExtendedBlockState.getValue(BlockSlippery.COPIEDBLOCK);
+
+            if(iBlockState.getBlock() instanceof BlockStairs)
+                copiedBlockIBlockState = copiedBlockIBlockState
+                        .withProperty(BlockStairs.FACING, iBlockState.getValue(BlockStairs.FACING))
+                        .withProperty(BlockStairs.HALF, iBlockState.getValue(BlockStairs.HALF))
+                        .withProperty(BlockStairs.SHAPE, iBlockState.getValue(BlockStairs.SHAPE));
 
             if (copiedBlockIBlockState != UNCAMOUFLAGED_BLOCK) {
                 // Retrieve the IBakedModel of the copied block and return it.

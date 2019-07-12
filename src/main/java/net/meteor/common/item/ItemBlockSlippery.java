@@ -47,7 +47,7 @@ public class ItemBlockSlippery extends ItemBlock {
 		checkNBT(itemStack);
 		Block storedBlock = getStoredBlock(itemStack);
 		String facadeName = new ItemStack(Item.getItemFromBlock(storedBlock), 1, itemStack.getItemDamage()).getDisplayName();
-		return I18n.translateToLocalFormatted(this.getRegistryName() + ".name", facadeName);
+		return I18n.translateToLocalFormatted("tile.slipperyBlock.name", facadeName);
     }
 
 	@Override
@@ -63,6 +63,9 @@ public class ItemBlockSlippery extends ItemBlock {
 	@Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+        if(this.getBlock() instanceof BlockSlipperyStairs)
+            return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);//TODO 1.12.2 see if this entire method can be neatened up
+
         Block block = world.getBlockState(pos).getBlock();
         ItemStack itemStack = player.getHeldItem(hand);
         Block storedBlock = getStoredBlock(itemStack);
@@ -119,7 +122,6 @@ public class ItemBlockSlippery extends ItemBlock {
         }
         else if (world.mayPlace(storedBlock, newPos, false, facing, player))
         {
-            int i1 = this.getMetadata(itemStack.getItemDamage());
             IBlockState newState = storedBlock.getDefaultState();//TODO 1.12.2 verify, guessing we should save the block state too ?
 
             if (placeBlockAt(itemStack, player, world, newPos, facing, hitX, hitY, hitZ, newState))

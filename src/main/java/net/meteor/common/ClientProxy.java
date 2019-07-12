@@ -72,6 +72,10 @@ public class ClientProxy extends CommonProxy
 		ModelResourceLocation slipperyBlock2Loc = new ModelResourceLocation("meteors:slippery_block2", "normal");
 		ModelResourceLocation slipperyBlock3Loc = new ModelResourceLocation("meteors:slippery_block3", "normal");
 		ModelResourceLocation slipperyBlock4Loc = new ModelResourceLocation("meteors:slippery_block4", "normal");
+		ModelResourceLocation slipperyStairs1Loc = new ModelResourceLocation("meteors:slippery_stairs1", "normal");
+		ModelResourceLocation slipperyStairs2Loc = new ModelResourceLocation("meteors:slippery_stairs2", "normal");
+		ModelResourceLocation slipperyStairs3Loc = new ModelResourceLocation("meteors:slippery_stairs3", "normal");
+		ModelResourceLocation slipperyStairs4Loc = new ModelResourceLocation("meteors:slippery_stairs4", "normal");
 
 		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlippery, new StateMapperBase() {
 			@Override
@@ -97,11 +101,39 @@ public class ClientProxy extends CommonProxy
 				return slipperyBlock4Loc;
 			}
 		});
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlipperyStairs, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyStairs1Loc;
+			}
+		});
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlipperyStairsTwo, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyStairs2Loc;
+			}
+		});
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlipperyStairsThree, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyStairs3Loc;
+			}
+		});
+		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlipperyStairsFour, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return slipperyStairs4Loc;
+			}
+		});
 
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlippery), 0, slipperyBlock1Loc);
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyTwo), 0, slipperyBlock2Loc);
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyThree), 0, slipperyBlock3Loc);
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyFour), 0, slipperyBlock4Loc);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairs), 0, slipperyStairs1Loc);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsTwo), 0, slipperyStairs2Loc);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsThree), 0, slipperyStairs3Loc);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsFour), 0, slipperyStairs4Loc);
 
 	}
 
@@ -115,6 +147,15 @@ public class ClientProxy extends CommonProxy
 
 		for(int i = 0; i <= 4; i++) {
 			ModelResourceLocation loc = new ModelResourceLocation("meteors:slippery_block"+i, "normal");
+			Object object = event.getModelRegistry().getObject(loc);
+			if (object instanceof IBakedModel) {
+				IBakedModel existingModel = (IBakedModel) object;
+				SlipperyBlockBakedModel customModel = new SlipperyBlockBakedModel(existingModel);
+				event.getModelRegistry().putObject(loc, customModel);
+			}
+		}
+		for(int i = 0; i <= 4; i++) {
+			ModelResourceLocation loc = new ModelResourceLocation("meteors:slippery_stairs"+i, "normal");
 			Object object = event.getModelRegistry().getObject(loc);
 			if (object instanceof IBakedModel) {
 				IBakedModel existingModel = (IBakedModel) object;

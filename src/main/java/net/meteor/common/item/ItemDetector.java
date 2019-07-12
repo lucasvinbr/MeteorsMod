@@ -2,10 +2,8 @@ package net.meteor.common.item;
 
 import java.util.List;
 
-import net.meteor.client.TextureDetector;
 import net.meteor.common.ClientHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
