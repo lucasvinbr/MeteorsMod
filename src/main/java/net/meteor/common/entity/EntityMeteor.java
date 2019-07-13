@@ -4,11 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.List;
 
-import net.meteor.common.ClientHandler;
-import net.meteor.common.EnumMeteor;
-import net.meteor.common.ExplosionMeteor;
-import net.meteor.common.IMeteorShield;
-import net.meteor.common.MeteorsMod;
+import net.meteor.common.*;
 import net.meteor.common.climate.CrashLocation;
 import net.meteor.common.climate.GhostMeteor;
 import net.meteor.common.climate.HandlerMeteor;
@@ -22,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -103,8 +100,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					EntityPlayer playerOwner = getEntityWorld().getPlayerEntityByName(owner);
 					if (playerOwner != null) {
 						playerOwner.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
-						///TODO 1.12.2
-						// playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
+						HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) playerOwner, HandlerAchievement.meteorBlocked, HandlerAchievement.metsorsBlocked);
 					}
 					metHandler.getShieldManager().sendMeteorMaterialsToShield(shield, new GhostMeteor((int)posX, (int)posZ, size, 0, meteorType));
 					this.getEntityWorld().playSound(posX, posY, posZ, new SoundEvent(new ResourceLocation("minecraft:random.explode")), SoundCategory.BLOCKS, 5F, (1.0F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.2F) * 0.7F, true);
@@ -151,8 +147,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					AxisAlignedBB aabb = new AxisAlignedBB(posX - 40D, posY - 20D, posZ - 40D, posX + 40D, posY + 20D, posZ + 40D);
 					List<EntityPlayer> players = this.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, aabb);
 					for (EntityPlayer player : players) {
-						//TODO 1.12.2
-						// player.addStat(HandlerAchievement.foundMeteor, 1);
+						HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) player, HandlerAchievement.foundMeteor, HandlerAchievement.meteorsFound);
 					}
 					
 					HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(getEntityWorld().provider.getDimension());

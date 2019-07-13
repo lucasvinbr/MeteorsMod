@@ -136,7 +136,7 @@ public class FreezerRecipes {
 				res.setTagCompound(nbt);
 				return res;
 				
-			} else if (block instanceof BlockStairs) {//TODO 1.12.2
+			} else if (block instanceof BlockStairs) {
 				res = new ItemStack(MeteorBlocks.blockSlipperyStairs, 1, neededItem.getItemDamage());
 			}
 			

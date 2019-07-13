@@ -79,15 +79,6 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 	public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
-    
-    /**
-     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
-     */
-    //TODO 1.12.2
-/*	@Override
-    public boolean renderAsNormalBlock() {
-        return false;
-    }*/
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
@@ -122,7 +113,7 @@ public class BlockSlipperyStairs extends BlockStairs implements ITileEntityProvi
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		Item item = super.getPickBlock(state, target, world, pos, player).getItem();//TODO 1.12.2 confirm
+		Item item = super.getPickBlock(state, target, world, pos, player).getItem();
 
 		if (item == Items.AIR) {
 			return ItemStack.EMPTY;

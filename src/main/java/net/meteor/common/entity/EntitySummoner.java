@@ -1,15 +1,12 @@
 package net.meteor.common.entity;
 
 import io.netty.buffer.ByteBuf;
-import net.meteor.common.ClientHandler;
-import net.meteor.common.EnumMeteor;
-import net.meteor.common.IMeteorShield;
-import net.meteor.common.MeteorItems;
-import net.meteor.common.MeteorsMod;
+import net.meteor.common.*;
 import net.meteor.common.climate.HandlerMeteor;
 import net.meteor.common.climate.HandlerWorld;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -135,8 +132,7 @@ public class EntitySummoner extends EntityThrowable implements IEntityAdditional
 			if (canHit) {
 				if (player != null) {
 					player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorSummoner.incomingMeteor"), TextFormatting.LIGHT_PURPLE));
-					//TODO 1.12.2
-					//player.triggerAchievement(HandlerAchievement.summonMeteor);
+					HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.summonMeteor);
 				}
 				EntityMeteor meteorToSpawn = new EntityMeteor(this.getEntityWorld(), HandlerMeteor.getMeteorSize(), this.posX, this.posZ, this.meteorType, true);
 				this.getEntityWorld().spawnEntity(meteorToSpawn);

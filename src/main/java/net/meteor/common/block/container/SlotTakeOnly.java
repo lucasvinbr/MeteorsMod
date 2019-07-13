@@ -1,9 +1,11 @@
 package net.meteor.common.block.container;
 
+import net.meteor.common.HandlerAchievement;
 import net.meteor.common.block.BlockSlippery;
 import net.meteor.common.block.BlockSlipperyStairs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -45,14 +47,11 @@ public class SlotTakeOnly extends Slot {
 		
 		if (item != null && this.thePlayer != null) {
 			if (item.getItem() == Item.getItemFromBlock(Blocks.ICE)) {
-				//TODO 1.12.2
-				//this.thePlayer.addStat(HandlerAchievement.freezeWater, 1);
+				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeWater, HandlerAchievement.waterFrozen);
 			} else if (item.getItem() == Item.getItemFromBlock(Blocks.PACKED_ICE)) {
-				//TODO 1.12.2
-				//this.thePlayer.addStat(HandlerAchievement.freezeIce, 1);
+				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeIce, HandlerAchievement.iceFrozen);
 			} else if (Block.getBlockFromItem(item.getItem()) instanceof BlockSlippery || Block.getBlockFromItem(item.getItem()) instanceof BlockSlipperyStairs) {
-				//TODO 1.12.2
-				//this.thePlayer.addStat(HandlerAchievement.freezeBlocks, 1);
+				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeBlocks, HandlerAchievement.blocksFrozen);
 			}
 		}
 		

@@ -1,0 +1,24 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Well Informed"
+        },
+        "description": {
+            "text": "Craft any kind of detector: Meteorite, Frezarite, or Kreknorite"
+        },
+        "icon": {
+            "item": "meteors:meteordetectorproximity"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "parent": "meteors:main/root"
+}

@@ -15,6 +15,7 @@ import net.meteor.common.climate.HandlerMeteor;
 import net.meteor.common.climate.MeteorShieldData;
 import net.meteor.common.entity.EntityComet;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -465,8 +466,7 @@ public class TileEntityMeteorShield extends TileEntityNetworkBase implements ISi
 			this.getWorld().playSound(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, new SoundEvent(new ResourceLocation("meteors:shield.powerup")), SoundCategory.BLOCKS, 1.0F, powerLevel / 10.0F + 0.5F, true);
 			EntityPlayer player = getWorld().getPlayerEntityByName(owner);
 			if (powerLevel == 5 && player != null) {
-				//TODO 1.12.2
-				//player.addStat(HandlerAchievement.shieldFullyUpgraded, 1);
+				HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.shieldFullyUpgraded);
 			}
 			if (MeteorsMod.instance.ShieldRadiusMultiplier <= 0 && !getWorld().isRemote) {
 				if (player != null) {

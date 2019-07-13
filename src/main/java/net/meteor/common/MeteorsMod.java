@@ -139,8 +139,6 @@ public class MeteorsMod implements IWorldGenerator
 
 		this.playerTickHandler = new HandlerPlayerTick();
 
-		//TODO 1.12.2
-		//this.achHandler.readyAchievements();
 		proxy.loadStuff();
 
 		MinecraftForge.EVENT_BUS.register(new HandlerPlayerBreakSpeed());

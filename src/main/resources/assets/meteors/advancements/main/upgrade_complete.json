@@ -1,0 +1,24 @@
+{
+  "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+  "display": {
+    "title": {
+      "text": "Upgrade Complete"
+    },
+    "description": {
+      "text": "Fully upgrade a Meteor Shield using rare Red Meteor Gems."
+    },
+    "icon": {
+      "item": "meteors:redmeteorgem"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "meteors:main/true_power"
+}

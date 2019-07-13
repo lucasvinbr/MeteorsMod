@@ -2,6 +2,7 @@ package net.meteor.common;
 
 import net.meteor.common.util.MeteorCraftingHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -18,22 +19,17 @@ public class HandlerRecipe implements IFuelHandler {
 		Item item = event.crafting.getItem();
 		EntityPlayer player = event.player;
 		if (item == Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD)) {
-			//TODO 1.12.2
-			//player.addStat(HandlerAchievement.shieldCrafted, 1);
+			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.shieldCrafted);
 		} else if (item == MeteorItems.KreknoriteSword) {
-			//TODO 1.12.2
-			//player.addStat(HandlerAchievement.craftedKreknoSword, 1);
+			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedKreknoSword);
 		} else if (item == MeteorItems.itemMeteorProximityDetector ||
 				   item == MeteorItems.itemMeteorTimeDetector ||
 				   item == MeteorItems.itemMeteorCrashDetector) {
-			//TODO 1.12.2
-			//player.addStat(HandlerAchievement.craftedDetector, 1);
+			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedDetector);
 		} else if (item == Item.getItemFromBlock(MeteorBlocks.METEOR_TIMER)) {
-			//TODO 1.12.2
-			//player.addStat(HandlerAchievement.craftedMeteorTimer, 1);
+			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedMeteorTimer);
 		} else if (item == Item.getItemFromBlock(MeteorBlocks.FREEZER)) {
-			//TODO 1.12.2
-			//player.addStat(HandlerAchievement.craftedFreezer, 1);
+			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedFreezer);
 		}
 			
 	}
@@ -151,7 +147,7 @@ public class HandlerRecipe implements IFuelHandler {
 				'b', new ItemStack(MeteorBlocks.DECORATOR_KREKNORITE, 1));
 
 		MeteorCraftingHelper.addShapedRecipe(new ItemStack(MeteorItems.itemMeteorSummonerUnknown, 1), "rmr", "ksk", "rfr", 'm', new ItemStack(MeteorBlocks.DECORATOR_METEORITE, 1), 's', MeteorItems.itemMeteorSummonerRandom,
-				'k', new ItemStack(MeteorBlocks.DECORATOR_KREKNORITE, 1), 'f', new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1, 1),
+				'k', new ItemStack(MeteorBlocks.DECORATOR_KREKNORITE, 1), 'f', new ItemStack(MeteorBlocks.DECORATOR_FREEZARITE, 1),
 				'r', MeteorItems.itemRedMeteorGem);
 
 

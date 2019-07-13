@@ -481,8 +481,6 @@ public class TileEntityFreezingMachine extends TileEntityNetworkBase implements 
 		return 0;
 	}
 
-	//TODO 1.12.2 crash on shift clicking water buckets
-
 	private boolean canFreeze() {
 		FreezerRecipe recipe = FreezerRecipes.instance().getFreezingResult(this.inv.get(FREEZE_ITEM_IN), tank.getFluid(), this.acceptedRecipeType);
 		if (recipe == null)

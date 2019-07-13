@@ -1,0 +1,24 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "We're Covered"
+        },
+        "description": {
+            "text": "Craft a Meteor Shield using meteorite chips."
+        },
+        "icon": {
+            "item": "meteors:meteorshield"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "parent": "meteors:main/root"
+}

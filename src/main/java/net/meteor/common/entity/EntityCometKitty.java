@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
@@ -57,8 +58,7 @@ public class EntityCometKitty extends EntityOcelot
 		super.setOwnerId(uuid);
 		EntityPlayer player = this.getEntityWorld().getPlayerEntityByUUID(uuid);
 		if (player != null) {
-			//TODO 1.12.2
-			//player.addStat(HandlerAchievement.kittyTame, 1);
+			HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) player, HandlerAchievement.kittyTame, HandlerAchievement.kittysTamed);
 		}
 	}
 	

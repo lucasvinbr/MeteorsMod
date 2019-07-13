@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.meteor.common.ClientHandler;
-import net.meteor.common.EnumMeteor;
-import net.meteor.common.IMeteorShield;
-import net.meteor.common.MeteorsMod;
+import net.meteor.common.*;
 import net.meteor.common.entity.EntityMeteor;
 import net.meteor.common.packets.PacketGhostMeteor;
 import net.meteor.common.packets.PacketLastCrash;
@@ -76,8 +73,7 @@ public class HandlerMeteor
 							EntityPlayer player = theWorld.getPlayerEntityByName(owner);
 							if (player != null) {
 								player.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
-								//TODO 1.12.2
-								//player.addStat(HandlerAchievement.meteorBlocked, 1);
+								HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) player, HandlerAchievement.meteorBlocked, HandlerAchievement.metsorsBlocked);
 							}
 							shieldManager.sendMeteorMaterialsToShield(shield, gMeteor);
 						} else if (gMeteor.type == EnumMeteor.KITTY) {
@@ -115,8 +111,7 @@ public class HandlerMeteor
 						EntityPlayer playerOwner = theWorld.getPlayerEntityByName(owner);
 						if (playerOwner != null) {
 							playerOwner.sendMessage(ClientHandler.createMessage(I18n.translateToLocal("MeteorShield.meteorBlocked"), TextFormatting.GREEN));
-							//TODO 1.12.2
-							//playerOwner.addStat(HandlerAchievement.meteorBlocked, 1);
+							HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) player, HandlerAchievement.meteorBlocked, HandlerAchievement.metsorsBlocked);
 						}
 						shieldManager.sendMeteorMaterialsToShield(shield, new GhostMeteor(x, z, 1, 0, EnumMeteor.KITTY));
 					} else {
@@ -125,8 +120,7 @@ public class HandlerMeteor
 						this.theWorld.spawnEntity(fKitty);
 					}
 				}
-				//TODO 1.12.2
-				//player.addStat(HandlerAchievement.kittyEvent, 1);
+				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) player, HandlerAchievement.kittyEvent, HandlerAchievement.kittyEventStat);
 			}	
 		}
 	}
@@ -157,8 +151,7 @@ public class HandlerMeteor
 			AxisAlignedBB aabb = new AxisAlignedBB(x - 60D, 0, z - 60D, x + 60D, theWorld.getHeight(), z + 60D);
 			List<EntityPlayer> players = this.theWorld.getEntitiesWithinAABB(EntityPlayer.class, aabb);
 			for (EntityPlayer player : players) {
-				//TODO 1.12.2
-				//player.addStat(HandlerAchievement.foundMeteor, 1);
+				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) player, HandlerAchievement.foundMeteor, HandlerAchievement.meteorsFound);
 			}
 		}
 	}

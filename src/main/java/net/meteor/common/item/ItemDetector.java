@@ -109,7 +109,6 @@ public class ItemDetector extends ItemMeteorsMod {
 			@SideOnly(Side.CLIENT)
 			private double getAnglePosition(World world, Entity entity)
 			{
-				//TODO point it at the things!
 				BlockPos blockpos = null;
 				if(type == DetectorType.PROXIMITY) {
 					blockpos = ClientHandler.getClosestIncomingMeteor(entity.posX, entity.posZ);
@@ -152,7 +151,7 @@ public class ItemDetector extends ItemMeteorsMod {
 			}
 		} else if (type == DetectorType.PROXIMITY) {
 			tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.translateToLocal("Detector.proximity"));
-			if (ClientHandler.getClosestIncomingMeteor(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posZ) == null) {//TODO confirm for 1.12.2
+			if (ClientHandler.getClosestIncomingMeteor(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posZ) == null) {
 				tooltip.add(I18n.translateToLocal("Detector.scanning") + dots);
 			} else {
 				tooltip.add(TextFormatting.GREEN + I18n.translateToLocal("Detector.detected"));
