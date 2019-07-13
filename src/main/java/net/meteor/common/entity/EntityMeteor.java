@@ -111,7 +111,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
 					
 					CrashLocation lastCrash = metHandler.getForecast().getLastCrashLocation();
-					if (lastCrash != null && lastCrash.x == originX && lastCrash.z == originZ) {
+					if (lastCrash != null && lastCrash.pos.getX() == originX && lastCrash.pos.getZ() == originZ) {
 						metHandler.getForecast().setLastCrashLocation(null);
 						MeteorsMod.network.sendToDimension(new PacketLastCrash(new CrashLocation(-1, -1, -1, false, null)), getEntityWorld().provider.getDimension());
 					}
@@ -158,7 +158,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 					HandlerMeteor metHandler = MeteorsMod.proxy.metHandlers.get(getEntityWorld().provider.getDimension());
 					if (metHandler != null) {
 						CrashLocation cc = metHandler.getForecast().getLastCrashLocation();
-						if (cc != null && originX == cc.x && originZ == cc.z) {
+						if (cc != null && originX == cc.pos.getX() && originZ == cc.pos.getZ()) {
 							metHandler.getForecast().setLastCrashLocation(new CrashLocation((int)posX, (int)posY, (int)posZ, false, cc.prevCrash));
 							MeteorsMod.network.sendToDimension(new PacketLastCrash(metHandler.getForecast().getLastCrashLocation()), getEntityWorld().provider.getDimension());
 						}

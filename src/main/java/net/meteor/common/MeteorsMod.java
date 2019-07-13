@@ -48,7 +48,9 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid=MeteorsMod.MOD_ID, name=MeteorsMod.MOD_NAME, version=MeteorsMod.VERSION, dependencies="after:waila;after:baubles;after:thaumcraft")
 public class MeteorsMod implements IWorldGenerator
 {
-	
+
+	//1.12.2 TODO seems meteors arnt falling randomly like they do on 1.7.10
+
 	public static final String MOD_ID 	= "meteors";
 	public static final String MOD_NAME = "Falling Meteors";
 	public static final String VERSION 	= "2.14.3"; 		// Switch to automatic versioning later on

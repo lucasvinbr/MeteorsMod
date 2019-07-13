@@ -1,6 +1,41 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "meteors:items/meteordetectors/meteor_detector_proximity"
-  }
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "meteors:items/meteordetectors/proximity/16"
+    },
+    "overrides": [
+        { "predicate": { "angle": 0.000000 }, "model": "meteors:item/meteordetectorproximity" },
+        { "predicate": { "angle": 0.015625 }, "model": "meteors:item/meteordetectorproximity_17" },
+        { "predicate": { "angle": 0.046875 }, "model": "meteors:item/meteordetectorproximity_18" },
+        { "predicate": { "angle": 0.078125 }, "model": "meteors:item/meteordetectorproximity_19" },
+        { "predicate": { "angle": 0.109375 }, "model": "meteors:item/meteordetectorproximity_20" },
+        { "predicate": { "angle": 0.140625 }, "model": "meteors:item/meteordetectorproximity_21" },
+        { "predicate": { "angle": 0.171875 }, "model": "meteors:item/meteordetectorproximity_22" },
+        { "predicate": { "angle": 0.203125 }, "model": "meteors:item/meteordetectorproximity_23" },
+        { "predicate": { "angle": 0.234375 }, "model": "meteors:item/meteordetectorproximity_24" },
+        { "predicate": { "angle": 0.265625 }, "model": "meteors:item/meteordetectorproximity_25" },
+        { "predicate": { "angle": 0.296875 }, "model": "meteors:item/meteordetectorproximity_26" },
+        { "predicate": { "angle": 0.328125 }, "model": "meteors:item/meteordetectorproximity_27" },
+        { "predicate": { "angle": 0.359375 }, "model": "meteors:item/meteordetectorproximity_28" },
+        { "predicate": { "angle": 0.390625 }, "model": "meteors:item/meteordetectorproximity_29" },
+        { "predicate": { "angle": 0.421875 }, "model": "meteors:item/meteordetectorproximity_30" },
+        { "predicate": { "angle": 0.453125 }, "model": "meteors:item/meteordetectorproximity_31" },
+        { "predicate": { "angle": 0.484375 }, "model": "meteors:item/meteordetectorproximity_00" },
+        { "predicate": { "angle": 0.515625 }, "model": "meteors:item/meteordetectorproximity_01" },
+        { "predicate": { "angle": 0.546875 }, "model": "meteors:item/meteordetectorproximity_02" },
+        { "predicate": { "angle": 0.578125 }, "model": "meteors:item/meteordetectorproximity_03" },
+        { "predicate": { "angle": 0.609375 }, "model": "meteors:item/meteordetectorproximity_04" },
+        { "predicate": { "angle": 0.640625 }, "model": "meteors:item/meteordetectorproximity_05" },
+        { "predicate": { "angle": 0.671875 }, "model": "meteors:item/meteordetectorproximity_06" },
+        { "predicate": { "angle": 0.703125 }, "model": "meteors:item/meteordetectorproximity_07" },
+        { "predicate": { "angle": 0.734375 }, "model": "meteors:item/meteordetectorproximity_08" },
+        { "predicate": { "angle": 0.765625 }, "model": "meteors:item/meteordetectorproximity_09" },
+        { "predicate": { "angle": 0.796875 }, "model": "meteors:item/meteordetectorproximity_10" },
+        { "predicate": { "angle": 0.828125 }, "model": "meteors:item/meteordetectorproximity_11" },
+        { "predicate": { "angle": 0.859375 }, "model": "meteors:item/meteordetectorproximity_12" },
+        { "predicate": { "angle": 0.890625 }, "model": "meteors:item/meteordetectorproximity_13" },
+        { "predicate": { "angle": 0.921875 }, "model": "meteors:item/meteordetectorproximity_14" },
+        { "predicate": { "angle": 0.953125 }, "model": "meteors:item/meteordetectorproximity_15" },
+        { "predicate": { "angle": 0.984375 }, "model": "meteors:item/meteordetectorproximity" }
+    ]
 }

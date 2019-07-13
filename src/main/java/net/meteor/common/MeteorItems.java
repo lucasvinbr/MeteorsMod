@@ -47,9 +47,9 @@ public class MeteorItems {
 	public static final Item itemKreknoChip 			= new ItemMeteorsMod().setMaxStackSize(64).setRegistryName("KreknoriteChip").setTranslationKey("KreknoriteChip");
 	public static final Item itemVanillaIceCream 		= new ItemFoodMeteorsMod(4, false).setMaxStackSize(64).setRegistryName("VanillaIceCream").setTranslationKey("VanillaIceCream");
 	public static final Item itemChocolateIceCream 		= new ItemFoodMeteorsMod(6, false).setMaxStackSize(64).setRegistryName("ChocolateIceCream").setTranslationKey("ChocolateIceCream");
-	public static final Item itemMeteorProximityDetector= new ItemDetector(0).setRegistryName("MeteorDetectorProximity").setTranslationKey("MeteorDetectorProximity");
-	public static final Item itemMeteorTimeDetector 	= new ItemDetector(1).setRegistryName("MeteorDetectorTime").setTranslationKey("MeteorDetectorTime");
-	public static final Item itemMeteorCrashDetector 	= new ItemDetector(2).setRegistryName("MeteorDetectorCrash").setTranslationKey("MeteorDetectorCrash");
+	public static final Item itemMeteorProximityDetector= new ItemDetector(ItemDetector.DetectorType.PROXIMITY).setRegistryName("MeteorDetectorProximity").setTranslationKey("MeteorDetectorProximity");
+	public static final Item itemMeteorTimeDetector 	= new ItemDetector(ItemDetector.DetectorType.TIME).setRegistryName("MeteorDetectorTime").setTranslationKey("MeteorDetectorTime");
+	public static final Item itemMeteorCrashDetector 	= new ItemDetector(ItemDetector.DetectorType.CRASH).setRegistryName("MeteorDetectorCrash").setTranslationKey("MeteorDetectorCrash");
 	public static final Item MeteoriteHelmet 			= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.HEAD).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteHelmet").setTranslationKey("MeteoriteHelmet");
 	public static final Item MeteoriteBody 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.CHEST).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteChest").setTranslationKey("MeteoriteChest");
 	public static final Item MeteoriteLegs 				= new ItemEnchArmor(MeteoriteArmor, 3, EntityEquipmentSlot.LEGS).setEnch(MeteorsMod.Magnetization, 1).setRegistryName("MeteoriteLegs").setTranslationKey("MeteoriteLegs");
@@ -88,6 +88,7 @@ public class MeteorItems {
 		FrezariteAxe.setHarvestLevel("axe", 2);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 

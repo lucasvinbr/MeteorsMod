@@ -2,6 +2,7 @@ package net.meteor.client;
 
 import net.meteor.common.ClientHandler;
 import net.meteor.common.climate.CrashLocation;
+import net.meteor.common.item.ItemDetector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -12,9 +13,9 @@ public class TextureDetector extends TextureAtlasSprite {
 
 	public double currentAngle;
 	public double angleDelta;
-	public int detectorType;		// 0 = Proximity, 1 = Time, 2 = Crash
+	public ItemDetector.DetectorType detectorType;		// 0 = Proximity, 1 = Time, 2 = Crash
 
-	public TextureDetector(String s, int type) {
+	public TextureDetector(String s, ItemDetector.DetectorType type) {
 		super(s);
 		this.detectorType = type;
 	}
@@ -30,12 +31,12 @@ public class TextureDetector extends TextureAtlasSprite {
 		}
 		else
 		{
-			this.updateCompass((World)null, 0.0D, 0.0D, 0.0D, true, false);
+			this.updateCompass(null, 0.0D, 0.0D, 0.0D, true, false);
 		}
 	}
 
-	public void updateCompass(World par1World, double par2, double par4, double par6, boolean par8, boolean par9)
-	{
+	public void updateCompass(World par1World, double par2, double par4, double par6, boolean par8, boolean par9) {
+
 		if (this.framesTextureData.isEmpty()) {
 			return;
 		}
@@ -44,14 +45,14 @@ public class TextureDetector extends TextureAtlasSprite {
 		if (par1World != null && !par8)
 		{
 			BlockPos chunkcoordinates;
-			if (this.detectorType == 0) {
+			if (this.detectorType == ItemDetector.DetectorType.PROXIMITY) {
 				chunkcoordinates = ClientHandler.getClosestIncomingMeteor(par2, par4);
-			} else if (this.detectorType == 1) {
+			} else if (this.detectorType == ItemDetector.DetectorType.TIME) {
 				chunkcoordinates = ClientHandler.nearestTimeLocation;
-			} else {
+			} else {//Crash
 				CrashLocation cl = ClientHandler.lastCrashLocation;
 				if (cl != null) {
-					chunkcoordinates = new BlockPos(cl.x, cl.y, cl.z);
+					chunkcoordinates = cl.pos;
 				} else {
 					chunkcoordinates = null;
 				}
@@ -112,8 +113,7 @@ public class TextureDetector extends TextureAtlasSprite {
 		if (i != this.frameCounter)
 		{
 			this.frameCounter = i;
-			//this.textureSheet.copyFrom(this.originX, this.originY, (Texture)this.field_110976_a.get(this.frameCounter), this.rotated);
-			TextureUtil.uploadTextureMipmap((int[][])this.framesTextureData.get(this.frameCounter), this.width, this.height, this.originX, this.originY, false, false);
+			TextureUtil.uploadTextureMipmap(this.framesTextureData.get(this.frameCounter), this.width, this.height, this.originX, this.originY, false, false);
 		}
 	}
 

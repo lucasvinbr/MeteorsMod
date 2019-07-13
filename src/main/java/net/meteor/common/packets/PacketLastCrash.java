@@ -42,9 +42,9 @@ public class PacketLastCrash implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buffer) {
-		buffer.writeInt(lastCrashLoc.x);
-		buffer.writeInt(lastCrashLoc.y);
-		buffer.writeInt(lastCrashLoc.z);
+		buffer.writeInt(lastCrashLoc.pos.getX());
+		buffer.writeInt(lastCrashLoc.pos.getY());
+		buffer.writeInt(lastCrashLoc.pos.getZ());
 		buffer.writeBoolean(lastCrashLoc.inOrbit);
 	}
 	

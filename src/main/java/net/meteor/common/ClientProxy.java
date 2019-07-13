@@ -49,16 +49,10 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void loadStuff()
 	{
-//		registerSlipperyBlockModels();
-
 		//TODO 1.12.2
 		/*
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD), new ShieldItemRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.METEOR_TIMER), new TimerItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairs), new SlipperyItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsTwo), new SlipperyItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsThree), new SlipperyItemRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(MeteorBlocks.blockSlipperyStairsFour), new SlipperyItemRenderer());
 		 */
 
 		if (Baubles.isBaublesLoaded()) {
@@ -68,14 +62,14 @@ public class ClientProxy extends CommonProxy
 
 	public static void registerSlipperyBlockModels() {
 
-		ModelResourceLocation slipperyBlock1Loc = new ModelResourceLocation("meteors:slippery_block1", "normal");
-		ModelResourceLocation slipperyBlock2Loc = new ModelResourceLocation("meteors:slippery_block2", "normal");
-		ModelResourceLocation slipperyBlock3Loc = new ModelResourceLocation("meteors:slippery_block3", "normal");
-		ModelResourceLocation slipperyBlock4Loc = new ModelResourceLocation("meteors:slippery_block4", "normal");
-		ModelResourceLocation slipperyStairs1Loc = new ModelResourceLocation("meteors:slippery_stairs1", "normal");
-		ModelResourceLocation slipperyStairs2Loc = new ModelResourceLocation("meteors:slippery_stairs2", "normal");
-		ModelResourceLocation slipperyStairs3Loc = new ModelResourceLocation("meteors:slippery_stairs3", "normal");
-		ModelResourceLocation slipperyStairs4Loc = new ModelResourceLocation("meteors:slippery_stairs4", "normal");
+		final ModelResourceLocation slipperyBlock1Loc = new ModelResourceLocation("meteors:slippery_block1", "normal");
+		final ModelResourceLocation slipperyBlock2Loc = new ModelResourceLocation("meteors:slippery_block2", "normal");
+		final ModelResourceLocation slipperyBlock3Loc = new ModelResourceLocation("meteors:slippery_block3", "normal");
+		final ModelResourceLocation slipperyBlock4Loc = new ModelResourceLocation("meteors:slippery_block4", "normal");
+		final ModelResourceLocation slipperyStairs1Loc = new ModelResourceLocation("meteors:slippery_stairs1", "normal");
+		final ModelResourceLocation slipperyStairs2Loc = new ModelResourceLocation("meteors:slippery_stairs2", "normal");
+		final ModelResourceLocation slipperyStairs3Loc = new ModelResourceLocation("meteors:slippery_stairs3", "normal");
+		final ModelResourceLocation slipperyStairs4Loc = new ModelResourceLocation("meteors:slippery_stairs4", "normal");
 
 		ModelLoader.setCustomStateMapper(MeteorBlocks.blockSlippery, new StateMapperBase() {
 			@Override
@@ -146,19 +140,17 @@ public class ClientProxy extends CommonProxy
 		// Replace the mapping with our CamouflageBakedModel.
 
 		for(int i = 0; i <= 4; i++) {
-			ModelResourceLocation loc = new ModelResourceLocation("meteors:slippery_block"+i, "normal");
-			Object object = event.getModelRegistry().getObject(loc);
-			if (object instanceof IBakedModel) {
-				IBakedModel existingModel = (IBakedModel) object;
+			final ModelResourceLocation loc = new ModelResourceLocation("meteors:slippery_block"+i, "normal");
+			final IBakedModel existingModel = event.getModelRegistry().getObject(loc);
+			if (existingModel != null) {
 				SlipperyBlockBakedModel customModel = new SlipperyBlockBakedModel(existingModel);
 				event.getModelRegistry().putObject(loc, customModel);
 			}
 		}
 		for(int i = 0; i <= 4; i++) {
-			ModelResourceLocation loc = new ModelResourceLocation("meteors:slippery_stairs"+i, "normal");
-			Object object = event.getModelRegistry().getObject(loc);
-			if (object instanceof IBakedModel) {
-				IBakedModel existingModel = (IBakedModel) object;
+			final ModelResourceLocation loc = new ModelResourceLocation("meteors:slippery_stairs"+i, "normal");
+			final IBakedModel existingModel = event.getModelRegistry().getObject(loc);
+			if (existingModel != null) {
 				SlipperyBlockBakedModel customModel = new SlipperyBlockBakedModel(existingModel);
 				event.getModelRegistry().putObject(loc, customModel);
 			}

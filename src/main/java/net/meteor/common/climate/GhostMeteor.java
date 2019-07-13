@@ -36,6 +36,7 @@ implements Serializable
 	{
 		this.tick += 1;
 		this.ready = tick >= tGoal;
+		this.ready = true;
 	}
 
 	public int getRemainingTicks()

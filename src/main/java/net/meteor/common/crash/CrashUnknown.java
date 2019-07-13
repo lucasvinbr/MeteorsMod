@@ -136,11 +136,11 @@ public class CrashUnknown extends CrashMeteorite
 		case 50:
 		case 51:
 		case 52:
-			List l = new ArrayList();
+			List<Item> l = new ArrayList<>();
 			l.add(MeteorItems.itemMeteorProximityDetector);
 			l.add(MeteorItems.itemMeteorTimeDetector);
 			l.add(MeteorItems.itemMeteorCrashDetector);
-			return new ItemStack((Item)l.get(random.nextInt(3)), 1);
+			return new ItemStack(l.get(random.nextInt(3)), 1);
 		}
 		return null;
 	}
