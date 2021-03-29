@@ -32,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraft.world.Explosion;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
@@ -175,9 +176,9 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
-	protected ExplosionMeteor explode() {
+	protected Explosion explode() {
 		float f = (float) (this.size * MeteorsMod.instance.ImpactExplosionMultiplier);
-		ExplosionMeteor explosion = new ExplosionMeteor(getEntityWorld(), this, posX, posY, posZ, f, meteorType.getFieryExplosion(), true);
+		Explosion explosion = new Explosion(getEntityWorld(), this, posX, posY, posZ, f, meteorType.getFieryExplosion(), true);
         explosion.doExplosionA();
         explosion.doExplosionB(true);
         return explosion;

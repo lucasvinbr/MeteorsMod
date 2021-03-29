@@ -6,11 +6,12 @@ import net.meteor.common.EnumMeteor;
 import net.meteor.common.ExplosionMeteor;
 import net.meteor.common.entity.EntityCometKitty;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class CrashKitty extends CrashMeteorite
 {
-	public CrashKitty(int Size, ExplosionMeteor expl, EnumMeteor metType)
+	public CrashKitty(int Size, Explosion expl, EnumMeteor metType)
 	{
 		super(Size, expl, metType);
 	}

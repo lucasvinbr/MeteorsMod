@@ -12,11 +12,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class CrashUnknown extends CrashMeteorite
 {
-	public CrashUnknown(int Size, ExplosionMeteor expl, EnumMeteor metType)
+	public CrashUnknown(int Size, Explosion expl, EnumMeteor metType)
 	{
 		super(Size, expl, metType);
 	}

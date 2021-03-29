@@ -10,11 +10,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class CrashFrezarite extends CrashMeteorite
 {
-	public CrashFrezarite(int Size, ExplosionMeteor expl, EnumMeteor metType)
+	public CrashFrezarite(int Size, Explosion expl, EnumMeteor metType)
 	{
 		super(Size, expl, metType);
 	}

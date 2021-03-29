@@ -12,16 +12,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class CrashMeteorite extends WorldGenerator
 {
 	protected int crashSize;
-	protected ExplosionMeteor explosion;
+	protected Explosion explosion;
 	protected EnumMeteor meteorType;
 
-	public CrashMeteorite(int Size, ExplosionMeteor expl, EnumMeteor metType)
+	public CrashMeteorite(int Size, Explosion expl, EnumMeteor metType)
 	{
 		this.crashSize = MathHelper.clamp(Size, 1, 3);
 		this.explosion = expl;
