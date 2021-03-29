@@ -24,7 +24,7 @@ public class HandlerAchievement
     public static final ResourceLocation meteorManipulator = new ResourceLocation("meteors:main/true_power");
     public static final ResourceLocation shieldCrafted = new ResourceLocation("meteors:main/were_covered");
     public static final ResourceLocation shieldFullyUpgraded = new ResourceLocation("meteors:main/upgrade_complete");
-    public static final ResourceLocation meteorBlocked = new ResourceLocation("meteors:main/dmeteor_destroyed");
+    public static final ResourceLocation meteorBlocked = new ResourceLocation("meteors:main/meteor_destroyed");
     public static final ResourceLocation attractedDrop = new ResourceLocation("meteors:main/magnetized");
     public static final ResourceLocation craftedKreknoSword = new ResourceLocation("meteors:main/flames_of_fury");
     public static final ResourceLocation craftedDetector = new ResourceLocation("meteors:main/well_informed");
