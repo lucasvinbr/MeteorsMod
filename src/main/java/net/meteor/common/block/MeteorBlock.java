@@ -42,13 +42,6 @@ public class MeteorBlock extends Block {
         return 2;
     }
 
-    @SuppressWarnings({"deprecation"})
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        AxisAlignedBB AABB = new AxisAlignedBB(pos);
-        return AABB.contract(0.006D, 0.006D, 0.006D);
-    }
-
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
 
