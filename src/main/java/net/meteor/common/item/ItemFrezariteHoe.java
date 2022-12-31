@@ -4,8 +4,10 @@ import java.util.List;
 
 import net.meteor.common.MeteorsMod;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -20,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,53 +38,42 @@ public class ItemFrezariteHoe extends ItemHoe
 		this.setCreativeTab(MeteorsMod.meteorTab);
 	}
 
-	@Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-	{
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (!player.canPlayerEdit(pos, facing, heldItem))
-        {
+    public EnumActionResult onItemUse(EntityPlayer p_onItemUse_1_, World p_onItemUse_2_, BlockPos p_onItemUse_3_, EnumHand p_onItemUse_4_, EnumFacing p_onItemUse_5_, float p_onItemUse_6_, float p_onItemUse_7_, float p_onItemUse_8_) {
+        ItemStack itemstack = p_onItemUse_1_.getHeldItem(p_onItemUse_4_);
+        if (!p_onItemUse_1_.canPlayerEdit(p_onItemUse_3_.offset(p_onItemUse_5_), p_onItemUse_5_, itemstack)) {
             return EnumActionResult.FAIL;
-        }
-        else
-        {
-            UseHoeEvent event = new UseHoeEvent(player, heldItem, world, pos);
-            if (MinecraftForge.EVENT_BUS.post(event))
-            {
-                return EnumActionResult.FAIL;
-            }
+        } else {
+            int hook = ForgeEventFactory.onHoeUse(itemstack, p_onItemUse_1_, p_onItemUse_2_, p_onItemUse_3_);
+            if (hook != 0) {
+                return hook > 0 ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+            } else {
+                IBlockState iblockstate = p_onItemUse_2_.getBlockState(p_onItemUse_3_);
+                Block block = iblockstate.getBlock();
+                if (p_onItemUse_5_ != EnumFacing.DOWN && p_onItemUse_2_.isAirBlock(p_onItemUse_3_.up())) {
+                    if (block == Blocks.GRASS || block == Blocks.GRASS_PATH) {
+                        this.setBlock(itemstack, p_onItemUse_1_, p_onItemUse_2_, p_onItemUse_3_, Blocks.FARMLAND.getDefaultState());
+                        return EnumActionResult.SUCCESS;
+                    }
 
-            if (event.getResult() == Event.Result.ALLOW)
-            {
-                heldItem.damageItem(1, player);
-                return EnumActionResult.SUCCESS;
-            }
-
-            Block block = world.getBlockState(pos).getBlock();
-
-            if (facing != EnumFacing.DOWN && world.isAirBlock(pos.up()) && (block == Blocks.GRASS || block == Blocks.DIRT))
-            {
-                Block block1 = Blocks.FARMLAND;
-                SoundType stepSound = block1.getSoundType();
-                world.playSound((double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), stepSound.getStepSound(), SoundCategory.BLOCKS, (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F, true);
-
-                if (world.isRemote)
-                {
-                    return EnumActionResult.SUCCESS;
+                    if (block == Blocks.DIRT) {
+                        switch((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT)) {
+                            case DIRT:
+                                Block block1 = Blocks.FARMLAND;
+                                SoundType stepSound = block1.getSoundType();
+                                p_onItemUse_2_.playSound((double)((float)p_onItemUse_3_.getX() + 0.5F), (double)((float)p_onItemUse_3_.getY() + 0.5F), (double)((float)p_onItemUse_3_.getZ() + 0.5F), stepSound.getStepSound(), SoundCategory.BLOCKS, (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F, true);
+                                p_onItemUse_2_.setBlockState(p_onItemUse_3_, block1.getDefaultState().withProperty(BlockFarmland.MOISTURE, 14), 3);
+                                return EnumActionResult.SUCCESS;
+                            case COARSE_DIRT:
+                                this.setBlock(itemstack, p_onItemUse_1_, p_onItemUse_2_, p_onItemUse_3_, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
+                                return EnumActionResult.SUCCESS;
+                        }
+                    }
                 }
-                else
-                {
-                    world.setBlockState(pos, block1.getDefaultState().withProperty(BlockFarmland.MOISTURE, 14), 3);
-                    heldItem.damageItem(1, player);
-                    return EnumActionResult.SUCCESS;
-                }
-            }
-            else
-            {
-                return EnumActionResult.FAIL;
+
+                return EnumActionResult.PASS;
             }
         }
-	}
+    }
 
 	@Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)

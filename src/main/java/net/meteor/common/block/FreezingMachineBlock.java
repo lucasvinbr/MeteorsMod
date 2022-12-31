@@ -2,6 +2,7 @@ package net.meteor.common.block;
 
 import net.meteor.common.ClientProxy;
 import net.meteor.common.MeteorBlocks;
+import net.meteor.common.MeteorItems;
 import net.meteor.common.tileentity.TileEntityFreezingMachine;
 import net.meteor.common.util.MeteorConstants;
 import net.minecraft.block.SoundType;
@@ -9,6 +10,8 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -27,6 +30,11 @@ public class FreezingMachineBlock extends DirectionalContainerBlock {
     public FreezingMachineBlock(boolean isFreezing) {
         setSoundType(SoundType.METAL);
         this.isFreezing = isFreezing;
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return new ItemStack(MeteorBlocks.FREEZER).getItem();
     }
 
     @Override
