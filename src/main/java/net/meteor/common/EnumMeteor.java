@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 public enum EnumMeteor
 implements Serializable
 {
-	METEORITE(0, MeteorBlocks.METEOR, MeteorBlocks.RARE_METEOR, true, "met", TextFormatting.LIGHT_PURPLE, new ItemStack(MeteorBlocks.METEOR, 1, 1), MeteorBlocks.METEOR),
+	METEORITE(0, MeteorBlocks.HOT_METEOR, MeteorBlocks.HOT_RARE_METEOR, true, "met", TextFormatting.LIGHT_PURPLE, new ItemStack(MeteorBlocks.HOT_METEOR, 1, 1), MeteorBlocks.METEOR),
 	FREZARITE(1, MeteorBlocks.FREEZARITE, Blocks.ICE, false, "freza", TextFormatting.AQUA, new ItemStack(MeteorBlocks.FREEZARITE, 1, 1), MeteorBlocks.FREEZARITE),
 	KREKNORITE(2, MeteorBlocks.KRENKONITE, Blocks.LAVA, true, "krekno", TextFormatting.RED, new ItemStack(MeteorBlocks.KRENKONITE, 1, 1), MeteorBlocks.KRENKONITE),
 	UNKNOWN(3, Blocks.AIR, Blocks.AIR, true, "unk", TextFormatting.GRAY, new ItemStack(Blocks.CHEST, 1), Blocks.GLOWSTONE),

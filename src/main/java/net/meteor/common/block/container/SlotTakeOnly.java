@@ -44,17 +44,17 @@ public class SlotTakeOnly extends Slot {
 	
 	@Override
 	protected void onCrafting(ItemStack item) {
-		
 		if (item != null && this.thePlayer != null) {
-			if (item.getItem() == Item.getItemFromBlock(Blocks.ICE)) {
-				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeWater, HandlerAchievement.waterFrozen);
-			} else if (item.getItem() == Item.getItemFromBlock(Blocks.PACKED_ICE)) {
-				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeIce, HandlerAchievement.iceFrozen);
-			} else if (Block.getBlockFromItem(item.getItem()) instanceof BlockSlippery || Block.getBlockFromItem(item.getItem()) instanceof BlockSlipperyStairs) {
-				HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeBlocks, HandlerAchievement.blocksFrozen);
+			if (!this.thePlayer.world.isRemote) {
+				if (item.getItem() == Item.getItemFromBlock(Blocks.ICE)) {
+					HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeWater, HandlerAchievement.waterFrozen);
+				} else if (item.getItem() == Item.getItemFromBlock(Blocks.PACKED_ICE)) {
+					HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeIce, HandlerAchievement.iceFrozen);
+				} else if (Block.getBlockFromItem(item.getItem()) instanceof BlockSlippery || Block.getBlockFromItem(item.getItem()) instanceof BlockSlipperyStairs) {
+					HandlerAchievement.grantAdvancementAndStat((EntityPlayerMP) this.thePlayer, HandlerAchievement.freezeBlocks, HandlerAchievement.blocksFrozen);
+				}
 			}
 		}
-		
 		super.onCrafting(item);
 	}
 	

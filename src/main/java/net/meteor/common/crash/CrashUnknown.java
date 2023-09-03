@@ -27,7 +27,7 @@ public class CrashUnknown extends CrashMeteorite
 	{
 		int j1 = getFirstUncoveredBlock(world, blockPos.getX(), blockPos.getZ(), blockPos.getY() - this.crashSize * 4, blockPos.getY() + this.crashSize * 4) + 1;
 
-		SBAPI.generateCuboid(world, blockPos.getX() + 1, j1 + 1, blockPos.getZ() + 1, blockPos.getX() - 1, j1 - 1, blockPos.getZ() - 1, MeteorBlocks.METEOR, random.nextInt(4) + 1);
+		SBAPI.generateCuboid(world, blockPos.getX() + 1, j1 + 1, blockPos.getZ() + 1, blockPos.getX() - 1, j1 - 1, blockPos.getZ() - 1, MeteorBlocks.HOT_METEOR, random.nextInt(4) + 1);
 		int end = random.nextInt(5) + 4;
 		for (int r = 0; r < end; r++) {
 			Block id = random.nextBoolean() ? MeteorBlocks.FREEZARITE : MeteorBlocks.KRENKONITE;

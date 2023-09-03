@@ -55,7 +55,7 @@ public class ContainerMeteorShield extends Container {
      */
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotID)
     {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(slotID);
 
         if (slot != null && slot.getHasStack())
@@ -67,7 +67,7 @@ public class ContainerMeteorShield extends Container {
             	// last boolean is which direction to search in (last to first, first to last)
             	// transfer into player inventory
             	if (!this.mergeItemStack(itemstack1, shield.getSizeInventory(), this.inventorySlots.size(), true)) {
-            		return null;
+            		return ItemStack.EMPTY;
             	}
             } else if (itemstack1.getItem() == MeteorItems.itemMeteorChips) {
             	ItemStack chip = new ItemStack(MeteorItems.itemMeteorChips, 1);
@@ -75,7 +75,7 @@ public class ContainerMeteorShield extends Container {
             		this.putStackInSlot(0, chip);
             		itemstack1.shrink(1);
             	}
-            	itemstack = null;
+            	itemstack = ItemStack.EMPTY;
             } else if (itemstack1.getItem() == MeteorItems.itemRedMeteorGem) {
             	for (int i = 1; i < 5 && itemstack1.getCount() > 0; i++) {
             		Slot slot1 = (Slot)this.inventorySlots.get(i);
@@ -84,12 +84,12 @@ public class ContainerMeteorShield extends Container {
             			itemstack1.shrink(1);
             		}
             	}
-            	itemstack = null;
+            	itemstack = ItemStack.EMPTY;
             } else {
-            	return null;
+            	return ItemStack.EMPTY;
             }
             
-            if (itemstack1.getCount() == 0) {
+            if (itemstack1.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
