@@ -61,7 +61,7 @@ public class ItemFrezariteHoe extends ItemHoe
                                 Block block1 = Blocks.FARMLAND;
                                 SoundType stepSound = block1.getSoundType();
                                 p_onItemUse_2_.playSound((double)((float)p_onItemUse_3_.getX() + 0.5F), (double)((float)p_onItemUse_3_.getY() + 0.5F), (double)((float)p_onItemUse_3_.getZ() + 0.5F), stepSound.getStepSound(), SoundCategory.BLOCKS, (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F, true);
-                                p_onItemUse_2_.setBlockState(p_onItemUse_3_, block1.getDefaultState().withProperty(BlockFarmland.MOISTURE, 14), 3);
+                                p_onItemUse_2_.setBlockState(p_onItemUse_3_, block1.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), 3);
                                 return EnumActionResult.SUCCESS;
                             case COARSE_DIRT:
                                 this.setBlock(itemstack, p_onItemUse_1_, p_onItemUse_2_, p_onItemUse_3_, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
