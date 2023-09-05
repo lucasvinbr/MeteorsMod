@@ -91,7 +91,7 @@ public class MeteorBlock extends Block {
 
     @Override
     public int quantityDropped(IBlockState state, int fortune, Random random) {
-        return random.nextInt(1 + random.nextInt(fortune + 1));
+        return random.nextInt(2 + random.nextInt(fortune + 1));
     }
 
     @Override

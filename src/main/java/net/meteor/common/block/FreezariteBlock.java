@@ -118,7 +118,7 @@ public class FreezariteBlock extends Block {
 
     @Override
     public int quantityDropped(IBlockState state, int fortune, Random random) {
-        return random.nextInt(1 + state.getValue(FROZEN_LEVEL) + random.nextInt(fortune + 1));
+        return random.nextInt(2 + state.getValue(FROZEN_LEVEL) + random.nextInt(fortune + 1));
     }
 
     @Override

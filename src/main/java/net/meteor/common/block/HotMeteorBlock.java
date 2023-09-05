@@ -82,8 +82,8 @@ public class HotMeteorBlock extends MeteorBlock {
         }
         final int heatLevel = state.getValue(HEAT);
 
-        if (player.getRNG().nextInt(100) < (player.getRNG().nextInt(heatLevel) / MeteorConstants.MAX_METEOR_HEAT) * 100) {
-            player.setFire(1 + player.getRNG().nextInt(heatLevel));
+        if (player.getRNG().nextInt(100) < (player.getRNG().nextInt(heatLevel + 1) / MeteorConstants.MAX_METEOR_HEAT) * 100) {
+            player.setFire(1 + player.getRNG().nextInt(heatLevel + 1));
         }
     }
 
@@ -100,9 +100,9 @@ public class HotMeteorBlock extends MeteorBlock {
     @Override
     public int quantityDropped(IBlockState state, int fortune, Random random) {
         if ((random.nextInt(4) == 0)) {
-            return 1 + random.nextInt(fortune + 1);
+            return 1 + random.nextInt(fortune + 2);
         }
-        return random.nextInt(1 + random.nextInt(fortune + 1));
+        return random.nextInt(2 + random.nextInt(fortune + 1));
     }
 
     private boolean isWaterAround(World world, BlockPos pos) {

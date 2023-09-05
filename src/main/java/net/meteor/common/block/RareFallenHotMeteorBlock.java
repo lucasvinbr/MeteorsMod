@@ -34,6 +34,6 @@ public class RareFallenHotMeteorBlock extends HotMeteorBlock {
 
     @Override
     public int quantityDropped(IBlockState state, int fortune, Random random) {
-        return 1 + random.nextInt(fortune + state.getValue(HEAT));
+        return 1 + random.nextInt(fortune + state.getValue(HEAT) + 2);
     }
 }
