@@ -8,6 +8,7 @@ import net.meteor.common.*;
 import net.meteor.common.entity.EntityMeteor;
 import net.meteor.common.packets.PacketGhostMeteor;
 import net.meteor.common.packets.PacketLastCrash;
+import net.meteor.common.packets.PacketMeteorCrashSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -82,7 +83,7 @@ public class HandlerMeteor
 							EntityMeteor meteor = new EntityMeteor(this.theWorld, gMeteor.size, gMeteor.x, gMeteor.z, gMeteor.type, false);
 							this.theWorld.spawnEntity(meteor);
 							applyMeteorCrash(gMeteor.x, 0, gMeteor.z);
-							playCrashSound(meteor);
+							sendMeteorCrashSoundPacket(gMeteor.x, gMeteor.z);
 						}
 						sendGhostMeteorRemovePacket(gMeteor);
 						this.ghostMets.remove(i);
@@ -264,13 +265,9 @@ public class HandlerMeteor
 		}
 	}
 
-	private void playCrashSound(EntityMeteor meteor) {
-		for (EntityPlayer player : theWorld.playerEntities) {
-			double xDiff = meteor.posX - player.posX;
-			double zDiff = meteor.posZ - player.posZ;
-			double xMod = xDiff / 128.0D * 4.0D;
-			double zMod = zDiff / 128.0D * 4.0D;
-			theWorld.playSound(player.posX + xMod, player.posY + 1.0D, player.posZ + zMod, new SoundEvent(new ResourceLocation(MeteorsMod.MOD_ID + ":meteor.crash")), SoundCategory.BLOCKS, 1.0F, 1.0F, true);
+	private void sendMeteorCrashSoundPacket(int x, int z) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			MeteorsMod.network.sendToDimension(new PacketMeteorCrashSound(x, z), theWorld.provider.getDimension());
 		}
 	}
 }

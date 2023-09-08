@@ -8,6 +8,7 @@ import net.meteor.common.packets.PacketBlockedMeteor;
 import net.meteor.common.packets.PacketButtonPress;
 import net.meteor.common.packets.PacketGhostMeteor;
 import net.meteor.common.packets.PacketLastCrash;
+import net.meteor.common.packets.PacketMeteorCrashSound;
 import net.meteor.common.packets.PacketSettings;
 import net.meteor.common.packets.PacketSoonestMeteor;
 import net.meteor.plugin.baubles.Baubles;
@@ -45,6 +46,7 @@ public class ClientHandler
 			MeteorsMod.network.registerMessage(PacketToggleMagnetism.Handler.class, PacketToggleMagnetism.class, 6, Side.SERVER);
 			MeteorsMod.network.registerMessage(PacketTogglePlayerMagnetism.Handler.class, PacketTogglePlayerMagnetism.class, 7, Side.CLIENT);
 		}
+		MeteorsMod.network.registerMessage(PacketMeteorCrashSound.Handler.class, PacketMeteorCrashSound.class, 8, Side.CLIENT);
 	}
 
 	public static BlockPos getClosestIncomingMeteor(double pX, double pZ) {

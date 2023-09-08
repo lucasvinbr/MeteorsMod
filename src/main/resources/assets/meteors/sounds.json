@@ -1,8 +1,8 @@
 {
   "meteor.crash": {
-    "category": "ambient",
+    "category": "block",
     "sounds": [
-      "meteors:meteor/crash"
+        "meteors:meteor/crash"
     ]
   },
   "shield.powerup": {
