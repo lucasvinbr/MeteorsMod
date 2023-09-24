@@ -18,18 +18,21 @@ public class HandlerRecipe implements IFuelHandler {
 	{
 		Item item = event.crafting.getItem();
 		EntityPlayer player = event.player;
-		if (item == Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD)) {
-			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.shieldCrafted);
-		} else if (item == MeteorItems.KreknoriteSword) {
-			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedKreknoSword);
-		} else if (item == MeteorItems.itemMeteorProximityDetector ||
-				   item == MeteorItems.itemMeteorTimeDetector ||
-				   item == MeteorItems.itemMeteorCrashDetector) {
-			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedDetector);
-		} else if (item == Item.getItemFromBlock(MeteorBlocks.METEOR_TIMER)) {
-			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedMeteorTimer);
-		} else if (item == Item.getItemFromBlock(MeteorBlocks.FREEZER)) {
-			HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedFreezer);
+
+		if (player != null && !event.player.world.isRemote) {
+			if (item == Item.getItemFromBlock(MeteorBlocks.METEOR_SHIELD)) {
+				HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.shieldCrafted);
+			} else if (item == MeteorItems.KreknoriteSword) {
+				HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedKreknoSword);
+			} else if (item == MeteorItems.itemMeteorProximityDetector ||
+					item == MeteorItems.itemMeteorTimeDetector ||
+					item == MeteorItems.itemMeteorCrashDetector) {
+				HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedDetector);
+			} else if (item == Item.getItemFromBlock(MeteorBlocks.METEOR_TIMER)) {
+				HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedMeteorTimer);
+			} else if (item == Item.getItemFromBlock(MeteorBlocks.FREEZER)) {
+				HandlerAchievement.grantAdvancement((EntityPlayerMP) player, HandlerAchievement.craftedFreezer);
+			}
 		}
 			
 	}
