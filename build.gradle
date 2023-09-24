@@ -9,8 +9,8 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.2-2.14.8"
-group= "net.meteor" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "2.15"
+group= "net.meteor"
 archivesBaseName = "meteors"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -18,7 +18,21 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+def buildNumber = 1
+
 minecraft {
+
+    def Properties versionProps = new Properties()
+    def versionPropsFile = file('version.properties')
+
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    def code = versionProps['BUILD_NUMBER'].toInteger() + 1
+    buildNumber = code
+
+    versionProps['BUILD_NUMBER']=code.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
+
     version = "1.12.2-14.23.5.2838"
     runDir = "run"
     // the mappings can be changed at any time, and must be in the following format.
@@ -28,7 +42,11 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "stable_39"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    replaceIn "net/meteor/common/MeteorsMod.java"
+    replace   "@VERSION@", "${project.minecraft.version}-${project.version}" + "." + buildNumber
 }
+
+version = "${project.minecraft.version}-${project.version}" + "." + buildNumber
 
 repositories {
     maven { // The repo from which to get waila
