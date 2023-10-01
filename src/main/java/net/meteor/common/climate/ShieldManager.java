@@ -15,9 +15,10 @@ import net.meteor.common.tileentity.TileEntityMeteorShield;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -155,7 +156,36 @@ public class ShieldManager {
 				case 4:
 					items.add(new ItemStack(Items.COOKED_FISH, random.nextInt(2 * gMeteor.size) + 1));
 					if (r < 5) {
-						items.add(new ItemStack(Items.SPAWN_EGG, 1, EntityList.getID(EntityCometKitty.class)));
+						ItemStack spawnEggStack = new ItemStack(Items.SPAWN_EGG, 1, EntityList.getID(EntityCometKitty.class));
+						
+						NBTTagCompound eggStackTagCompound = spawnEggStack.getTagCompound();
+						
+						if(eggStackTagCompound == null){
+							// MeteorsMod.log.info("kitty egg has no NBT data! we must create it");
+							eggStackTagCompound = new NBTTagCompound();
+						}
+
+						ResourceLocation kittyRes = new ResourceLocation(MeteorsMod.MOD_ID, "cometkitty");
+						NBTTagCompound nbttagcompound1 = eggStackTagCompound.getCompoundTag("EntityTag");
+
+						if(nbttagcompound1 == null){
+							// MeteorsMod.log.info("kitty egg has no EntityTag NBT data! we must create it");
+							nbttagcompound1 = new NBTTagCompound();
+						}
+
+						if (!nbttagcompound1.hasKey("id", 8)) {
+							nbttagcompound1.setString("id", kittyRes.toString());
+						} else {
+							String s = nbttagcompound1.getString("id");
+							if (!s.contains(":")) {
+							nbttagcompound1.setString("id", kittyRes.toString());
+							}
+						}
+
+						eggStackTagCompound.setTag("EntityTag", nbttagcompound1);
+						spawnEggStack.setTagCompound(eggStackTagCompound);
+
+						items.add(spawnEggStack);
 					}
 					break;
 			}
